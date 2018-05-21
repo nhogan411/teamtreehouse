@@ -429,3 +429,16 @@ fractional_number.class  // returns Float
 whole_number.even?  // returns an error
 ```
 
+## Convert Strings to Numbers
+When you ask for user input using `gets` your result is always a string, even if the user inputs a digit (1, 2, 3, etc.).
+
+Trying to perform math on a string will cause you problems so it's important to know how to convert strings to numbers.
+
+```
+"7" * 10  // returns "7777777777", the original string repeated 10 times
+"a" * 3  // returns "aaa", the original string repeated 3 times
+```
+
+`.to_i` will convert a string to an integer and `.to_f` will convert a string to a float.
+
+
