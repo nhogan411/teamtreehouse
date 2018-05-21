@@ -139,9 +139,43 @@ print("c", "d")
 print "c", "d"
 ```
 
-# Comments
+## Comments
 Mark text as comments using #
+
 ```
 # This is a comment explaining that the new line will print "hello world"
 puts "hello world"
 ```
+
+## Defining Methods
+Easy to define your own methods in ruby.
+
+`def` keyword and then the name your method
+
+```
+def wait
+puts "Waiting..."
+sleep 3
+puts "Done"
+end
+
+def count_to_three
+puts 1
+puts 2
+puts 3
+end
+```
+
+Method names:
+- should be all lowercase
+- should avoid having numbers in them, but it's not a rule
+- should use snake case 
+	- this_is_an_example_of_snake_case
+
+To call/run a method, simply type it's name into the file
+
+```
+count-to_three
+wait
+```
+
