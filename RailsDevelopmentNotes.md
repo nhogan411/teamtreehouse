@@ -238,4 +238,96 @@ add(3, 4)               # ooutputs value assigned to first(3) and second(4) as w
 subtract(10, 5)         # outputs value assigned to first(10) and second(5) as well as the results of the subtraction operation (5)
 ```
 
+## Method Return Values
+
+```
+def ask(question)
+	print question
+end
+
+puts "Welcome to the widget store!"
+ask "How many widgets are you ordering?"
+```
+
+`gets` waits for the user to type something and press enter and returns what the user types.
+
+```
+def ask(question)
+	print question     # prints value of question to the screen
+	answer = gets      # waits for the user to enter a value
+	puts answer        # displays the users value to the screen
+end
+```
+
+The `return` keyword in a method will send the assigned information back to the call.
+
+```
+def add(first, second)
+	puts first + second
+end
+
+add(100, 50)               # outputs 150 to the screen
+
+def addition(first, second)
+	return first + second
+end
+
+puts addition(100, 50)     # outputs 150 to the screen
+
+def sum(first, second)
+	return first + second
+end
+
+result = sum(100, 50)     # assigns the result of the sum method to the result variable
+```
+
+Conveniently, the return keyword is not required to return values in a method. The last expression evaluated in that method becomes the return value.
+
+```
+def addition(first, second)
+	first + second
+end
+
+puts addition(100, 50)     # outputs 150 to the screen
+
+def sum(first, second)
+	first + second
+end
+
+result = sum(100, 50)     # assigns the result of the sum method to the result variable
+```
+
+Important to remember that `return` != `puts`. `return` will return a value from a method back to the call. `puts` will print the value or whatever is passed to it.
+
+If the last line (or `return` line) of your method is `puts` you will actually be returning a null value. 
+
+```
+def add(first, second)
+	puts first + second        # prints the result of the math, but actually returns a null value
+end
+
+x = add(100, 50)               # outputs 150 to the screen but assigns NULL to variable x
+
+def addition(first, second)
+	return first + second      # simply returns the result of the math
+end
+
+y = addition(100, 50)          # no output to screen, assigns 150 to variable y
+```
+
+Back to widgets code
+
+```
+def ask(question)
+	print question
+	gets
+end
+
+puts "Welcome to the widget store!"
+answer = ask("How many widgets are you ordering?")
+puts answer
+```
+
+`answer = ask("How many widgets are you ordering?")` assigns the value of the `gets` to variable `answer`. This is outside of the method and allows us to manipulate or use the value of `answer`.
+
 
