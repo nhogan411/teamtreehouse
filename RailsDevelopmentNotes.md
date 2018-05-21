@@ -58,23 +58,23 @@ For the most part, you'll be using `bundle install`, `bundle update` and `bundle
 
 Let's create a new application to mess around in.
 
-``` rails new static_pages ```
+- `rails new static_pages`
 
 Dive into the application
 
-``` cd static_pages ```
+- `cd static_pages`
 
 And let's make sure everything is working by running bundle
 
-``` bundle ```
+- `bundle`
 
 Start the rails server
 
-``` bin/rails server ```
+- `bin/rails server`
 
 Everything is working. Cool. Stop the server for a moment.
 
-``` control + C ```
+- `control + C`
 	
 ``` bin/rails generate controller pages --skip-assets ```
 
