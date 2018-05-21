@@ -9,7 +9,7 @@ Rails requires several software packages. Homebrew can install these packages fo
 2. Install GPG for encryption
 	1. Type into the terminal
 
-	```brew install gpg```
+	``` brew install gpg ```
 
 Now we need to install Ruby Version Manager (RVM). This will download compile and install new ruby versions for us.
 
@@ -40,7 +40,7 @@ Given a version number MAJOR.MINOR.PATCH, increment the:
 
 In Bundler, this looks like:
 
-``` gem 'rails', '4.1.0' ```
+```gem 'rails', '4.1.0'```
 
 If no version specified, the latest will be used
 
