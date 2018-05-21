@@ -352,3 +352,15 @@ puts "some words" + "more words"    # outputs "some wordsmore words"
 puts "some words" + " " + "more words" # outputs "some words more words"
 ```
 
+## String Interpolation
+Interpolation can be used in double quotation markers (`"`).
+
+Interpolation is used using interpolartion markers `#{}`
+
+```
+"aaa #{} bbb"           # outputs "aaa  bbb"
+"aaa #{Time.now} bbb"   # outputs "aaa 2017-11-15 11:24:000 +000 bbb"
+"a string #{1}"         # outputs "a string 1"
+"a string #{1 + 2}"     # outputs "a string 3"
+```
+
