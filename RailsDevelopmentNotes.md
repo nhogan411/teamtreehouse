@@ -415,3 +415,17 @@ Use `.class` methods to determine the class of a given object
 ## Using "chomp" to Fix Our Ouput
 In widget program we're taking user input, but that's including the `\n` character when the user hit `enter`. To clear that, we can use the `.chomp` method on a string to remove new line characters.
 
+## Numeric Types
+```
+whole_number = 12
+fractional_number = 12.34
+whole_number.class  // returns Fixnum
+fractional_number.class  // returns Float
+```
+
+`.even?` is a method for Fixnums, but it is not available for Floats
+
+```
+whole_number.even?  // returns an error
+```
+
