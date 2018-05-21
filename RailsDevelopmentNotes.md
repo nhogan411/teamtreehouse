@@ -523,7 +523,7 @@ Create an array in ruby via Array.new and assigning to a variable.
 grocery_list = Array.new
 ```
 
-Can also use bracket ([]) notation
+Can also use bracket (`[]`) notation
 
 ```
 grocery_list = []
@@ -541,13 +541,13 @@ Arrays can hold objects of different classes.
 grocery_list = ["milk", "eggs", 1, 2, 3]
 ```
 
-An array of just strings can be built without the quotation marksusing the %w notation
+An array of just strings can be built without the quotation marksusing the `%w` notation
 
 ```
 grocery_list = %w(milk ggs bread)
 ```
 
-Interpolating variables into an array can be done with %W, note the capital 'W'
+Interpolating variables into an array can be done with `%W`, note the capital 'W'
 ```
 item = "milk"
 grocery_list = %W(#{item} eggs bread)
@@ -1082,4 +1082,394 @@ contact_list.each do |contact|
 	end
 	puts "----\n"
 end
+```
+
+# Ruby Objects and Classes
+Think of classes like a blueprint that tells the class how it should be structured and what it should do.
+
+## Instantiation
+
+```
+name = String.new("Jason")
+```
+
+In the code above, 'name' is an Instance of a 'Blueprint' String being used. Instantiation is the act of creating an instance of a class. Once an instance of a class is created it's called an object.
+
+Classes are referred to and created in Ruby by using a capital letter and the name of the class. `String`
+
+Objects are created using the `.new()` method. 
+- `String.new`
+- `Array.new`
+- `Hash.new`
+
+## Ruby Objects
+`.respond_to?` method will check if an object will respond to the passed method
+
+## Creating a Class
+
+```
+// Defines class "Name"
+class Name
+	def title
+		"Mr."
+	end
+
+	def first_name
+		"Nick"
+	end
+
+	def middle_name
+		"Armen"
+	end
+
+	def last_name
+		"Hogan"
+	end
+end
+
+// Instantiates a new "Name" object
+name = Name.new
+
+// Displays value assigned to title in the new object name: "Mr."
+puts name.title
+
+// Displays value assigned to first_name in the new object name: "Nick"
+puts name.first_name
+
+// Displays value assigned to middle_name in the new object name: "Armen"
+puts name.middle_name
+
+// Displays value assigned to last_name in the new object name: "Hogan"
+puts name.last_name
+```
+
+## Variables
+In the above name class we defined my title, first, middle and last names as the values of those methods. Which is only useful if we never intend to use a different value for those methods.
+
+Let's make this class more of a blueprint by using variables within the class.
+
+```
+// Defines class "Name"
+class Name
+	// Method that is run when the class is instantiated
+	def initialize(title, first_name, middle_name, last_name)
+		@title = title
+		@first_name = first_name
+		@middle_name = middle_name
+		@last_name = last_name
+	end
+
+	def title
+		@title
+	end
+
+	def first_name
+		@first_name
+	end
+
+	def middle_name
+		@middle_name
+	end
+
+	def last_name
+		@last_name
+	end
+end
+```
+
+Denote an instance variable using the `@`
+
+## Attribrute Readers
+Ruby gives us a shortcut for outputing class variables, `attr_reader`
+
+```
+// Defines class "Name"
+class Name
+	// Auto builds the 'title' method, so we've deleted it
+	attr_reader :title
+	// Auto builds the other methods, so we've deleted them
+	attr_reader :first_name, :middle_name, last_name
+
+	// Method that is run when the class is instantiated
+	def initialize(title, first_name, middle_name, last_name)
+		@title = title
+		@first_name = first_name
+		@middle_name = middle_name
+		@last_name = last_name
+	end
+end
+```
+
+## Attribute Writers and Accessors
+In addition to `attr_reader` Ruby provides some additional shortcuts.
+
+For instance, two ways to change a class variable:
+
+```
+// Defines class "Name"
+class Name
+	attr_reader :title, :first_name, :middle_name, last_name
+
+	// Method that is run when the class is instantiated
+	def initialize(title, first_name, middle_name, last_name)
+		@title = title
+		@first_name = first_name
+		@middle_name = middle_name
+		@last_name = last_name
+	end
+
+	// Allows you to set new value for class variable 'title'
+	def title = (new_title)
+		@title = new_title
+	end
+end
+```
+
+The shortcut version of this new method for altering class variables is `attr_writer`
+
+```
+// Defines class "Name"
+class Name
+	attr_reader :title, :first_name, :middle_name, last_name
+	// Allows you to set new value for class variable 'title'
+	attr_writer :title
+
+	// Method that is run when the class is instantiated
+	def initialize(title, first_name, middle_name, last_name)
+		@title = title
+		@first_name = first_name
+		@middle_name = middle_name
+		@last_name = last_name
+	end
+end
+```
+
+There's an even shorter method that performs the actions of both `attr_reader` and `attr_writer`: `attr_accessor`
+
+```
+// Defines class "Name"
+class Name
+	// Performs action of both attr_reader and attr_writer
+	attr_accessor :title
+
+	attr_reader :first_name, :middle_name, last_name
+
+	// Method that is run when the class is instantiated
+	def initialize(title, first_name, middle_name, last_name)
+		@title = title
+		@first_name = first_name
+		@middle_name = middle_name
+		@last_name = last_name
+	end
+end
+```
+
+## Methods
+We can create methods inside of a class, which is useful because they are only available on the instance that we are working with.
+
+```
+// Defines class "Name"
+class Name
+	attr_accessor :title, :first_name, :middle_name, last_name
+
+	def initialize(title, first_name, middle_name, last_name)
+		@title = title
+		@first_name = first_name
+		@middle_name = middle_name
+		@last_name = last_name
+	end
+
+	// This methods outputs the values in first, middle and last name all concatenated together
+	def full_name
+		@first_name + " " + @middle_name + " " + last_name
+	end
+
+	// This methods outputs the values in title, first, middle and last name all concatenated together
+	def full_name_with_title
+		@title + " " + full_name()
+	end
+end
+```
+
+## Instance Variables and Local Variables
+Not every method inside of a class can see EVERY variable that we use.
+
+A variable available to different methods in the class is an instance variable. That means the variable should be visible to the whole instance of the class.
+
+A local variable is only available inside of the method we're working with.
+
+This is the scope of the variable.
+
+```
+// Defines class "Name"
+class Name
+	attr_accessor :title, :first_name, :middle_name, last_name
+
+	def initialize(title, first_name, middle_name, last_name)
+		@title = title
+		@first_name = first_name
+		@middle_name = middle_name
+		@last_name = last_name
+	end
+
+	def full_name
+		// Creates a local variable storing the first and middle names
+		// This variable is ONLY available in this class
+		first_and_middle_name = @first_name + " " + @middle_name
+
+		// Uses the above variable to build the full name
+		first_and_middle_name + " " + last_name
+	end
+
+	def full_name_with_title
+		// Won't work because the first_and_middle_name variable is local to the full_name method
+		@title + " " + first_and_middle_name + " " + @last_name
+	end
+end
+```
+
+We can make the first_and_middle_name varialbe available to the whole class by putting the `@` in front of it, making it an instance variable.
+
+```
+// Defines class "Name"
+class Name
+	attr_accessor :title, :first_name, :middle_name, last_name
+
+	// Necessary to set the first_and_middle_name instance variable
+	attr_reader :first_and_middle_name
+
+	def initialize(title, first_name, middle_name, last_name)
+		@title = title
+		@first_name = first_name
+		@middle_name = middle_name
+		@last_name = last_name
+	end
+
+	def full_name
+		// Creates an instance variable storing the first and middle names
+		@first_and_middle_name = @first_name + " " + @middle_name
+
+		// Uses the above variable to build the full name
+		@first_and_middle_name + " " + last_name
+	end
+
+	def full_name_with_title
+		// WILL work because the @first_and_middle_name variable is available to the whole name class
+		@title + " " + @first_and_middle_name + " " + @last_name
+	end
+end
+```
+
+## The to_s method
+```
+// Defines class "Name"
+class Name
+	attr_accessor :title, :first_name, :middle_name, last_name
+
+	def initialize(title, first_name, middle_name, last_name)
+		@title = title
+		@first_name = first_name
+		@middle_name = middle_name
+		@last_name = last_name
+	end
+
+	def full_name
+		@first_name + " " + @middle_name + " " + last_name
+	end
+
+	def full_name_with_title
+		@title + " " + full_name()
+	end
+end
+
+name = Name.new("Mr.", "Nick", "", "Hogan")
+puts name.full_name_with_title
+```
+
+`puts` is calling the `to_s` method when you call it. Instead of using a method to call `.full_name_with_title` you can call that method inside the `to_s` method to default an output.
+
+```
+// Defines class "Name"
+class Name
+	attr_accessor :title, :first_name, :middle_name, last_name
+
+	def initialize(title, first_name, middle_name, last_name)
+		@title = title
+		@first_name = first_name
+		@middle_name = middle_name
+		@last_name = last_name
+	end
+
+	def full_name
+		@first_name + " " + @middle_name + " " + last_name
+	end
+
+	def full_name_with_title
+		@title + " " + full_name()
+	end
+
+	def to_s
+		full_name_with_title()
+	end
+end
+
+name = Name.new("Mr.", "Nick", "", "Hogan")
+puts name    // works the same as the above code
+```
+
+## Build a Bank Account
+
+```
+class BankAccount
+	attr_reader :name
+	attr_accessor :transactions
+
+	// Initializes bank account object
+	// Requires a name to be passed in
+	def initialize(name)
+		// Set instance variable @name
+		@name = name
+		// Set instance array @transctions (although none created yet)
+		@transactions = []
+		// Set initial value of @transactions
+		add_transaction("Beginning Balance", 0)
+	end
+
+	def credit(description, amount)
+		add_transaction(description, amount)
+	end
+
+	def debit(description, amount)
+		add_transaction(description, -amount)
+	end
+
+	def add_transaction(description, amount)
+		@transactions.push(description: description, amount: amount)
+	end
+
+	def balance
+		balance = 0
+		@transactions.each do |transaction|
+			balance += transaction[:amount]
+		end
+	end
+
+	def to_s
+		"name: #{name}, Balance: #{sprintf("%0.2f", balance)}"
+	end
+
+	def print_register
+		puts "#{name}'s Bank Account"
+
+	puts "Description\tAmount
+	@transactions.each do |transaction|
+		puts transaction[:description] + "\t" + sprintf("%0.2f",transaction[:amount].to_s)
+	end
+	end
+end
+
+// Creates bank_account variable which is a BankAccount object
+bank_account = BankAccount.new("Nick")
+bank_account.credit("Paycheck", 100)
+bank_account.debit("Groceries", 40)
 ```
