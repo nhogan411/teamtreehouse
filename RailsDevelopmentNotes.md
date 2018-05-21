@@ -26,6 +26,7 @@ Rails is a Ruby Gem - a library or collection of reuseable code. Gems can be dow
 
 1. In terminal type `gem install` and then the name of the gem we want, `rails`, and then the particular version (skip for most recent version of rails), like `--version 5.0.0`
 
+
 # Introduction to Bundler
 Bundler is going to help us manage different dependencies (which Ruby Gems and whic Ruby Gem versions) for our Ruby project.
 
@@ -90,9 +91,12 @@ bin/rails generate controller pages --skip-assets
 
 and then they kind of lost me.
 
+
 # Rails Application Walkthrough
 
+
 # Installing a Ruby on Rails Development Environment in OS X
+
 
 # Ruby Basics
 ## Methods
@@ -505,7 +509,392 @@ def price(quantity)
 	else
 		price_per_unit = 10
 	end
-	
+
 	quantity * price_per_unit
 end
 ```
+
+
+# Ruby Collections
+## Ruby Arrays
+Create an array in ruby via Array.new and assigning to a variable.
+
+```
+grocery_list = Array.new
+```
+
+Can also use bracket ([]) notation
+
+```
+grocery_list = []
+```
+
+Create an array containing items by separating those items with a comma.
+
+```
+grocery_list = ["milk", "eggs", "bread"]
+```
+
+Arrays can hold objects of different classes.
+
+```
+grocery_list = ["milk", "eggs", 1, 2, 3]
+```
+
+An array of just strings can be built without the quotation marksusing the %w notation
+
+```
+grocery_list = %w(milk ggs bread)
+```
+
+Interpolating variables into an array can be done with %W, note the capital 'W'
+```
+item = "milk"
+grocery_list = %W(#{item} eggs bread)
+```
+
+## Adding Items to Arrays
+Once the array is created, there are a few ways to add items to it.
+
+Use `.inspect` method to view the contents of an array
+
+`<<` will append an item to an already existing array.
+
+```
+grocery_list = ["milk", "eggs", "bread"]
+grocery_list << "carrots"
+```
+
+`.push` method is another option to add items to an array
+
+```
+grocery_list = ["milk", "eggs", "bread"]
+grocery_list.push("potatoes")
+```
+
+`.unshift` method will add something to the begining of the array
+
+```
+grocery_list = ["milk", "eggs", "bread"]
+grocery_list.unshift("celery")
+```
+
+The `+=` operator will also add items to the end of an array
+
+```
+grocery_list = ["milk", "eggs", "bread"]
+grocery_list += ["ice cream", "pie"]
+```
+
+## Accessing Items in Arrays
+Ruby arrays work like other languages and start the index at 0.
+
+```
+grocery_list = ["milk", "eggs", "bread", "ice cream", "pie", "potatoes"]
+grocery_list[0]  // returns "milk"
+grocery_list[1]  // returns "eggs"
+```
+
+`.at` method also works
+
+```
+grocery_list = ["milk", "eggs", "bread", "ice cream", "pie", "potatoes"]
+grocery_list.at(0)  // returns "milk"
+grocery_list.at(1)  // returns "eggs"
+```
+
+`.first` and `.last` are quick ways to get the first and last items of the array
+
+```
+grocery_list = ["milk", "eggs", "bread", "ice cream", "pie", "potatoes"]
+grocery_list.first  // returns "milk"
+grocery_list.last  // returns "potatoes"
+```
+
+`-1` notation will also get you the last item in the array. this notation works backwards through the index, so it works for more than just -1 and the last item
+
+```
+grocery_list = ["milk", "eggs", "bread", "ice cream", "pie", "potatoes"]
+grocery_list[-1]  // returns "potatoes"
+grocery_list[-2]  // returns "pie"
+grocery_list[-3]  // returns "ice cream"
+```
+
+`.insert` method will insert a new item into the array at the specified location
+
+```
+grocery_list = ["milk", "eggs", "bread", "ice cream", "pie", "potatoes"]
+grocery_list.insert(2, "oatmeal")  // puts "oatmeal at the number 2 index in the array (between "eggs" and "bread")
+```
+
+`.length` method also applies to arrays (not just strings)
+
+```
+grocery_list = ["milk", "eggs", "bread", "ice cream", "pie", "potatoes"]
+grocery_list.length  // returns 6
+```
+
+`.count` method can also return the number of items in the array, but it can also be used to find out how many times an item is in the array
+
+```
+grocery_list = ["milk", "eggs", "bread", "ice cream", "pie", "potatoes"]
+grocery_list.count  // returns 6
+grocery_list.count("eggs")  // returns 1
+
+grocery_list = ["eggs", "eggs", "eggs", "ice cream", "pie", "potatoes"]
+grocery_list.count  // returns 6
+grocery_list.count("eggs")  // returns 3
+```
+
+`.include?` method will return a boolean based on if the passed parameter is in the array
+
+```
+grocery_list = ["milk", "eggs", "bread", "ice cream", "pie", "potatoes"]
+grocery_list.include("eggs")  // returns true
+grocery_list.count("pasta")  // returns false
+```
+
+## Removing Items From Arrays
+One way to remove an item from the array is to use `.pop`. This method will remove the last item (which can be assigned to a separate variable.
+
+```
+grocery_list = ["milk", "eggs", "bread", "ice cream", "pie", "potatoes"]
+last_item = grocery_list.pop  // removes "potatoes" from grocery_list AND assigns "potatoes" to last_item variable
+```
+
+`.shift` method works the same way as .pop but on the first item in the array
+
+```
+grocery_list = ["milk", "eggs", "bread", "ice cream", "pie", "potatoes"]
+first_item = grocery_list.shift  // removes "milk" from grocery_list AND assigns "milk" to first_item variable
+```
+
+The `.drop` method will pull a specified number of items from the end of the array for separate use. THESE ITEMS AREN'T REMOVED FROM THE ARRAY
+
+```
+grocery_list = ["milk", "eggs", "bread", "ice cream", "pie", "potatoes"]
+drop_two_items = grocery_list.drop(2)  // assigns "pie" and "potatoes" to the drop_two_items array
+```
+
+The `.slice` method will take in a start index and a specified number of items and push to a separate array. THESE ITEMS AREN'T REMOVED FROM THE ARRAY
+
+```
+grocery_list = ["milk", "eggs", "bread", "ice cream", "pie", "potatoes"]
+first_three_items = grocery_list.slice(0, 3)  // assigns "milk", "eggs", and "bread" to the first_three_items array
+new_list = grocery_list.slice(2, 2)  // assigns "bread", and "ice cream" to the new_list array
+```
+
+## Ruby Hash Creation
+With an Array, you can only refer to an item based on it's position or index in the array.
+
+Inside a Hash we use an identifier to describe the item we want to access (an associative array?)
+
+Initialize a Hash using `.new` or the `{}` notation
+
+```
+item = Hash.new
+item = {}
+```
+
+To put items into a hash:
+```
+item = { "name" => "Bread" }
+       {  KEY   =>  VALUE  }
+```
+
+To reference that item use the `[]` notation and the KEY
+
+```
+item["name"]  // returns "Bread"
+```
+
+To put multiple items in the hash
+
+```
+item = { "name" => "Bread", "quantity" => 1 }
+```
+
+Add an item using `[]` notation
+
+```
+item = { "name" => "Bread", "quantity" => 1 }
+item[1] = "Grocery Store"
+
+// returns {"name"=>"Bread", "quntity"=>1, 1=>"Grocery Store"}
+```
+
+Another way to do this is with symbols. Symbol is just like a string but with a colon in front of it. 
+
+```
+item[:name] = "Bread"
+```
+
+OR
+
+```
+item = {name: "Bread", quantity: 1}
+```
+
+`.delete` method will delete the item specified
+
+```
+item = { "name" => "Bread", "quantity" => 1 }
+item.delete("name")
+```
+
+## Working with Hash Keys
+Use the `.keys` method to find all the different keys associated with a hash
+
+```
+hash = {"item"=>"Bread", "quantity"=>1, "brand"=>"Giant Hat Bread"}
+hash.keys // returns an array of keys: ["itme", "quantity", "brand"]
+```
+
+`.has_key?` or `key?` or `.member` to test whether a specific key is available
+
+```
+hash = {"item"=>"Bread", "quantity"=>1, "brand"=>"Giant Hat Bread"}
+hash.has_key?("brand")  // returns true
+hash.key?("brand")      // returns true
+hash.member?("brand")   // returns true
+```
+
+`.fetch` method will pull the value associated with the specified key. Same as using brackets `[]`
+
+```
+hash = {"item"=>"Bread", "quantity"=>1, "brand"=>"Giant Hat Bread"}
+hash.fetch("quantity")  // returns 1
+hash.["quantity"]       // returns 1
+```
+
+## Working with Hash Values
+Similar to `.keys` we have a `.values` method that will return an array of values in the hash
+
+```
+hash = {"item"=>"Bread", "quantity"=>1, "brand"=>"Giant Hat Bread"}
+hash.values  // returns ["Bread", 1, "Giant Hat Bread"]
+```
+
+`.has_value?` or `.value` can be used to check if a value is in the hash
+
+```
+hash = {"item"=>"Bread", "quantity"=>1, "brand"=>"Giant Hat Bread"}
+hash.has_value?("Bread")  // returns true
+hash.value("Bread")  // returns true
+```
+
+`.values_at` gives us the option to specify more than one key, and receive back an array of values associated with the specified keys
+```
+hash = {"item"=>"Bread", "quantity"=>1, "brand"=>"Giant Hat Bread"}
+hash.values_at("item", "quantity")  // returns ["Bread", 1]
+```
+
+## Hash Methods
+`.length` is a method that, like arrays and strings, returns the number of key/value pairs in the hash.
+
+```
+hash = {"item"=>"Bread", "quantity"=>1, "brand"=>"Giant Hat Bread"}
+hash.length  // returns 3
+```
+
+`.invert` flips the keys and values 
+
+```
+hash = {"item"=>"Bread", "quantity"=>1, "brand"=>"Giant Hat Bread"}
+inverted_hash = hash.invert  // same as: 
+inverted_hash = {"Bread"=>"item", 1=>"quantity", "Giant Hat Bread"=>"brand"
+```
+
+`.shift` takes the first item in the hash and separates it out into a new array, removing from the original hash
+
+```
+hash = {"item"=>"Bread", "quantity"=>1, "brand"=>"Giant Hat Bread"}
+shifted_hash = hash.shift  // returns ["item", "Bread"]
+hash.inspect // returns {"quantity"=>1, "brand"=>"Giant Hat Bread"}
+```
+
+`.merge` combines two hashes, without affect either
+
+```
+hash = {"item"=>"Bread", "quantity"=>1, "brand"=>"Giant Hat Bread"}
+puts hash.merge({"calories"=>100}) // will display {"item"=>"Bread", "quantity"=>1, "brand"=>"Giant Hat Bread", "calories"=>100}
+puts hash // still returns original hash
+```
+
+If `.merge`ing to a key that already exists you'll overwrite the old with the new
+
+```
+hash = {"item"=>"Bread"}
+puts hash.merge({"item"=>"Eggs"}) // displays {"item"=>"Eggs"}
+puts hash // still displays {"item"=>"Bread"}
+```
+
+## Build a Grocery List Program
+
+```
+def create_list
+	print "What is the list name? "
+	name = gets.chomp
+
+	hash = { "name" => name, "items" => Array.new }
+	return hash
+end
+
+list = create_list()
+```
+
+This will create a list and give it a name.
+
+```
+def add_list_item
+	print "What is the item called? "
+	item_name = gets.chomp
+
+	print "How much/many? "
+	quantity = gets.chomp.to_i
+
+	hash = { "name" => item_name, "quantity" => quantity }
+	return hash
+end
+
+list['items'].push(add_list_item())
+```
+
+This will ask for user to input items and quantity and add to the array associated with the items key in the first hash.
+
+```
+def print_list(list)
+	puts "List: #{list['name']}"
+	puts "----"
+
+	list["items"].each do |item|
+		puts "Item: " + item['name']
+		puts "Quantity: " + item['quantity'].to_s
+		puts "---"
+	end
+end
+
+print_list(list)
+```
+
+This will clean things up the list and display a nicer looking list
+
+```
+def print_seperator(character = "-")
+	puts character * 8
+end
+
+def print_list(list)
+	puts "List: #{list['name']}"
+	print_seperator()
+
+	list["items"].each do |item|
+		puts "\tItem: " + item['name'] + "\t\t\t" + "Quantity: " + item['quantity'].to_s
+	end
+
+	print_seperator()
+end
+
+print_list(list)
+```
+
