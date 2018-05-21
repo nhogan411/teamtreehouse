@@ -179,3 +179,63 @@ count-to_three
 wait
 ```
 
+## Variables
+assign value to variables with = sign
+
+```
+number = 4
+greeting = "hello"
+```
+
+to refer to the variable you simply use it
+
+```
+puts number        # outputs 4
+puts greeting      # outputs "hello"
+puts number + 2    # outputs 6
+```
+
+## Method Arguments
+A parameter is a special variable declared at the start of a method.
+
+```
+def add(first, second)
+```
+
+In this example, first and second are both parameters or method arguments. these arguments can be used within the method body, for ptance:
+
+```
+def add(first, second)
+	puts first, second
+	puts first + second
+end
+
+def subtract(first, second)
+	puts first, second
+	puts first - second
+end
+```
+
+In order to call these methods we will need to send parameter values with the call. 
+
+```
+def add(first, second)
+	puts first, second
+	puts first + second
+end
+
+def subtract(first, second)
+	puts first, second
+	puts first - second
+end
+
+add(100, 50)            # outputs value assigned to first(100) and second(50) as well as the results of the addition operation (150)
+
+subtract(75, 25)        # outputs value assigned to first(75) and second(25) as well as the results of the subtraction operation (50)
+
+add(3, 4)               # ooutputs value assigned to first(3) and second(4) as well as the results of the addition operation (7)
+
+subtract(10, 5)         # outputs value assigned to first(10) and second(5) as well as the results of the subtraction operation (5)
+```
+
+
