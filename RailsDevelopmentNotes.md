@@ -412,3 +412,6 @@ Think of classes like a blueprint for building a car or radio or house. Objects 
 
 Use `.class` methods to determine the class of a given object
 
+## Using "chomp" to Fix Our Ouput
+In widget program we're taking user input, but that's including the `\n` character when the user hit `enter`. To clear that, we can use the `.chomp` method on a string to remove new line characters.
+
