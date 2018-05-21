@@ -103,7 +103,7 @@ puts(1, 2, "a", "b")
 
 `sleep` - causes the program to pause execution for a specified number of seconds before continuing
 
-    `sleep(2)` will set a two second pause
+	- `sleep(2)` will set a two second pause
 
 `print` - puts a string of characters to the terminal output. each string is on the same line
 
