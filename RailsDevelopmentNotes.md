@@ -396,3 +396,19 @@ string.length.even? // determines the length of string "string, and then returns
 
 Only chain methods when you're certain the first method call won't fail, or you'll obviously get errors on subsequent methods.
 
+## Classes
+Methods are specific to different types of objects. You can call `.even?` on a number, but you can't call the `.length`. Similarly you can call `.length` on a string, but not `.even?`
+
+You can get a list of methods avaialble on a given object by calling the `.methods` method.
+
+```
+p 2.methods.sort  // prints sorted list of integer methods to screen
+p "AA".methods.sort  // prints sorted list of string methods to screen
+```
+
+Object class determines what methods are availalble.
+
+Think of classes like a blueprint for building a car or radio or house. Objects are constructed using the blueprint (instances of a class). The blueprint determines the structure and what they can do, but doesn't get into the individual details of the object.
+
+Use `.class` methods to determine the class of a given object
+
