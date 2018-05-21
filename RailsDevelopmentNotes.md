@@ -41,7 +41,7 @@ Given a version number MAJOR.MINOR.PATCH, increment the:
 In Bundler, this looks like:
 
 ```
-	gem 'rails', '4.1.0'
+gem 'rails', '4.1.0'
 ```
 
 If no version specified, the latest will be used
