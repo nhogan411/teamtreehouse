@@ -370,3 +370,29 @@ Ruby provides a method `p` to inspect the values you pass to it, to see approxim
 ## Escape Sequences
 `\` to use escape sequences in/on strings
 
+## Calling Methods on an Object
+We're not talking about passing an argument to a method, we're talking about taking a piece of data and calling a method that's only available on that data.
+
+```
+"a string".length
+"another string".upcase
+"a third string.reverse
+
+7.even?
+-12.abs
+5.next
+```
+
+Use `.` operator on an object to indicate we're calling a method on it.
+
+`?` and `!` are valid characters at the end of a method name
+
+You can string multiple methods together
+
+```
+string = "AA"  // assigns "AA" to variable "string"
+string.length.even? // determines the length of string "string, and then returns true because the length is an even number
+```
+
+Only chain methods when you're certain the first method call won't fail, or you'll obviously get errors on subsequent methods.
+
