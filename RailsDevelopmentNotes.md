@@ -898,3 +898,188 @@ end
 print_list(list)
 ```
 
+# Ruby Loops
+Start a loop in ruby using the `loop` keyword
+
+```
+// typically used if inside loop is more than one line of code
+loop do
+	// some code
+end
+```
+
+or
+
+```
+// typically used if inside loop is only one line of code
+loop {
+	// some code
+}
+```
+
+`break` keyword is used to jump out of a loop.
+
+```
+loop do
+	// do a thing
+	// test a thing
+	if x == "the amount"
+		// end the look
+		break
+	end
+end
+```
+
+## Loop Conditionals
+Create a random number by assigning `Random.new` to a variable.
+
+We can put a limit on the random number generator with `rand(x)`
+
+```
+random_number = Random.new.rand(5) // assigns a random number between 0 and 5
+```
+
+If statements can be run on one line by switching things up a bit.
+
+```
+break if answer > 10   // executes break if answer is greater than 10
+```
+
+## The While Loop
+
+```
+answer = ""
+while answer != "n"
+	print "Do you want me to repeat this pointless loop again ? (y/n) "
+	answer = gets.chomp.downcase
+end
+```
+
+When we use the `while` loop we don't need to manually `break` the loop.
+
+Conventional to use `i`, `j`, or `k` with loops.
+
+## Until Loop
+Opposite of the while loop in that it runs UNTIL the condition becomes true.
+
+```
+answer = ""
+until answer == "no" do
+	print "Do you want this loop to continue? (y/n) "
+	answer = gets.chomp
+end
+```
+
+## Iteration with Each
+
+```
+array = [0, 1, 2, 3, 4, 5]
+array.each do |item|  // will send each array item into the do block as variable 'item'
+	puts "The current item is #{item}."
+end
+```
+
+with curly braces
+
+```
+array = [0, 1, 2, 3, 4, 5]
+array.each { |item|  
+	puts "The current item is #{item}."
+}
+```
+
+or all on one line
+```
+array = [0, 1, 2, 3, 4, 5]
+array.each { |item| puts "The current item is #{item}." }
+```
+
+NOTE: `.each` does not affect the actual array
+
+```
+array = [0, 1, 2, 3, 4, 5]
+array.each do |item|
+	item = item + 2
+	puts item  // prints 2, 3, 4, 5, 6, and 7 to screen 
+end
+puts array.inspect // original array still [0-5]
+```
+
+## Hash Iteration
+
+```
+business = { "name" => "Treehouse", "location" => "Portland, OR" }
+business.each do |key, value|
+	puts "the hash key is #{key} and the value is #{value}."
+end
+```
+
+`.each` can also be used on hashes as `.each_pair`
+
+Can also cycle through one specific side of the hash using `.each_key` and `.each_value`
+
+## Times Iteration
+The times iteration works on integers and will run a specific number of times.
+
+```
+// puts "hello!" 5x
+5.times do 
+	puts "hello!"
+end
+```
+
+```
+5.times do |item|
+	puts "#{item}"    // outputs 0-4
+end
+```
+
+## For Loops
+for item in 1..10 do
+	puts "The current item is #{item}."
+end
+```
+
+## Build a Contacts list
+
+```
+contact_list = []
+
+def ask(question, kind="string")
+	print question + " "
+	answer = gets.chomp
+	answer = answer.to_i if kind == "number"
+	return answer
+end
+
+def add_contact
+	contact = {"name" => "", "phone_numbers" => []}
+	contact["name"] = ask("What is the person's name?")
+	answer = ""
+	while answer != "n"
+		answer = ask("Do you want to add a phone number? (y/n)")
+		if answer == "y"
+			phone = ask ("Enter a phone number:")
+			contact["phone_numbers"].push(phone)
+		end
+	end
+	return contact
+end
+
+answer = ""
+while answer != "n"
+	contact_list.push(add_contact())
+	answer = ask("Add another? (y/n)")
+end
+
+puts "---"
+
+contact_list.each do |contact|
+	puts "Name: #{contact["name"]}"
+	if contact["phone_numbers"].size > 0
+		contact["phone_numbers"].each do |phone_number|
+		puts "Phone: #{phone_number}"
+	end
+	puts "----\n"
+end
+```
