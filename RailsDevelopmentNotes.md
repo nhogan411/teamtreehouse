@@ -138,3 +138,10 @@ sleep 2
 print("c", "d")
 print "c", "d"
 ```
+
+# Comments
+Mark text as comments using #
+```
+# This is a comment explaining that the new line will print "hello world"
+puts "hello world"
+```
