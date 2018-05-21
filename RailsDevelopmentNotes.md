@@ -9,7 +9,7 @@ Rails requires several software packages. Homebrew can install these packages fo
 2. Install GPG for encryption
 	1. Type into the terminal
 
-	``` brew install gpg ```
+	```brew install gpg```
 
 Now we need to install Ruby Version Manager (RVM). This will download compile and install new ruby versions for us.
 
