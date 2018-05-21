@@ -367,3 +367,6 @@ Interpolation is used using interpolartion markers `#{}`
 ## Inspecting Values
 Ruby provides a method `p` to inspect the values you pass to it, to see approximately how they'll be viewed in Ruby code.
 
+## Escape Sequences
+`\` to use escape sequences in/on strings
+
