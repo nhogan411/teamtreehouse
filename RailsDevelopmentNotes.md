@@ -364,3 +364,6 @@ Interpolation is used using interpolartion markers `#{}`
 "a string #{1 + 2}"     # outputs "a string 3"
 ```
 
+## Inspecting Values
+Ruby provides a method `p` to inspect the values you pass to it, to see approximately how they'll be viewed in Ruby code.
+
