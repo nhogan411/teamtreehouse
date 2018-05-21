@@ -441,4 +441,12 @@ Trying to perform math on a string will cause you problems so it's important to 
 
 `.to_i` will convert a string to an integer and `.to_f` will convert a string to a float.
 
+## Comparison Operators
+Let's create a new method that calculates the prices:
+
+```
+def price(quantity)
+	quantity * 10
+end
+```
 
