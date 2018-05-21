@@ -9,7 +9,9 @@ Rails requires several software packages. Homebrew can install these packages fo
 2. Install GPG for encryption
 	1. Type into the terminal
 
-	``` brew install gpg ```
+	```
+	brew install gpg
+	```
 
 Now we need to install Ruby Version Manager (RVM). This will download compile and install new ruby versions for us.
 
@@ -46,13 +48,17 @@ gem 'rails', '4.1.0'
 
 If no version specified, the latest will be used
 
-``` gem 'rack-cache' ```
+```
+gem 'rack-cache'
+```
 
 `~>` can be used to specify versions that have the same MAJOR and MINOR version. For instance, `gem 'nokogiri', '~> 1.6.1'` means `>= 1.6.1` but `< 1.7.0`
 
 `>=` can be used to specify ANY version greater than the speficied.
 
-``` gem 'uglifier', '>= 1.3.0' ```
+```
+gem 'uglifier', '>= 1.3.0'
+```
 
 For the most part, you'll be using `bundle install`, `bundle update` and `bundle exec`
 
@@ -78,7 +84,9 @@ Everything is working. Cool. Stop the server for a moment.
 
 - `control + C`
 	
-``` bin/rails generate controller pages --skip-assets ```
+```
+bin/rails generate controller pages --skip-assets
+```
 
 and then they kind of lost me.
 
