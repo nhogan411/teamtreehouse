@@ -330,4 +330,14 @@ puts answer
 
 `answer = ask("How many widgets are you ordering?")` assigns the value of the `gets` to variable `answer`. This is outside of the method and allows us to manipulate or use the value of `answer`.
 
+## Strings
+Strings are represented with single and double quotation marks.
+
+```
+# outputs: Single-quoted strings #{represent} "Characters" verbatim.
+puts 'Single-quoted strings #{represent} "Characters" verbatim.'
+
+# outputs: Double-quoted strings make some substitutions: 6
+puts "Double-quoted strings make some substitutions: #{2 + 4}"
+```
 
