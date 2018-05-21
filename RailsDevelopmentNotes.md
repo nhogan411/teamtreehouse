@@ -341,3 +341,14 @@ puts 'Single-quoted strings #{represent} "Characters" verbatim.'
 puts "Double-quoted strings make some substitutions: #{2 + 4}"
 ```
 
+## String Concatenation
+`irb` in the console sets ur a testing area in the console where you can run ruby commands one at a time.
+
+Concatenate strings using the `+` operator
+
+```
+puts "a" + "b"                      # outputs "ab"
+puts "some words" + "more words"    # outputs "some wordsmore words"
+puts "some words" + " " + "more words" # outputs "some words more words"
+```
+
