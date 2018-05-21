@@ -450,3 +450,62 @@ def price(quantity)
 end
 ```
 
+## "if" and "unless" Statements
+
+```
+if true
+	puts "true"
+	puts "additional code here"
+end
+
+if false
+	puts "false"
+	puts "additional code here"
+end
+```
+
+```
+if 75 > 50
+	puts "75 > 50"  // displays on page
+end
+
+if 75 > 100
+	puts "75 > 100"  // DOES NOT display on page
+end
+
+if 50 == 50
+	puts "50 == 50"  // displays on page
+end
+```
+
+`unless` statement runs ONLY when the result is false
+
+```
+unless 75 > 50
+	puts "75 > 50"  // DOES NOT display on page
+end
+
+unless 75 > 100
+	puts "75 > 100"  // display on page
+end
+
+unless 50 == 50
+	puts "50 == 50"  // DOES NOT display on page
+end
+```
+
+For our widgets code, come back to the price method.
+
+```
+def price(quantity)
+	if quantity >= 100
+		price_per_unit = 8
+	elsif quantity >=50
+		price_per_unit = 9
+	else
+		price_per_unit = 10
+	end
+	
+	quantity * price_per_unit
+end
+```
