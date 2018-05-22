@@ -151,16 +151,18 @@ When viewing Customize setting page you'll see options on the left and preview o
 
 The specific options available to us is dependant on the theme itself.
 
-   Switch themes = different options available for customization
+* Switch themes = different options available for customization
 
-Theme Option Pages
+
+## Theme Option Pages
 Typically found at Appearance > Theme Options
 
 Again, different options are avaialble based on what the theme allows.
 
 Some themes have recommended plugins
 
-How to Make Child Themes
+
+## How to Make Child Themes
 Theme developers will occasionally update their themes to fix bugs and stay on top of wordpress updates.
 
 When we edit a theme we lose those edits in an update. To avoid this problem we create child themes.
@@ -168,22 +170,27 @@ When we edit a theme we lose those edits in an update. To avoid this problem we 
 Child Themes live in a separate folder of the theme we want to customize.
 
 Child themes will use parent them files unless a version exist in the child theme, in which case the child theme is used. 
-Copy and paste files from the parent theme to the child theme and then edit the child theme version to customize.
+* Copy and paste files from the parent theme to the child theme and then edit the child theme version to customize.
 
-Steps
-In FTP go to public_html folder > wp-content > themes
-Same name as original theme with "child" appended
-Ex: twentythirteen –> twentythirteenchild
-Copy .css file from original file and paste it into child theme folder
-Need a variable for Template that notes the parent theme
-Also need an @import to get the parent theme style sheet.
-@import "../twentythirteen/style.css";
-Without this step we would still have child theme but would lack styles of parent theme we want it to inherit
-Also need the screenshot.png file which shows up in the admin area when selecting themes.
-Upload child theme to server
-Go back to admin area - Appearance > Themes and find/activate Child Theme
+### Steps
+1. In FTP go to public_html folder > wp-content > themes
+2. Same name as original theme with "child" appended
+    * Ex: twentythirteen –> twentythirteenchild
+3. Copy .css file from original file and paste it into child theme folder
+    1. Need a variable for Template that notes the parent theme
+    2. Also need an `@import` to get the parent theme style sheet.
+        
+        ```
+        @import "../twentythirteen/style.css";
+        ```
 
-Customizing Wordpress Theme Files
+        * Without this step we would still have child theme but would lack styles of parent theme we want it to inherit
+4. Also need the screenshot.png file which shows up in the admin area when selecting themes.
+5. Upload child theme to server
+6. Go back to admin area - Appearance > Themes and find/activate Child Theme
+
+
+## Customizing Wordpress Theme Files
 CSS Customization
 We want to change the navigation menu to be the same background color as the footer.
 Find the style that sets the background color of the footer.
