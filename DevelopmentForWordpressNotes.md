@@ -104,11 +104,269 @@ Important to note that MAMP Servers need to be on to run Wordpress locally
 7. Good idea to run process in reverse if you're going to start developing locally again.
 
 
-
-
 ****************************************************************************************************
 # Build a Website with Wordpress
 
+## [WordPress.org](http://wordpress.org/) Theme Repository
+See featured and most popular themes
+
+Easier to log into admin area > Appearance > Themes  > Add New
+
+Themes have to be installed AND activated
+
+If not using a theme or plugin it's good practice to delete it from the site.
+
+
+## Best Wordpress Themes
+Google is your friend.
+
+"Free Responsive Wordpress Themes"
+
+Easy to activate and install downloaded theme to the site
+
+    * Log into /wp-admin
+    * Appearance > Themes > Add New > Upload > Choose downloaded zip file > Install Now > Activate
+
+
+## Premium Themes - Paid (Not Free Themes)
+[themeforest.net](http://themeforest.net/) - hub from finding/searching/paying for premium themes
+[woothemes.com](http://woothemes.com/) - hub from finding/searching/paying for premium 
+
+
+## Theme Frameworks
+Theme framework - Advanced WP theme that comes with extensive ability to customize theme within admin area. Also, tend to come with a lot of extra hooks and functions that theme developers can use to quickly build custom layouts and features.
+
+Largely exist as a starting point for building custom themes.
+
+Flexible enough to build any type of site on top of them.
+
+The more you work with a specific theme framework the faster you develop.
+* [ ] Do we use a them framework? Which?
+
+
+## The Wordpress Theme Customizer
+Simplest place to update the theme is at Appearance > Customize
+
+When viewing Customize setting page you'll see options on the left and preview of changes on the right.
+
+The specific options available to us is dependant on the theme itself.
+    Switch themes = different options available for customization
+
+Theme Option Pages
+Typically found at Appearance > Theme Options
+
+Again, different options are avaialble based on what the theme allows.
+
+Some themes have recommended plugins
+
+How to Make Child Themes
+Theme developers will occasionally update their themes to fix bugs and stay on top of wordpress updates.
+
+When we edit a theme we lose those edits in an update. To avoid this problem we create child themes.
+
+Child Themes live in a separate folder of the theme we want to customize.
+
+Child themes will use parent them files unless a version exist in the child theme, in which case the child theme is used. 
+Copy and paste files from the parent theme to the child theme and then edit the child theme version to customize.
+
+Steps
+In FTP go to public_html folder > wp-content > themes
+Same name as original theme with "child" appended
+Ex: twentythirteen –> twentythirteenchild
+Copy .css file from original file and paste it into child theme folder
+Need a variable for Template that notes the parent theme
+Also need an @import to get the parent theme style sheet.
+@import "../twentythirteen/style.css";
+Without this step we would still have child theme but would lack styles of parent theme we want it to inherit
+Also need the screenshot.png file which shows up in the admin area when selecting themes.
+Upload child theme to server
+Go back to admin area - Appearance > Themes and find/activate Child Theme
+
+Customizing Wordpress Theme Files
+CSS Customization
+We want to change the navigation menu to be the same background color as the footer.
+Find the style that sets the background color of the footer.
+Open the child theme .css file
+After the @import from the parent theme, paste in the CSS setting the background color of the footer.
+The background color is all we're keeping.
+Find out the class of id that is setting the background color of the navigation bar and paste that into child theme .css file, replacing the rule name we pasted in during step 3.
+Save changes
+Upload to server
+Refresh
+New styles have been applied but the text color isn't legible so we need to update that style as well. Follow the same process to determine where the navigation color was being set and create a new rule that sets a readable color.
+
+Now we want to edit the PHP file for a page, specifically we want to remove the option for a visitor to comment on the page.
+Open theme folder locally and find the relevant file (page.php)
+Copy page.php from parent and paste into child theme.
+This ensures that the child theme file is seen by wordpress first, instead of the page.php file in the parent theme
+Open up child page.php and let's find the code that allows for comments:
+<?php comments_template(); ?>
+Instead of deleting the line of code, we're just going to comment out the comments_template() function in case we need it later.
+<?php //comments_template(); ?>
+Save changes and upload to server
+
+Custom Post Types and Field Plugins
+Two types of deault content:
+Posts
+Pages
+
+Custom Posts operate like posts but allow for custom fields.
+
+Normally going to deal with two sets of plugins to establish custom posts:
+Custom Post Type UI - helps set up custom post types
+Advanced Custom Fields - helps setup custom fields in custom post types
+
+The above mentioned plugins are two of the most popular plugins for this type of work, but some plugins might serve both functions. For instance Types - Custom Fields and Custom Post Types Management
+Do we use same plugins across the board? What plugin(s)?
+
+Setting Up Custom Post Types and Fields
+Installing Custom Post Type UI Plugin
+Plugins > Add New > Search for Plugin > Install
+Activate it
+Note new option in admin
+
+Creating new custom post type, Art, using Custom Post Type UI
+Post Type Name & Label: "Art"
+Singular Label might be different from Label ("Movies" vs "Movie")
+Note new option in admin
+
+To get Custom Post Type Fields will need new plugin
+
+Install Custom Post Type Fields plugin
+Plugins > Add New > Search for Plugin > Install
+Activate it
+Note new item in admin
+
+Adding New Fields
+Custom Fields > Add New
+Label them as "Art"
+Under rules make sure the Post Type is equal to "art"
+Add "Image"
+Required
+Return Value: "Image URL"
+Add "Description"
+Text Area
+Required
+Add "Price"
+Text
+Required
+Adjust style
+Adjust what options are displayed on page
+Publish
+
+Custom Post Type Templates
+First step to getting "Art" posts customized is to get new files into child theme.
+
+art.php
+Almost an exact copy of page.php except for few changes.
+
+Code is setup like a regular page but at the end is a call to pull all of the items with post_type == 'art' and display them according to the content-art.php file.
+
+content-art.php
+Here we can see that we're setup to display the title, price, the image, and the description.
+
+However, we're using an new piece of code that comes from the advanced custom field plugin:
+the_field()
+
+the_field() is a function used to display any custom fields that we're working with.
+
+single-art.php
+Determines what a single entry of "art" posts look like.
+
+Inside is some basic code that ALSO uses the content-art.php code, but only displays a single item of art instead of all the art items.
+
+Setting up a page on the site to display art
+Move files to child theme.
+Go to admin and create a new page.
+Name the page and add a description
+Change the template to "Art Page"
+Publish
+
+How to Create Widgetized Areas in Wordpress
+To create a new widgets area we need the files from the project to get edited and moved to the child theme. 
+
+We'll need the following files:
+functions.php
+header.php
+style.css
+
+functions.php
+Allows for more custom code than the normal page template file.
+
+Child functions.php still reads and has access to all the code in the parent functions.php file
+
+header.php
+Exact same file from parent theme
+
+Only made one edit:
+<?php if (! dynamic_sidebar( 'uptop' ) ); ?>
+If there's a custom widget, or dynamic sidebar called "uptop" then display it
+
+Can see that the "uptop" name is set in the functions.php file
+
+style.css
+See that we've added some styles for the #uptop
+
+back in admin
+Appearance > Widgets > refresh
+See that there's a new widget area called "Header" (also set in the functions.php file
+
+to setup new widgets
+Copy the create_widget function in functions.php and edit to reflect new location:
+create_widget("Header", "uptop", "Displays in the header of the site, above the title");
+create_widget("Pre-Footer", "prefooter", "Displays above the footer");
+Copy the dynamic_sidebar function to whatever page you want your new widget to apply to, and adjust the code to reflect your new widget:
+<?php if ( ! dynamic_sidebar( 'prefooter' ) ); ?>
+
+How to Add Custom Menus to a Wordpress Theme
+To create a new custom menu we need to copy the code from the original folder
+
+functions.php
+Now we need some code for creating custom menus.
+<?php
+/// Create a custom menu
+function register_my_menus() {
+register_nav_menus[
+array(
+'footer-menu' => __( 'Footer Menu' )
+
+/// Could add multiple menu items by filling out the array with more values
+'sidebar-menu' => __( 'Sidebar Menu' )
+)
+];
+}
+add_action( 'init', 'register_my_menus' );
+footer.php
+Added one line of code to add:
+<?php wp_nav_menu( array{'menu' => 'Footer Menu' )); ?>
+This checks for the "Footer Menu" and displays the menu if it exists.
+
+Finding, Installing and Updating Wordpress Plugins
+Plugins extend the functionality of wordpress.
+
+Most of the time, when you're looking for a new plugin you'll do so from the admin area.
+Plugins > Add New > Search
+
+Premium plugins are not listed in the wordpress.com repository
+Plugins > Upload > Select downloaded zip > Activate
+
+Common Wordpress Plugins
+BackUpWordPress - Simple and sets automated backups of files and database or done manually
+VaultPress another good service
+Akismet - Helps prevent spam on your site. Sign up for an API key and you're good to go.
+Jetpack - popular on wordpress.com
+Wordpress SEO by Yoast - lots of SEO features
+Gravity Forms - most popular plugin fro creating forms on wordpress sites. Premium but worth it.
+WooSlider - premium plugin for sliders
+Lightbox Plus ColorBox - automatically add lightbox where it makes sense.
+Custom Post Types UI
+Advanced Custom Fields
+Types - Custom Fields
+Black Studio TinyMCE Widget - Add TinyMCE to the Text option in Widgets area
+Dispaly Widgets - Let's you set which widgets display on which pages.
+Google Analytics for Wordpress - helps setup GA
+Google Analytics Dashboard for WP - lets you see analytics info in Wordpress dashboard
+Admin Menu Editor - Lets you control what users see when they log in to the backend of their site.
 
 ****************************************************************************************************
 # PHP for Wordpress
