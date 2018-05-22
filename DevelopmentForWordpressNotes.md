@@ -328,76 +328,93 @@ Exact same file from parent theme
 
 Only made one edit:
 
-  ```
-  <?php if (! dynamic_sidebar( 'uptop' ) ); ?>
-  ```
+```
+<?php if (! dynamic_sidebar( 'uptop' ) ); ?>
+```
 
   * If there's a custom widget, or dynamic sidebar called "uptop" then display it
   * Can see that the "uptop" name is set in the functions.php file
 
-style.css
+### style.css
 See that we've added some styles for the #uptop
 
-back in admin
+### back in admin
 Appearance > Widgets > refresh
-See that there's a new widget area called "Header" (also set in the functions.php file
+See that there's a new widget area called "Header" (also set in the `functions.php` file
 
-to setup new widgets
-Copy the create_widget function in functions.php and edit to reflect new location:
-create_widget("Header", "uptop", "Displays in the header of the site, above the title");
-create_widget("Pre-Footer", "prefooter", "Displays above the footer");
-Copy the dynamic_sidebar function to whatever page you want your new widget to apply to, and adjust the code to reflect your new widget:
-<?php if ( ! dynamic_sidebar( 'prefooter' ) ); ?>
+### To setup new widgets
+1. Copy the create_widget function in functions.php and edit to reflect new location:
 
-How to Add Custom Menus to a Wordpress Theme
+    ```
+    create_widget("Header", "uptop", "Displays in the header of the site, above the title");
+    create_widget("Pre-Footer", "prefooter", "Displays above the footer");
+    ```
+
+2. Copy the dynamic_sidebar function to whatever page you want your new widget to apply to, and adjust the code to reflect your new widget:
+
+    ```
+    <?php if ( ! dynamic_sidebar( 'prefooter' ) ); ?>
+    ```
+
+
+## How to Add Custom Menus to a Wordpress Theme
 To create a new custom menu we need to copy the code from the original folder
 
-functions.php
+### functions.php
 Now we need some code for creating custom menus.
+
+```
 <?php
 /// Create a custom menu
 function register_my_menus() {
-register_nav_menus[
-array(
-'footer-menu' => __( 'Footer Menu' )
+  register_nav_menus[
+    array(
+      'footer-menu' => __( 'Footer Menu' )
 
-/// Could add multiple menu items by filling out the array with more values
-'sidebar-menu' => __( 'Sidebar Menu' )
-)
-];
+      /// Could add multiple menu items by filling out the array with more values
+      'sidebar-menu' => __( 'Sidebar Menu' )
+    )
+  ];
 }
 add_action( 'init', 'register_my_menus' );
-footer.php
+```
+
+### footer.php
 Added one line of code to add:
+
+```
 <?php wp_nav_menu( array{'menu' => 'Footer Menu' )); ?>
+```
+
 This checks for the "Footer Menu" and displays the menu if it exists.
 
-Finding, Installing and Updating Wordpress Plugins
+## Finding, Installing and Updating Wordpress Plugins
 Plugins extend the functionality of wordpress.
 
 Most of the time, when you're looking for a new plugin you'll do so from the admin area.
-Plugins > Add New > Search
+* Plugins > Add New > Search
 
-Premium plugins are not listed in the wordpress.com repository
-Plugins > Upload > Select downloaded zip > Activate
+Premium plugins are not listed in the [wordpress.com](http://wordpress.com/) repository
+* Plugins > Upload > Select downloaded zip > Activate
 
-Common Wordpress Plugins
-BackUpWordPress - Simple and sets automated backups of files and database or done manually
+
+## Common Wordpress Plugins
+* BackUpWordPress - Simple and sets automated backups of files and database or done manually
 VaultPress another good service
-Akismet - Helps prevent spam on your site. Sign up for an API key and you're good to go.
-Jetpack - popular on wordpress.com
-Wordpress SEO by Yoast - lots of SEO features
-Gravity Forms - most popular plugin fro creating forms on wordpress sites. Premium but worth it.
-WooSlider - premium plugin for sliders
-Lightbox Plus ColorBox - automatically add lightbox where it makes sense.
-Custom Post Types UI
-Advanced Custom Fields
-Types - Custom Fields
-Black Studio TinyMCE Widget - Add TinyMCE to the Text option in Widgets area
-Dispaly Widgets - Let's you set which widgets display on which pages.
-Google Analytics for Wordpress - helps setup GA
-Google Analytics Dashboard for WP - lets you see analytics info in Wordpress dashboard
-Admin Menu Editor - Lets you control what users see when they log in to the backend of their site.
+* Akismet - Helps prevent spam on your site. Sign up for an API key and you're good to go.
+* Jetpack - popular on wordpress.com
+* Wordpress SEO by Yoast - lots of SEO features
+* Gravity Forms - most popular plugin fro creating forms on wordpress sites. Premium but worth it.
+* WooSlider - premium plugin for sliders
+* Lightbox Plus ColorBox - automatically add lightbox where it makes sense.
+* Custom Post Types UI
+* Advanced Custom Fields
+* Types - Custom Fields
+* Black Studio TinyMCE Widget - Add TinyMCE to the Text option in Widgets area
+* Dispaly Widgets - Let's you set which widgets display on which pages.
+* Google Analytics for Wordpress - helps setup GA
+* Google Analytics Dashboard for WP - lets you see analytics info in Wordpress dashboard
+* Admin Menu Editor - Lets you control what users see when they log in to the backend of their site.
 
 ****************************************************************************************************
 # PHP for Wordpress
