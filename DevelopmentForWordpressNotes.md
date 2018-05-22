@@ -521,6 +521,138 @@ The function we created is getting hooked into the widgest_init action hook.
 ****************************************************************************************************
 # Customizing the Wordpress Admin Area
 
+## What are Admin Color Schemes
+Color Schemes are basically skins that style what the admin screen looks like.
+
+Powered by a CSS file that controls how the navigation and links, modules and windows, etc. look.
+
+
+## Customizing Admin Color Schemes via a Plugin
+Admin Color Schemes - plugin that gives us a bunch more options color schemes.
+
+Admin Color Schemer - Allows you to create your own custom color scheme using color pickers.
+
+
+## Customizing Admin Color Schemes from Scratch
+Where do default color schemes live? `wp-admin/css/colors` folders for each scheme
+
+Copy a CSS file from one of the default color schemes and head back to your theme - suggest using a child theme
+
+Create a new folder in `/wp/content/child-theme-folder` called `admin-colors`. Now create a subfolder for the new scheme you're going to create.
+
+Paste in the file you copied earlier.
+
+Now that the file is there, we need to tell wordpress to look at it, which we'll do in our functions.php file.
+
+```
+function wpt_admin_color_schemes() {
+  // get_theme_directory_uri() would get the parent theme, not the child theme so we use get_stlylesheet_directory_uri() which will look in child theme folder
+  $theme_dir = get_stylesheet_directory_uri();
+
+  wp_ admin_css_color(
+    'treehouse', __( 'Treehouse' ),
+    $theme_dir . '/admin-colors/treehouse/colors.min.css',
+    array( '#384047', '#5bc67b', '#b38cc7', 'ffffff' )
+  );
+}
+
+add_action('admin_init', 'wpt_admin_color_schemes');
+```
+
+Important to note the use of `get_stylesheet_directory_uri()` instead of `get_theme_directory_uri()` because "theme" will get the URL of the parent theme, whereas "styelsheet" will the URL of the child theme.
+
+Could use conditionals in your functions.php to check the users role when they log in and default or disallow color scheme options based on that result.
+
+
+## How to Customize the Wordpress Login Screen via functions.php
+[codex.wordpress.org/Customizing_the_Login_Form](http://codex.wordpress.org/Customizing_the_Login_Form) - this breaks down all the different CSS, functions and custom hooks you'd need to customize the login screen from scratch.
+
+We're not going to go find the login page file. Instead we're going to use `functions.php` and some hooks to alter the page.
+
+Similar to front-end themes. You create a function in functions.php and enqueue styles and scripts to override the default login screen styles.
+
+There are additional hooks you can get into to provide custom login or custom error messages.
+
+
+## How to Customize the Wordpress Login SCreen Using a Plugin
+Custom Login - plugin lets you customize the login screen.
+
+## How and Why to Change Admin Navigation in Wordpress
+Admin Nav - Links down the left side of the admin area. Links you to posts, pages, media, appearance, general, etc.
+
+Most wordpress owners don't need to see all those options.
+
+So we'll look at customizing the admin menu to manage which users see which links.
+
+
+## How to Remove and Add Admin Menu Links via the functions.php File
+[codex.wordpress.org/Function_Reference/remove_menu_page](http://codex.wordpress.org/Function_Reference/remove_menu_page)
+
+Allows us to put in the `functions.php` the pages that we want to remove from the menu
+
+```
+function wpt_remove_menus() {
+  remove_menu_page( index.php' );  // Dashboard
+  remove_menu_page( edit.php' );  // Posts
+  remove_menu_page( upload.php' );  // Media
+  remove_menu_page( edit.php?post_type=page' );  / Pages
+  remove_menu_page( edit_comments.php' ); // Comments
+  remove_menu_page( themes.php' );  // Appearance
+  remove_menu_page( plugins.php' ); // Plugins
+  remove_menu_page( users.php' );  // Users
+  remove_menu_page( tools.php' );  // Tools
+  remove_menu_page( options-general.php' );  // Settings
+}
+
+add_action( "admin_menu', 'wpt_remove_menus' );
+```
+
+There is a function to add menu items, but unless you knew what you were building on that page, then you wouldn't need this. It will be covered under the Building Plugins Course.
+
+
+## How to Customize the Wordpress Admin Menu with a plugin
+Admin Menu Editor - Plugin lets you adjust what user roles are able to view which navigation is visible to users.
+
+
+## Custom Dashboard Widgets in Wordpress
+Dashboard is the default homepage after a user logs in.
+
+Customizing this page is useful because you can provide custom messages after a user logs in. For instnace, "Welcome to a site, he's where you go to edit your homepage" etc.
+
+
+## How to Add Custom Wordpress Dashboard Widgets via the functions.php File
+Screen options are a per-user setting, meaning that I could not change the screen options for another user.
+
+How do we create our own custom widget.
+
+[codex.wordpress.org/Dashboard_Widgets_API](http://codex.wordpress.org/Dashboard_Widgets_API) - shows main function and some example code for how to use it.
+
+```
+function example_add_dashboard_widgets() {
+  wp_add_dashboard_widget(
+    'example_dashboard_widget', // Widget Slug
+    'Example Dashboard Widget',  // Title
+    'example_dashboard_widget_function'  //Display function
+  );
+}
+
+add_action ( 'wp-dashboard_setup', 'example_add_dashboard_widgets' );
+
+function example_dashboard_widget_function() {
+  // Display text
+  echo "Hello World, I'm a great Dashboard Widget',
+}
+```
+
+
+## How to Add Custom Wordpress Dashboard Widgets via a Plugin
+Custom Dashboard Help Widget - Gives us a nice form that let's us display text on the homepage
+
+Allows for styling and let's you manage dashboard widgets globally (not just per user).
+
+
+## Updating the Footer Text in the Admin Area in Wordpress
+Custom Admin Footer Text Plugin
 
 ****************************************************************************************************
 # How to Build a Wordpress Plugin
