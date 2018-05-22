@@ -150,6 +150,7 @@ Simplest place to update the theme is at Appearance > Customize
 When viewing Customize setting page you'll see options on the left and preview of changes on the right.
 
 The specific options available to us is dependant on the theme itself.
+
     Switch themes = different options available for customization
 
 Theme Option Pages
