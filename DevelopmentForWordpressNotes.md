@@ -88,7 +88,7 @@ Important to note that MAMP Servers need to be on to run Wordpress locally
     define('WP_SITEURL', 'http://liveurlthatyoubought.com');
     ```
 
-       Make sure you have the 'http://'
+    Make sure you have the 'http://'
 
 6. All setup but should probably use a plugin to Find & Replace all links that might still be pointing at localhost. This can effect images too.
     1. Install and active Search and Replace plugin
