@@ -26,69 +26,78 @@
 
    Open MAMP > Preferences > Apache > Select new location
 
-Installing a Local Web Server on a PC
-XAMPP > XAMPP for Windows > Download the latest version
-Use Installer version
-Run Installer
-Uncheck BitNami
-After finish XAMPP will open automatically.
-Start Apache and MySQL services
-localhost/xampp/splash.php default 
-Files are stored in C drive > XAMPP folder > htdocs folder 
 
-Installing Wordpress Locally
-Go to wordpress.org and download wordpress
-Create a new folder in the Sites folder called localwp.com
-Don't install directly into Sites folder because it becomes difficult to deal with multiple installs
-Copy all the files from the downloaded wordpress install into the localwp.com folder.
-Open MAMP control panel > Open Start Page > PHPMyAdmin
-Databases > Create new database called localwp
-Users > Create new user: wpuser
-Set host: localhost
-Check All for global access to database
-localhost/localwp.com to proceed to installation script
-Create a Config file
-Enter DB info
-Submit
-Run Install
-Enter Site and WP User details
-Uncheck Privacy
-Install Wordpress
-Log In
+## Installing a Local Web Server on a PC
+* XAMPP > XAMPP for Windows > Download the latest version
+  * Use Installer version
+  * Run Installer
+  * Uncheck BitNami
+  * After finish XAMPP will open automatically.
+    * Start Apache and MySQL services
+* `localhost/xampp/splash.php` default 
+  * Files are stored in C drive > XAMPP folder > htdocs folder 
+
+
+## Installing Wordpress Locally
+* Go to [wordpress.org](http://wordpress.org/) and download wordpress
+* Create a new folder in the Sites folder called [localwp.com](http://localwp.com/)
+  * Don't install directly into Sites folder because it becomes difficult to deal with multiple installs
+* Copy all the files from the downloaded wordpress install into the localwp.com folder.
+* Open MAMP control panel > Open Start Page > PHPMyAdmin
+  * Databases > Create new database called localwp
+  * Users > Create new user: wpuser
+    * Set host: localhost
+    * Check All for global access to database
+  * `localhost/localwp.com` to proceed to installation script
+    * Create a Config file
+    * Enter DB info
+      * Submit
+    * Run Install
+      * Enter Site and WP User details
+      * Uncheck Privacy
+      * Install Wordpress
+    * Log In
+
 Important to note that MAMP Servers need to be on to run Wordpress locally
 
-Migrating Wordpress from Local to Live Server
-FTP into site and drag ALL items from localwp.com folder into the public_html folder on the server
-Log into cpanel and create a new MySQL database.
-Use name localwp for DB name
-Use wpuser as the username
-Use same password as the local install
-Make sure user has all privleges
-Note the final username and database name because we'll need this for the config file
-Go back to MAMP and open start page.
-Go to PHPMyAdmin > localwp database > Export tab
-Custom Export
-Everything selected
-Save as output file to text
-Database is successfully backed up
-Go back to cpanel and open PHPMyAdmin
-Click into new database that we created > Import new file from our local development that we just exported
-Database info is now on live server
-Go back to FTP and find wp_config.php > Open and Edit
-Still has all DB info from local site
-Update with info from live site
-DB_Collate tells WP to find site somewhere else
-define('WP_HOME', 'http://liveurlthatyoubought.com');
-define('WP_SITEURL', 'http://liveurlthatyoubought.com');
-Make sure you have the 'http://'
-All setup but should probably use a plugin to Find & Replace all links that might still be pointing at localhost. This can effect images too.
-Install and active Search and Replace plugin
-Go to Search and Replace plugin
-Enter Search URL from local site
-http://localhost/localwp.com
- Enter Replace URL for new site
-http://liveurlthatyoubought.com
-Good idea to run process in reverse if you're going to start developing locally again.
+
+## Migrating Wordpress from Local to Live Server
+1. FTP into site and drag ALL items from `localwp.com` folder into the `public_html` folder on the server
+2. Log into cpanel and create a new MySQL database.
+  1.  Use name localwp for DB name
+  2.  Use wpuser as the username
+    1. Use same password as the local install
+    2. Make sure user has all privleges
+  3. Note the final username and database name because we'll need this for the config file
+3. Go back to MAMP and open start page.
+  1. Go to PHPMyAdmin > localwp database > Export tab
+    1. Custom Export
+    2. Everything selected
+    3. Save as output file to text
+    4. Database is successfully backed up
+4. Go back to cpanel and open PHPMyAdmin
+  1. Click into new database that we created > Import new file from our local development that we just exported
+  2. Database info is now on live server
+5. Go back to FTP and find wp_config.php > Open and Edit
+  1. Still has all DB info from local site
+  2. Update with info from live site
+  3. DB_Collate tells WP to find site somewhere else
+
+    ```
+    define('WP_HOME', 'http://liveurlthatyoubought.com');
+    define('WP_SITEURL', 'http://liveurlthatyoubought.com');
+    ```
+
+       Make sure you have the 'http://'
+
+6. All setup but should probably use a plugin to Find & Replace all links that might still be pointing at localhost. This can effect images too.
+  1. Install and active Search and Replace plugin
+  2. Go to Search and Replace plugin
+    1. Enter Search URL from local site
+       [http://localhost/localwp.com](http://localhost/localwp.com)
+    2. Enter Replace URL for new site
+       [http://liveurlthatyoubought.com](http://liveurlthatyoubought.com/)
+7. Good idea to run process in reverse if you're going to start developing locally again.
 
 
 
