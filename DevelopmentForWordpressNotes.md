@@ -64,8 +64,8 @@ Important to note that MAMP Servers need to be on to run Wordpress locally
 ## Migrating Wordpress from Local to Live Server
 1. FTP into site and drag ALL items from `localwp.com` folder into the `public_html` folder on the server
 2. Log into cpanel and create a new MySQL database.
-  1.  Use name localwp for DB name
-  2.  Use wpuser as the username
+  1. Use name localwp for DB name
+  2. Use wpuser as the username
     1. Use same password as the local install
     2. Make sure user has all privleges
   3. Note the final username and database name because we'll need this for the config file
