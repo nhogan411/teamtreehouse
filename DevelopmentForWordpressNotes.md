@@ -419,6 +419,88 @@ VaultPress another good service
 ****************************************************************************************************
 # PHP for Wordpress
 
+## What is PHP
+Wordpress + PHP
+* Save content to a database
+* Read content from a database
+* Write loops and conditional statements
+* Pull in Wordpress specific information
+* Pull in images, PHP, CSS, and javscripts files
+
+## PHP Files
+Wordpress has a few different types of PHP files:
+1. Core files - only contain PHP code and not files you should be editing since they might break your wordpress install
+2. Theme files - contain a combination of PHP and HTML. Most common type of file you'll find yourself editing.
+3. Plugin files - primarily PHP code, although might have HTML, javscript or CSS mixed in. Typically don't edit plugin files unless you're building it.
+
+Typically don't edit files outside of the `wp-content` folder.
+
+Keep in mind not to edit themes directly. You will lose edits when a theme updates if you edit directly in the theme. Use child themes.
+
+
+## A PHP Block
+Writing PHP outside of the PHP block will display as plain text. 
+
+Writing HTML inside of a PHP block will cause errors.
+
+
+## The Importance of the Semicolon
+Semicolon in PHP marks the end of a statement or a line of code.
+
+
+## Adding HTML Markup with PHP
+In wordpress markup is typically left outside the PHP tags, especially in templates.
+
+
+## Template Tags
+Template tags - Wordpress comes with a lot of pre-built functions that easily let you get access to commonly used pieces of information that you may want to use on your site.
+
+Some template tags only generate a single bit of data.
+
+Others can output a number of pieces of data and require that you specify what you're looking for. We specify what we're looking for using parameters.
+
+[https://codex.wordpress.org/Template_Tags](https://codex.wordpress.org/Template_Tags) - a list of ALL the major template tags used in wordpress. Find examples to see what's available, how to use it and what the output is.
+
+
+## Custom Loops
+[WP_Query](https://codex.wordpress.org/Class_Reference/WP_Query)
+
+
+## Custom Functions
+When you create your own themes or plugins you'll often have to create your own functions.
+
+
+## Wordpress Hooks - Actions and Filters 
+Two types of hooks exist in wordpress
+1. Actions - insert your own code at different points while wordpress is running.
+    * ex. Run my code when a post is saved.
+    * ex. Run my code when a menu is loaded
+2. Filters - Modify content in wordpress
+    * ex. Add a custom footer to the end of the main content of a post
+    * ex. Limit the excerpt of a post to a certain number of characters
+
+```
+add_action( 'after_setup_theme', 'twentyfifteen_setup' );
+```
+
+After wordpress does everything it needs to do to setup a theme, let us hook our special setup function to your code when you're setting up this theme.
+
+```
+add_action( ;widgets_init', 'twentyfifteen_widgets_init' );
+```
+
+The function we created is getting hooked into the widgest_init action hook.
+
+
+## PHP Coding Standards for Wordpress
+* [PHP Coding Standards](https://make.wordpress.org/core/handbook/coding-standards/php/)
+* [HTML Coding Standards](https://make.wordpress.org/core/handbook/coding-standards/html/)
+* [CSS Coding Standards](https://make.wordpress.org/core/handbook/coding-standards/css/)
+* [Javascript Coding] Standards(https://make.wordpress.org/core/handbook/coding-standards/javascript/)
+
+
+## Learning More PHP
+
 
 ****************************************************************************************************
 # Wordpress Theme Development
