@@ -1,13 +1,21 @@
 # Local Wordpress Development
 
 ## Installing a Local Web Server on a Mac
+
 [mamp.info](http://mamp.info/) - click to download MAMP
+
 Install MAMP
+
 Applications > MAMP Folder > MAMP
+
 To get MAMP up and running click Start Servers
+
    This starts both Apache and MySQL
+
    Should also open MAMP start page in browser
+
 If we remove MAMP from URL we can get to the root directory of the server
+
 This file is actually in the MAMP Folder > htdocs folder
 
 Customizing Your Local Server Setup on a Mac
