@@ -588,7 +588,7 @@ Now let's apply this logic to the loop we have higher up on the page that displa
         <li class="wptreehouse-badge-name">
           <a href="#"><?php echo $wptreehouse_profile->{'badges'}[$i]->{'name'}; ?></a>
         </li>
-        
+
         <li class="wptreehouse-project-name">
           <a href="#"><?php echo $wptreehouse_profile->{'badges'}[$i]->{'courses'}[1]->{'title'}; ?></a>
         </li>
@@ -1003,6 +1003,101 @@ $.post(ajaxurl, {
 
 ****************************************************************************************************
 # WooCommerce Theme Development
+
+## Default WooCommerce Template Files
+`wp-content/plugins/woocommerce/templates` is where you can find all the default templates exist that woocommerce will use to display products and other related info.
+
+
+## How to Override a Default Template File
+[docs.woothemes.com/document/template-structure](http://docs.woothemes.com/document/template-structure)
+1. Go to the WooCommerce templates fold and grab a file that we want to override. 
+2. Now back out and create a folder called woocommerce inside of your childtheme. 
+3. Paste that file into your folder.
+4. Any edits made to this new file will override the default file.
+
+
+## WooCommerce Template Functions
+* [docs.woothemes.com/wc-apidocs/package-WooCommerce.Functions.html](http://docs.woothemes.com/wc-apidocs/package-WooCommerce.Functions.html) - list of all the functions available in the woocommerce templates.
+* [docs.woothemes.com/document/conditional-tags](http://docs.woothemes.com/document/conditional-tags) - a list of all the conditional functions available in woocommerce templates
+* [docs.woothemes.com/document/useful-functions](http://docs.woothemes.com/document/useful-functions) - useful core functions that might be helpful
+
+
+## Template Files Updates
+Takes a fair amount of work to update your custom files so suggestion is not to wait for a bunch of updates. Instead check and update regularly.
+
+
+## An Introduction to WooCommerce Template Hooks
+* [docs.woothemes.com/document/introduction-to-hooks-actions-and-filters](http://docs.woothemes.com/document/introduction-to-hooks-actions-and-filters) - short explanation of hooks and the two types of hooks
+* [docs.woothemes.com/wc-apidocs/hook-docs.html](http://docs.woothemes.com/wc-apidocs/hook-docs.html) - reference list of all action and filter hooks
+
+
+## The Main Shop Template
+`wp-content/plugins/woocommerce/templates/archive-products.php`
+
+`wp/content/plugins/woocommerce/templates/content-product.php`
+
+These two pages control the bulk of a woocommerce listing page.
+
+
+## Global Template Files
+* `woocommerce/templates/global/wrapper-start.php` - executed prior to displaying any products
+* `woocommerce/templates/global/wrapper-end.php` - executed after displaying all products
+* `woocommerce/templates/global/sidebar.php` - displays a standard sidebar unless ther'es a sidebar-shop.php file
+* `woocommerce/templates/global/quantity-input.php` - quantity of products option on the single product pages. unique functionality specific to woocommerce
+* `woocommerce/templates/global/form-login.php`
+* `woocommerce/templates/global/breadcrumb.php` - controls how the breadcrumbs are displayed and presented
+
+
+## Loop Template Files
+### How are multiple products being listed?
+* `woocommerce/templates/loop/loop-start.php` - just an unordered list
+* `woocommerce/templates/loop/loop-end.php` - closes the unordered list
+
+
+## The Single Product Template
+### How is a single product displayed?
+* `woocommerce/templates/single-product.php` - template file is the skeleton for how a single product is displayed.
+* `woocommerce/templates/content-single-product.php` - contains the bulk of the code controlling how single products are displayed
+
+`single-product.php` is a frame that calls a variety of functions and pages, similar to the `archives-product.php` page.
+`content-single-product.php` fills in the main section of that frame with actual product details
+
+
+## Cart Template Files
+* `woocommerce/templates/cart/cart.php` - primary wrapper for all of the cart.
+
+cart is really just a form with different buttons that perform different actions
+
+
+## Order Template Files
+Controls how are displayed on payment confirmation as well as when a user logs back into their account to see past orders.
+
+* `woocommere/tempaltes/order/order-details.php` is the primary shell for this info
+
+
+## Account Template Files
+If you allow customers to create accounts they can view past orders and update billing info, etc. Likewise, you can restrict what customers can view and access.
+
+* `woocommerce/templates/myaccount/my-account.php` is the main page for controlling how this info is displayed
+
+
+## Email Template Files
+Send customized emails to your customers.
+
+* `woocommerce/templates/emails`
+* `woocommerce/templates/emails/email-styles.php`
+* `woocommerce/templates/emails/email-header.php`
+* `woocommerce/templates/emails/email-footer.php`
+
+WooCommerce Email Test plugin - allows you to open emails in browser so you can see what your emails look like without having to go through the process
+
+
+## Miscellaneous Template Files
+* `woocommerce/templates/notices`
+  * `notice.php`
+  * `success.php`
+  * `error.php`
+* `woocommerce/templates/assets/css/woocommerce.scss`
 
 
 ****************************************************************************************************
