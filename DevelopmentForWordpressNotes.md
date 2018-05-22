@@ -519,7 +519,6 @@ OK. That worked. So now let's try pulling in their profile URL.
       <?php echo $wptreehouse_profile->{'profile_url'}; ?>
     </p>
 
-
     <pre><code>
       <?php var_dump( $wptreehouse_profile ); ?>
     </code></pre>
@@ -585,9 +584,11 @@ Now let's apply this logic to the loop we have higher up on the page that displa
         <li>
           <img width="120px" src="<?php echo <?php echo $wptreehouse_profile->{'badges'}[$i]->{'icon_url'}; ?> />
         </li>
+
         <li class="wptreehouse-badge-name">
           <a href="#"><?php echo $wptreehouse_profile->{'badges'}[$i]->{'name'}; ?></a>
         </li>
+        
         <li class="wptreehouse-project-name">
           <a href="#"><?php echo $wptreehouse_profile->{'badges'}[$i]->{'courses'}[1]->{'title'}; ?></a>
         </li>
