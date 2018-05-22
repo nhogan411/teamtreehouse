@@ -328,9 +328,9 @@ Exact same file from parent theme
 
 Only made one edit:
 
-    ```
-    <?php if (! dynamic_sidebar( 'uptop' ) ); ?>
-    ```
+  ```
+  <?php if (! dynamic_sidebar( 'uptop' ) ); ?>
+  ```
 
   * If there's a custom widget, or dynamic sidebar called "uptop" then display it
   * Can see that the "uptop" name is set in the functions.php file
