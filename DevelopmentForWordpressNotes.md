@@ -16,9 +16,9 @@
    
    To do this, open MAMP > Preferences > Ports > "Set to default Apache and MySQL ports" > OK
 
-  * This sets the local host to default :80, which means you don't have to have the port in the URL at all.
+    * This sets the local host to default :80, which means you don't have to have the port in the URL at all.
 
-     `localhost/SITENAME` will work
+       `localhost/SITENAME` will work
 
 2. Change folder location of where we store files
    
