@@ -226,102 +226,114 @@ Now we want to edit the PHP file for a page, specifically we want to remove the 
 
 ## Custom Post Types and Field Plugins
 Two types of deault content:
-Posts
-Pages
+1. Posts
+2. Pages
 
 Custom Posts operate like posts but allow for custom fields.
 
 Normally going to deal with two sets of plugins to establish custom posts:
-Custom Post Type UI - helps set up custom post types
-Advanced Custom Fields - helps setup custom fields in custom post types
+1. Custom Post Type UI - helps set up custom post types
+2. Advanced Custom Fields - helps setup custom fields in custom post types
 
 The above mentioned plugins are two of the most popular plugins for this type of work, but some plugins might serve both functions. For instance Types - Custom Fields and Custom Post Types Management
-Do we use same plugins across the board? What plugin(s)?
 
-Setting Up Custom Post Types and Fields
-Installing Custom Post Type UI Plugin
-Plugins > Add New > Search for Plugin > Install
-Activate it
-Note new option in admin
+* [ ] Do we use same plugins across the board? What plugin(s)?
 
-Creating new custom post type, Art, using Custom Post Type UI
-Post Type Name & Label: "Art"
-Singular Label might be different from Label ("Movies" vs "Movie")
-Note new option in admin
+
+## Setting Up Custom Post Types and Fields
+
+### Installing Custom Post Type UI Plugin
+1. Plugins > Add New > Search for Plugin > Install
+2. Activate it
+3. Note new option in admin
+
+
+### Creating new custom post type, Art, using Custom Post Type UI
+1. Post Type Name & Label: "Art"
+  1. Singular Label might be different from Label ("Movies" vs "Movie")
+2. Note new option in admin
 
 To get Custom Post Type Fields will need new plugin
 
-Install Custom Post Type Fields plugin
-Plugins > Add New > Search for Plugin > Install
-Activate it
-Note new item in admin
+### Install Custom Post Type Fields plugin
+1. Plugins > Add New > Search for Plugin > Install
+2. Activate it
+3. Note new item in admin
 
-Adding New Fields
-Custom Fields > Add New
-Label them as "Art"
-Under rules make sure the Post Type is equal to "art"
-Add "Image"
-Required
-Return Value: "Image URL"
-Add "Description"
-Text Area
-Required
-Add "Price"
-Text
-Required
-Adjust style
-Adjust what options are displayed on page
-Publish
+### Adding New Fields
+1. Custom Fields > Add New
+2. Label them as "Art"
+3. Under rules make sure the Post Type is equal to "art"
+4. Add "Image"
+    1. Required
+    2. Return Value: "Image URL"
+5. Add "Description"
+    1. Text Area
+    2. Required
+6. Add "Price"
+    1. Text
+    2. Required
+7. Adjust style
+8. Adjust what options are displayed on page
+9. Publish
 
-Custom Post Type Templates
+
+## Custom Post Type Templates
 First step to getting "Art" posts customized is to get new files into child theme.
 
-art.php
+### art.php
 Almost an exact copy of page.php except for few changes.
 
-Code is setup like a regular page but at the end is a call to pull all of the items with post_type == 'art' and display them according to the content-art.php file.
+Code is setup like a regular page but at the end is a call to pull all of the items with `post_type == 'art'` and display them according to the `content-art.php` file.
 
-content-art.php
+### content-art.php
 Here we can see that we're setup to display the title, price, the image, and the description.
 
 However, we're using an new piece of code that comes from the advanced custom field plugin:
+
+```
 the_field()
+```
 
-the_field() is a function used to display any custom fields that we're working with.
+`the_field()` is a function used to display any custom fields that we're working with.
 
-single-art.php
+### single-art.php
 Determines what a single entry of "art" posts look like.
 
 Inside is some basic code that ALSO uses the content-art.php code, but only displays a single item of art instead of all the art items.
 
-Setting up a page on the site to display art
-Move files to child theme.
-Go to admin and create a new page.
-Name the page and add a description
-Change the template to "Art Page"
-Publish
+### Setting up a page on the site to display art
+1. Move files to child theme.
+2. Go to admin and create a new page.
+3. Name the page and add a description
+4. Change the template to "Art Page"
+5. Publish
 
-How to Create Widgetized Areas in Wordpress
+
+## How to Create Widgetized Areas in Wordpress
 To create a new widgets area we need the files from the project to get edited and moved to the child theme. 
 
 We'll need the following files:
-functions.php
-header.php
-style.css
+1. `functions.php`
+2. `header.php`
+3. `style.css`
 
-functions.php
+### functions.php
 Allows for more custom code than the normal page template file.
 
 Child functions.php still reads and has access to all the code in the parent functions.php file
 
-header.php
+### header.php
 Exact same file from parent theme
 
 Only made one edit:
-<?php if (! dynamic_sidebar( 'uptop' ) ); ?>
-If there's a custom widget, or dynamic sidebar called "uptop" then display it
 
-Can see that the "uptop" name is set in the functions.php file
+    ```
+    <?php if (! dynamic_sidebar( 'uptop' ) ); ?>
+    ```
+
+  * If there's a custom widget, or dynamic sidebar called "uptop" then display it
+  * Can see that the "uptop" name is set in the functions.php file
 
 style.css
 See that we've added some styles for the #uptop
