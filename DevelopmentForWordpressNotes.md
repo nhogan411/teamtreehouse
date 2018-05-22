@@ -48,7 +48,7 @@ Wordpress hooks come in two forms:
 
   For example:
     
-    * When someone publishes a post, send out a tweet with a link to that post.
+  * When someone publishes a post, send out a tweet with a link to that post.
 Filters - allow us to manipulate any data that Wordpress provides a hook for
 For example:
 Wordpress provides a hook so that we can modify the main content of a post. We could take the post content and a "tweet this" button to the end of it.
