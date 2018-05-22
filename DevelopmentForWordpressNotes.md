@@ -1,7 +1,6 @@
 # Local Wordpress Development
 
 ## Installing a Local Web Server on a Mac
-
 * [mamp.info](http://mamp.info/) - click to download MAMP
 * Install MAMP
 * Applications > MAMP Folder > MAMP
@@ -11,14 +10,21 @@
 * If we remove MAMP from URL we can get to the root directory of the server
   * This file is actually in the MAMP Folder > htdocs folder
 
-Customizing Your Local Server Setup on a Mac
-Remove the :8888 from the URL
-To do this, open MAMP > Preferences > Ports > "Set to default Apache and MySQL ports" > OK
-This sets the local host to default :80, which means you don't have to have the port in the URL at all.
-localhost/SITENAME will work
+
+## Customizing Your Local Server Setup on a Mac
+1. Remove the :8888 from the URL
+   
+   To do this, open MAMP > Preferences > Ports > "Set to default Apache and MySQL ports" > OK
+
+  * This sets the local host to default :80, which means you don't have to have the port in the URL at all.
+
+     `localhost/SITENAME` will work
+
 2. Change folder location of where we store files
-Common to create a Sites folder in their home directory
-Open MAMP > Preferences > Apache > Select new location
+   
+   Common to create a Sites folder in their home directory
+
+   Open MAMP > Preferences > Apache > Select new location
 
 Installing a Local Web Server on a PC
 XAMPP > XAMPP for Windows > Download the latest version
