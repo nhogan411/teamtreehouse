@@ -191,29 +191,40 @@ Child themes will use parent them files unless a version exist in the child them
 
 
 ## Customizing Wordpress Theme Files
-CSS Customization
+
+### CSS Customization
 We want to change the navigation menu to be the same background color as the footer.
-Find the style that sets the background color of the footer.
-Open the child theme .css file
-After the @import from the parent theme, paste in the CSS setting the background color of the footer.
-The background color is all we're keeping.
-Find out the class of id that is setting the background color of the navigation bar and paste that into child theme .css file, replacing the rule name we pasted in during step 3.
-Save changes
-Upload to server
-Refresh
+1. Find the style that sets the background color of the footer.
+2. Open the child theme .css file
+3. After the `@import` from the parent theme, paste in the CSS setting the background color of the footer.
+4. The background color is all we're keeping.
+5. Find out the class of id that is setting the background color of the navigation bar and paste that into child theme .css file, replacing the rule name we pasted in during step 3.
+6. Save changes
+7. Upload to server
+8. Refresh
+
 New styles have been applied but the text color isn't legible so we need to update that style as well. Follow the same process to determine where the navigation color was being set and create a new rule that sets a readable color.
 
 Now we want to edit the PHP file for a page, specifically we want to remove the option for a visitor to comment on the page.
-Open theme folder locally and find the relevant file (page.php)
-Copy page.php from parent and paste into child theme.
-This ensures that the child theme file is seen by wordpress first, instead of the page.php file in the parent theme
-Open up child page.php and let's find the code that allows for comments:
-<?php comments_template(); ?>
-Instead of deleting the line of code, we're just going to comment out the comments_template() function in case we need it later.
-<?php //comments_template(); ?>
-Save changes and upload to server
+1. Open theme folder locally and find the relevant file (page.php)
+2. Copy page.php from parent and paste into child theme.
+    * This ensures that the child theme file is seen by wordpress first, instead of the page.php file in the parent theme
+3. Open up child page.php and let's find the code that allows for comments:
 
-Custom Post Types and Field Plugins
+    ```
+    <?php comments_template(); ?>
+    ```
+
+    * Instead of deleting the line of code, we're just going to comment out the comments_template() function in case we need it later.
+
+    ```
+    <?php //comments_template(); ?>
+    ```
+
+4. Save changes and upload to server
+
+
+## Custom Post Types and Field Plugins
 Two types of deault content:
 Posts
 Pages
