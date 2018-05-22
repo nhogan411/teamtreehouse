@@ -98,17 +98,14 @@ and then they kind of lost me.
 
 **************************************************
 # Rails Application Walkthrough
-**************************************************
 
 
 **************************************************
 # Installing a Ruby on Rails Development Environment in OS X
-**************************************************
 
 
 **************************************************
 # Ruby Basics
-**************************************************
 
 ## Methods
 
@@ -545,7 +542,6 @@ end
 
 **************************************************
 # Ruby Collections
-**************************************************
 
 ## Ruby Arrays
 Create an array in ruby via Array.new and assigning to a variable.
@@ -940,7 +936,6 @@ print_list(list)
 
 **************************************************
 # Ruby Loops
-**************************************************
 Start a loop in ruby using the `loop` keyword
 
 ```
@@ -1155,7 +1150,6 @@ end
 
 **************************************************
 # Ruby Objects and Classes
-**************************************************
 Think of classes like a blueprint that tells the class how it should be structured and what it should do.
 
 
@@ -1558,7 +1552,6 @@ bank_account.debit("Groceries", 40)
 
 **************************************************
 # Building Web Apps with Sinatra
-**************************************************
 
 ## Your First App
 Install Sinatra
@@ -1968,7 +1961,6 @@ end
 
 **************************************************
 # Ruby on Rails 5 Basics
-**************************************************
 MVC - Model, View, Controller
 Model - Writes Ruby objects to the database and reads them later
 View - Shows data to users, most often in HTML
