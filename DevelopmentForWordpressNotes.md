@@ -1,3 +1,96 @@
+# Local Wordpress Development
+
+## Installing a Local Web Server on a Mac
+[mamp.info](http://mamp.info/) - click to download MAMP
+Install MAMP
+Applications > MAMP Folder > MAMP
+To get MAMP up and running click Start Servers
+   This starts both Apache and MySQL
+   Should also open MAMP start page in browser
+If we remove MAMP from URL we can get to the root directory of the server
+This file is actually in the MAMP Folder > htdocs folder
+
+Customizing Your Local Server Setup on a Mac
+Remove the :8888 from the URL
+To do this, open MAMP > Preferences > Ports > "Set to default Apache and MySQL ports" > OK
+This sets the local host to default :80, which means you don't have to have the port in the URL at all.
+localhost/SITENAME will work
+2. Change folder location of where we store files
+Common to create a Sites folder in their home directory
+Open MAMP > Preferences > Apache > Select new location
+
+Installing a Local Web Server on a PC
+XAMPP > XAMPP for Windows > Download the latest version
+Use Installer version
+Run Installer
+Uncheck BitNami
+After finish XAMPP will open automatically.
+Start Apache and MySQL services
+localhost/xampp/splash.php default 
+Files are stored in C drive > XAMPP folder > htdocs folder 
+
+Installing Wordpress Locally
+Go to wordpress.org and download wordpress
+Create a new folder in the Sites folder called localwp.com
+Don't install directly into Sites folder because it becomes difficult to deal with multiple installs
+Copy all the files from the downloaded wordpress install into the localwp.com folder.
+Open MAMP control panel > Open Start Page > PHPMyAdmin
+Databases > Create new database called localwp
+Users > Create new user: wpuser
+Set host: localhost
+Check All for global access to database
+localhost/localwp.com to proceed to installation script
+Create a Config file
+Enter DB info
+Submit
+Run Install
+Enter Site and WP User details
+Uncheck Privacy
+Install Wordpress
+Log In
+Important to note that MAMP Servers need to be on to run Wordpress locally
+
+Migrating Wordpress from Local to Live Server
+FTP into site and drag ALL items from localwp.com folder into the public_html folder on the server
+Log into cpanel and create a new MySQL database.
+Use name localwp for DB name
+Use wpuser as the username
+Use same password as the local install
+Make sure user has all privleges
+Note the final username and database name because we'll need this for the config file
+Go back to MAMP and open start page.
+Go to PHPMyAdmin > localwp database > Export tab
+Custom Export
+Everything selected
+Save as output file to text
+Database is successfully backed up
+Go back to cpanel and open PHPMyAdmin
+Click into new database that we created > Import new file from our local development that we just exported
+Database info is now on live server
+Go back to FTP and find wp_config.php > Open and Edit
+Still has all DB info from local site
+Update with info from live site
+DB_Collate tells WP to find site somewhere else
+define('WP_HOME', 'http://liveurlthatyoubought.com');
+define('WP_SITEURL', 'http://liveurlthatyoubought.com');
+Make sure you have the 'http://'
+All setup but should probably use a plugin to Find & Replace all links that might still be pointing at localhost. This can effect images too.
+Install and active Search and Replace plugin
+Go to Search and Replace plugin
+Enter Search URL from local site
+http://localhost/localwp.com
+ Enter Replace URL for new site
+http://liveurlthatyoubought.com
+Good idea to run process in reverse if you're going to start developing locally again.
+
+
+
+
+****************************************************************************************************
+# Build a Website with Wordpress
+
+
+****************************************************************************************************
 # PHP for Wordpress
 
 
@@ -11,6 +104,10 @@
 
 ****************************************************************************************************
 # Wordpress Hooks - Actions and Filters
+
+
+****************************************************************************************************
+# Wordpress Customizer API
 
 
 ****************************************************************************************************
