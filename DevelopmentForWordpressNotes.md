@@ -123,12 +123,13 @@ Google is your friend.
 "Free Responsive Wordpress Themes"
 
 Easy to activate and install downloaded theme to the site
-    * Log into /wp-admin
-    * Appearance > Themes > Add New > Upload > Choose downloaded zip file > Install Now > Activate
+  * Log into /wp-admin
+  * Appearance > Themes > Add New > Upload > Choose downloaded zip file > Install Now > Activate
 
 
 ## Premium Themes - Paid (Not Free Themes)
 [themeforest.net](http://themeforest.net/) - hub from finding/searching/paying for premium themes
+
 [woothemes.com](http://woothemes.com/) - hub from finding/searching/paying for premium 
 
 
