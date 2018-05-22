@@ -496,7 +496,7 @@ The function we created is getting hooked into the widgest_init action hook.
 * [PHP Coding Standards](https://make.wordpress.org/core/handbook/coding-standards/php/)
 * [HTML Coding Standards](https://make.wordpress.org/core/handbook/coding-standards/html/)
 * [CSS Coding Standards](https://make.wordpress.org/core/handbook/coding-standards/css/)
-* [Javascript Coding] Standards(https://make.wordpress.org/core/handbook/coding-standards/javascript/)
+* [Javascript Coding Standards](https://make.wordpress.org/core/handbook/coding-standards/javascript/)
 
 
 ## Learning More PHP
