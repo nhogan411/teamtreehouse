@@ -27,7 +27,7 @@ Rails is a Ruby Gem - a library or collection of reuseable code. Gems can be dow
 1. In terminal type `gem install` and then the name of the gem we want, `rails`, and then the particular version (skip for most recent version of rails), like `--version 5.0.0`
 
 
-# Introduction to Bundler
+## Introduction to Bundler
 Bundler is going to help us manage different dependencies (which Ruby Gems and whic Ruby Gem versions) for our Ruby project.
 
 ### Why do we need to manage gems/versions?
@@ -63,7 +63,7 @@ gem 'uglifier', '>= 1.3.0'
 
 For the most part, you'll be using `bundle install`, `bundle update` and `bundle exec`
 
-# Creating Static Pages in Rails
+## Creating Static Pages in Rails
 
 Let's create a new application to mess around in.
 
@@ -1614,3 +1614,480 @@ get ":title" do
 end
 ```
 This creates two instance variables and then calls the `show.erb` file.
+
+We'll create that file and put some HTML inside of it that accesses our instance variables
+
+```
+<h1><%= @title %>
+
+<p><%= @content %></p> 
+```
+
+## Saving Text Files
+We've added a new method to our wiki.rb file that will take in two parameters (title and content), allowing users to create new pages.
+
+```
+def save_content(title, content)
+	File.open("pages/#{title}.txt", "w") do |file|
+		file.print(content)
+	end
+end
+```
+
+We call the `File.open` method with the name of the file we want to save our text to.
+
+The second argument will open the file in write mode (`"w"`).
+
+## Route Priority
+Now that we've created a function or method that let's users create new files and save data to it, we need to provide a page that contains a fillable form so they can submit that data.
+
+First things first, we need a link to the new page.
+
+In `welcome.erb`:
+
+```
+<p>Or, you can <a href="/new">create a new page</a>.</p>
+```
+
+Now we need a route for that new page. 
+
+In wiki.rb (before the route with the `"/:title"` the end of the file):
+
+```
+get "/new" do
+	erb :new
+end
+```
+
+This creates the URL location and looks at /views/new.erb for page content, so we'll need to create that now.
+
+In the views folder create a new file called new.erb and drop in HTML to be displayed on the page when some visits /new.
+
+```
+<h1>Add New Page</h1>
+<div>
+	<form method="post" action="/create">
+		<fieldset>
+			<label id="titleLabel" for="title">Title:</label>
+			<input type="text" name="title" id="title" />
+		</fieldset>
+		<fieldset>
+			<label id="contentLabel" for="content">Content:</label>
+			<textarea name="content" id="content" rows="10" columns="50"></textarea>
+		</fieldset>
+		<input type="submit" />
+	</form>
+</div>
+
+<p><a href="/">Back to Index</a></p>
+```
+
+The HTML form is setup to send the input data to the /create page. But we don't have a page for that location, nor do we have anything in place to process the data getting passed to it, so that's what we'll take care of next.
+
+So back at the end of the wiki.rb file we're going to setup a location for the /create page:
+
+```
+post "/create" do
+	save_content(params["title"], params["content"])
+	redirect "/#{params["title"]}"
+end
+```
+
+We specified in our form that we're passing the URL via 'post' request, so our setup is a little different than usual. Additionally, it doesn't matter (for now) the order that we put this in the file, because it's not conflicting with an other 'get' requests.
+
+Like parameters passed through the URL in get requests, we can utilize the parameters passed via 'post' requests using the `params` method.
+
+Since we don't want a blank page after the user submits the form, we're going to use the `redirect` method.
+
+All of this will work fine until we create a page that has a space in it. We're not encoding the URL in the redirect, so it gets hung up on the space.
+
+To get around this we need to access the "uri" library that is standard with ruby.
+
+At the top of the `wiki.rb` file
+
+```
+require "sinatra"
+require "uri"
+```
+
+Then we modify the redirect path a little bit
+
+```
+redirect URI.escape("/#{params["title"]}")
+```
+
+This way, if the title of a new page has a space in it, that space is encoded into `%20` in the URL during the redirect.
+
+## A Form to Edit an Existing Page
+Similar to what we did for new pages, we need to create a link to the form to edit an existing page.
+
+At the bottom of the show.erb page we're going to create a link to the edit page.
+
+```
+<div>
+	<a href="/<%= @title %>/edit">Edit this page</a>
+</div>
+```
+
+We need to know what page to edit, so we'll pass that parameter as part of the destination path for the edit page. Then we tack on "/edit" to establish that we want the edit form.
+
+Obviously that just creates the link and doesn't actually establish a location for the page. So now we need to go to wiki.rb and establish a new location for the edit page.
+
+```
+get "/:title/edit" do
+	@title = params[:title]
+	@content = page_content(@title)
+	erb :edit
+end
+```
+
+We've established the edit page and that it'll have access to the title parameter assigned as `@title` and the content of the page (pulled using the `page_content()` method as `@content`. Now we need to create the edit page itself.
+
+In the views folder create a new file called edit.erb. Since this form will actually be very similar to the form on new.erb, we'll use that as a template for building `edit.erb`.
+
+```
+<h1>Edit Page: <%= @title %></h1>
+<div>
+	<form method="post" action="/<%= @title %>">
+		<input type="hidden" name="_method" value="put"> // Sinatra will recognize this hidden field and modify the request from 'post' to 'put'
+		<fieldset>
+			<label id="contentLabel" for="content">Content:</label>
+			<textarea name="content" id="content" rows="10" columns="50"><%= @content %></textarea>
+		</fieldset>
+		<input type="submit" />
+	</form>
+</div>
+
+<p><a href="/">Back to Index</a></p>
+```
+
+Important to note that we want to make this a 'put' request instead of a 'post' request. The additional notes for this page indicate that you use post for new items and put for editing items.
+
+So now we need to create the route for the put request. In wiki.rb:
+
+```
+put "/:title" do
+	save_content(params["title"], params["content"])
+	redirect URI.escape("/#{params["title"]}")
+end
+```
+
+## Deleting Pages
+Now we need to allow for pages to be deleted.
+
+In `wiki.rb`:
+
+```
+def delete_content(title)
+	File.delete("pages/#{title}.txt")
+end
+```
+
+In the `show.erb`, we're going to add a small form to delete the current page.
+
+```
+<div>
+	<a href="/<%= @title =>/edit">Edit this page</a>
+	<form method="post" action="<%= @title =>>
+		<input type="hidden" name="_method" value="delete" />
+		<input type="submit" value="Delete this page" />
+	</form>
+</div>
+```
+
+In `wiki.rb` we need a route for the delete method
+
+```
+delete "/:title" do
+	delete_content(params["title"])
+	redirect "/"
+end
+```
+
+## Layouts
+Instead of recreating the same HTML and CSS structure for all of our .erb files we're going to create a layout that serves as a template for site.
+
+In the views folder create a new page called `page.erb`
+
+```
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="/styles.css">
+	</head>
+	<body>
+		<%= yield %>
+	</body>
+</html>
+```
+
+In the `wiki.rb` file we're going to edit our erb calls to include a `layout` parameter and the file we want it to look at.
+
+```
+get "/" do
+	erb :welcome, layout: :page
+end
+
+get "/new" do
+	erb :new, layout: :page
+end
+
+get "/:title" do
+	@title="params[:title]
+	@content = page_content(@title)
+	erb :show, layout: :page
+end
+```
+
+But all of this is actually unnecessary.
+
+If you only have one layout, you can set it as a default. Instead of naming your layout file `page.erb`, name it `layout.erb` and it will automatically be used in erb calls.
+
+So change the name of `page.erb` to `layout.erb` and remove the calls from `wiki.rb`
+
+```
+get "/" do
+	erb :welcome
+end
+
+get "/new" do
+	erb :new
+end
+
+get "/:title" do
+	@title="params[:title]
+	@content = page_content(@title)
+	erb :show
+end
+```
+
+
+# Ruby on Rails 5 Basics
+MVC - Model, View, Controller
+Model - Writes Ruby objects to the database and reads them later
+View - Shows data to users, most often in HTML
+Controller - Respond to requests by users, cordinates with Model and View
+
+## Creating a Rails App
+`rails new blog` creates a new directory with the same name as the app, "blog"
+
+`cd blog`
+`bin/rails server` to get the rails server fired up
+
+## Our First Resource
+A Resource is a type of object that we want users to be able to:
+1. **C**reate instances of
+2. **R**ead data for
+3. **U**pdate data for
+4. **D**elete instances of
+aka CRUD
+
+Since we're creating a blog we need to create a posts resource.
+
+### Scaffolds
+Scaffolds can help setup the model, views, and controllers. Good for beginners, as you get more experienced you'll want more control and you'll set these up yourself.
+
+```
+bin/rails generate scaffold Post title:string
+```
+- `generate` is the sub command and will generate source code to compile for us
+- `scaffold` is the type of code we want to generate
+- `Post` is the model we want to make a scaffold for
+- `title` is an attribute that will help describe the object we're creating
+- `string` determines what type of variable the `title` should be
+
+After the above command, we need to run a migration to create the table for posts
+
+```
+bin/rails db:migrate
+```
+
+Restart your server (`bin/rails server`) and navigate to localhost:3000/posts to see a list of posts. 
+
+There aren't any posts yet, so click the New Post link, fill out the field to add a title (remember that's the only field we've asked for so far) and click Create Post button.
+
+Now on the /posts page you'll see the post you've created with links to Show (read), Edit (update), and Destroy (delete).
+
+## The Browser's Request
+### How Rails Processes a Request
+1. Rails looks at the request to see which code should handle it.
+2. The request gets routed to an action method on that controller.
+3. The controller loads the info in from the database using a model.
+4. The controller generates a view using the model data
+
+## The Controller
+The controller is responsible for handling the browser request. It controls the model and the view to generate a response.
+
+It receives the request from the URL, pulls the information from the model (typically a DB) and then presents it to the user as a view (HTML/CSS).
+
+When we generated scaffolding for posts, the posts_controller.rb file was automatically generated in the /app/controllers folder of our application.
+
+```
+def index
+	@posts = Post.all
+end
+```
+
+Basically says, on page load get all Posts and assign to the local variable @posts.
+
+## The Model
+The Model is responsible for storing and retrieving data from users of the app.
+
+Model classes are ruby classes that usually know how to read and write data from a DB.
+
+Rails creates the code for Model classes in the /app/models sub directory.
+
+Rails generates SQL queries for you.
+
+## The View
+The View is responsible for dispalying data to users. views usually, but not always, take the form of HTML templates, with Ruby expressions embedded in them.
+
+Those Ruby expressions use the data from the model to populate the page with data.
+
+Views can be found in the /app/views folder. By default the view will be /app/views/layouts/application.html.erb.
+
+.erb files are Embedd RuBy, which is a plain text file with Ruby code embedded.
+
+The code `<%= yield %>` is a piece of ruby code that will will actually render another template into this one.
+
+Because we're looking at the posts page, the `yield` keyword will render in the /app/views/posts folder, specifically the indx.html.erb (because we're working with the index controller action).
+
+## Launching Rails Console
+The rails console is useful when you need to do operations on many models at once, or to look at model attributes that you haven't yet added to any views.
+
+`bin/rails console` will start new system prompt where ruby will be evaluated (like irb)
+
+## Rails Console: Reading Model Objects
+### Read
+`Post.all` will show the controller going to the model to `SELECT "posts".* FROM "posts"` and then display each of the returned posts (includes the Post id, title, created_at, and updated_at timestamps).
+
+`Post.last` will show the controller going to the model to `SELECT "posts".* FROM "posts" ORDER BY "posts"."id" DESC LIMIT ? [["LIMIT", 1]]` and then display the single post that was returned.
+
+`Post.find(3)` will show the controller going to the model to `SELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ? [["id", 3], ["LIMIT", 1]]` and then display the single post with id=3.
+
+## Rails Console: Creating Model Objects
+`post = Post.new` will create a post variable and define it as a new instance of the Post object. By default, no values are assigned to any of the object attributes (id: nil, title:nil, etc.)
+
+`post.title = "Hello, console!"` will assign the string to the title attribute of our post variable.
+
+This new object won't be stored in the application database yet, so we'll need to do that ourselves.
+
+`post.save` will show the controller going to the model and saving to the DB, `INSERT INTO "posts"("title", "created_at") VALUES (?, ?, ?) [["title", "Hello, console!"], ["created_at", 2018-01-24 11:10:00 UTC], ["updated_at", 2018-01-24 11:10:00 UTC]]`.
+
+Now when we run `Post.all` we can see our new post is included in the results.
+
+When we inserted our post to the database, using `post.save` an id was automatically assigned to the post.
+
+## Rails Console: Updating Model Objects
+Remeber the `post.find()` method, and that we were able to use that to pull a specific post.
+
+By assigning the return object to a variable, we can edit the object the same we did with new objects.
+
+`post = Post.find(3)` will pull Post object with id = 3 and assign to the post variable.
+
+Like the new post, let's assign a new title value, `post.title = "Updated Title"` and `post.save` to save this new post title to the DB.
+
+## Rails Console: Deleting Model Objects
+`post = Post.find(4)` assigns the Post object with id = 4 to the post variable.
+
+Now we can call the `.destroy` method on that variable to delete itm `post.destroy`
+
+This runs an SQL query that deletes the object from the DB, `DELETE FROM "posts" WHERE "posts"."id" = ? [["id", 4]]`
+
+## Updating the Model
+We built a title into a Post object, but never added a body for the Post content. We'll need to update the Model to include that.
+
+First we need to add a column to the database so we can store the data.
+Then we need update our views to show those values.
+Finally, we need to update the controller so new text can be submitted from HTML forms.
+
+Scaffolding can't help us modify an existing resource.
+
+```
+bin/rails generate migration AddBodyToPosts body:text
+```
+
+- Anytime we want to update a DB we need to use a migration. In order to use a migration we need to use the rails `generate` command.
+
+- The migration to create the post table was setup as part of the scaffolding earlier. Since we can't use that here, we have to build it ourselves. Instead of the `scaffold` generator, we're going to run the `migration` generator.
+
+- The migration name comes next. Should be camel case and common format is "Add" + AttributeName  + "To" + TableName.
+
+- Finally, specify the columns we want to add to the database with `body:text`
+
+This command will create another file in the /db/migrate/ folder to hold the migration, BUT it's not actually performing the migration, so we still need to do that with `bin/rails db:migrate` again.
+
+Now all Posts have a body attribute (with `nil` as default value).
+
+## Updating Views
+Now that we've added columns to the DB to store blog post content, we need to update the views on the front-end.
+
+To do this we need to update the .erb files that render the templates.
+
+Open up /app/views/posts/index.html.erb.
+This .erb page contains a `<table>` that presents all the blog post data to viewers. We need to add a table heading (`<th>`) to the row of headings, and we need to add a field (`<td>`) in the loop that will contain some .erb code that displays the post body content (`<td><%= post.body %></td>`).
+
+Unfortunately, this only updated the one view that displays all the posts. It doesn't edit the view of the single post. To do that, we need to edit /posts/show.html.erb.
+- This page is already setup to show the post title, we just need to add a little HTML and some .erb code to display the post body. 
+
+```
+<p>
+	<strong>Body: </strong>
+	<%= @post.body %>
+</p>
+```
+
+So now we can see the post body in the Show All view and in the Single view for the posts. But there's still spot to enter a blog post body when we edit or create new blog posts. To get that setup we need to edit the /posts/edit.html.erb and /posts/new.html.erb files. 
+
+Unfortunately, in both of those files, there's no HTML to edit. Instead, there's a line of .erb that renders the form: `<%= render 'form', post: @post %>`. Instead of two seperate forms for managing existing and creating new posts, we actually just use the same form in both instances, this is called a partial.
+
+### Partials
+Partials are used to render pieces of a view that will get reused on multiple pages in your app. You don't want to update every page when you add a new link to the navigation. You want to update it in one place that gets reused over and over agian. This is a partial.
+
+The partial for the Post form is at /posts/_form.html.erb
+We can mimic the code for the title attribute in this file to generate some code to take in the body attribute.
+
+```
+<div class="field">
+	<%= f.label :body %>
+	<%= f.text_area : body %>
+</div>
+```
+
+## Updating Strong Parameters
+When we update a post, we're sending a POST request to the server (names unintentionally similar). A hacker could potentially hijack the POST process and send malicious data to the server. 
+
+In order to protect against this rails has a feature called strong parameters. In every controller, you specify a list of parameters that controller will accept.
+
+Obviously the new body attribute isn't being accepted by the controller yet.
+
+If we head over to /app/controllers/post_controllers.rb we can see in the create method that it's calling the post_params method. In that post_params method you can see a list of permitted parameters:
+
+```
+def post_params
+	params.require(:post).permit(:title)
+end
+```
+
+We need to add `:body` to the list of permitted parameters.
+
+```
+def post_params
+	params.require(:post).permit(:title, :body)
+end
+```
+
+
+# Rails Routes and Resources
+
+
+# Important Related Topics
+
+
+# Javascript Basics
+
+
+# Ruby Gems
+
+
+# Troubleshooting a Rails Application
