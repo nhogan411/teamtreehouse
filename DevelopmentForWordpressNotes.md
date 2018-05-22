@@ -45,6 +45,7 @@ Applications with no hooks make it really hard to add additional code.
 
 Wordpress hooks come in two forms:
 1. Actions - let US do something when Wordpress does something that it provides a hook for.
+
   For example:
     * When someone publishes a post, send out a tweet with a link to that post.
 Filters - allow us to manipulate any data that Wordpress provides a hook for
