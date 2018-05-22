@@ -1473,3 +1473,144 @@ bank_account = BankAccount.new("Nick")
 bank_account.credit("Paycheck", 100)
 bank_account.debit("Groceries", 40)
 ```
+
+
+# Building Web Apps with Sinatra
+## Your First App
+Install Sinatra
+
+```
+gem install sinatra
+```
+
+```
+require "sinatra"
+
+get("/apple/") do
+	"Here's a juicy apple!"
+end
+```
+
+If working in the Treehouse workspace you need to have the following right after the call to require "sinatra"
+
+```
+set :bind, "0.0.0.0"
+```
+
+## Multiple Routes in the Same App
+
+```
+get("/apple") do
+  "<h1>Here's a juicy apple!</h1>"
+end
+
+get("/banana") do
+  "<h1>Here's a ripe banana!</h1>"
+end
+
+get("/carrot") do
+  "<h1>Here's a crunchy carrot!</h1>"
+end
+```
+
+## Root Path
+
+```
+get("/") do
+  "<h1>Welcome to our Wiki!</h1>"
+end
+```
+
+## Getting HTML from a Template
+We'll be using `.erb`  files, which stands for Embedded Ruby.
+
+Sinatra loads the .erb files from a `/views` directory.
+
+Add a new file to that views directory and name it `welcome.erb`
+
+`erb :welcome` to call the welcome.erb file and display it. 
+
+## Loading Text Files
+Let's create a method to pull a .txt file and read it on the page
+
+```
+def page_content(title)
+	File.read("pages/#{title}.txt")
+	rescue Errno::ENOENT
+	return nil
+end
+```
+
+Create a new folder called `/pages`
+
+## URL Parameters
+We don't want to create a get request for EVERY page because that would turn into a huge file and wouldn't allow for dynamic pages.
+
+Instead we'll create a kind of catch-all that grabs URL parameters
+
+```
+get "/:title" do
+	params[:title]
+end
+```
+
+This will grab the URL parameter like `/FirstName LastName` and spit it out to the screen.
+
+Instead of just spitting out the `:title` parameter we will pass it into the our `page_content()` method to pull that .txt file
+
+```
+get "/:title" do
+	page_content(params[:title])
+end
+```
+
+## ERB Tags
+Two kinds of ERB Tags, regular embedding tags and outputting embedding tags.
+**Regular** - `<% %>` - ruby code goes between these open/close tags. The code is evaluated but the result doesn't get directly output. These are most frequently used to trigger loops and conditionals.
+
+```
+<% grade = 64 %>
+```
+
+This sets the grade variable to 64, but doesn't output anything.
+
+```
+<% grade = 64 %>
+<% if grade > 60 %>
+	// Will get output if conditional is true
+	<p>Grade is passing!</p>
+<% end %>
+```
+
+**Outputting** - `<%= %>` - ruby code goes between these open/close tags. The code is evaluated and gets included in the output.
+
+```
+<%= 2 + 2 %>   // outputs 4
+<%= Time.now %>   // outputs current time
+```
+
+### Combining embed tags
+Create a variable and cycle through each entry, outputting it to the display
+
+```
+<% [1, 5, 25].each do |number| %> 
+	<p><%= number %> dollar</p>
+<% end %>
+
+// Outputs:
+1 dollar
+5 dollar
+25 dollar
+```
+
+## Embedding Page Data with ERB
+Let's use instance variables, which are available to 
+
+```
+get ":title" do
+	@title = params[:title]
+	@content = page_contant(@title)
+	erb :show
+end
+```
+This creates two instance variables and then calls the `show.erb` file.
