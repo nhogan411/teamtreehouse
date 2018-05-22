@@ -1,4 +1,6 @@
 # Installing a Rails 5 Development Environment on Mac
+**************************************************
+
 1. Open Terminal
 
 Rails requires several software packages. Homebrew can install these packages for us
@@ -25,6 +27,7 @@ Now we need to install Ruby Version Manager (RVM). This will download compile an
 Rails is a Ruby Gem - a library or collection of reuseable code. Gems can be downloaded and installed automatically using the gems tool.
 
 1. In terminal type `gem install` and then the name of the gem we want, `rails`, and then the particular version (skip for most recent version of rails), like `--version 5.0.0`
+
 
 
 ## Introduction to Bundler
@@ -63,6 +66,7 @@ gem 'uglifier', '>= 1.3.0'
 
 For the most part, you'll be using `bundle install`, `bundle update` and `bundle exec`
 
+
 ## Creating Static Pages in Rails
 
 Let's create a new application to mess around in.
@@ -92,13 +96,20 @@ bin/rails generate controller pages --skip-assets
 and then they kind of lost me.
 
 
+**************************************************
 # Rails Application Walkthrough
+**************************************************
 
 
+**************************************************
 # Installing a Ruby on Rails Development Environment in OS X
+**************************************************
 
 
+**************************************************
 # Ruby Basics
+**************************************************
+
 ## Methods
 
 A method is a group of code statements that perform a particular task.
@@ -143,6 +154,7 @@ print("c", "d")
 print "c", "d"
 ```
 
+
 ## Comments
 Mark text as comments using #
 
@@ -151,6 +163,7 @@ Mark text as comments using #
 puts "hello world"
 ```
 
+
 ## Defining Methods
 Easy to define your own methods in ruby.
 
@@ -158,15 +171,15 @@ Easy to define your own methods in ruby.
 
 ```
 def wait
-puts "Waiting..."
-sleep 3
-puts "Done"
+	puts "Waiting..."
+	sleep 3
+	puts "Done"
 end
 
 def count_to_three
-puts 1
-puts 2
-puts 3
+	puts 1
+	puts 2
+	puts 3
 end
 ```
 
@@ -183,6 +196,7 @@ count-to_three
 wait
 ```
 
+
 ## Variables
 assign value to variables with = sign
 
@@ -198,6 +212,7 @@ puts number        # outputs 4
 puts greeting      # outputs "hello"
 puts number + 2    # outputs 6
 ```
+
 
 ## Method Arguments
 A parameter is a special variable declared at the start of a method.
@@ -241,6 +256,7 @@ add(3, 4)               # ooutputs value assigned to first(3) and second(4) as w
 
 subtract(10, 5)         # outputs value assigned to first(10) and second(5) as well as the results of the subtraction operation (5)
 ```
+
 
 ## Method Return Values
 
@@ -334,6 +350,7 @@ puts answer
 
 `answer = ask("How many widgets are you ordering?")` assigns the value of the `gets` to variable `answer`. This is outside of the method and allows us to manipulate or use the value of `answer`.
 
+
 ## Strings
 Strings are represented with single and double quotation marks.
 
@@ -345,6 +362,7 @@ puts 'Single-quoted strings #{represent} "Characters" verbatim.'
 puts "Double-quoted strings make some substitutions: #{2 + 4}"
 ```
 
+
 ## String Concatenation
 `irb` in the console sets ur a testing area in the console where you can run ruby commands one at a time.
 
@@ -355,6 +373,7 @@ puts "a" + "b"                      # outputs "ab"
 puts "some words" + "more words"    # outputs "some wordsmore words"
 puts "some words" + " " + "more words" # outputs "some words more words"
 ```
+
 
 ## String Interpolation
 Interpolation can be used in double quotation markers (`"`).
@@ -368,11 +387,14 @@ Interpolation is used using interpolartion markers `#{}`
 "a string #{1 + 2}"     # outputs "a string 3"
 ```
 
+
 ## Inspecting Values
 Ruby provides a method `p` to inspect the values you pass to it, to see approximately how they'll be viewed in Ruby code.
 
+
 ## Escape Sequences
 `\` to use escape sequences in/on strings
+
 
 ## Calling Methods on an Object
 We're not talking about passing an argument to a method, we're talking about taking a piece of data and calling a method that's only available on that data.
@@ -400,6 +422,7 @@ string.length.even? // determines the length of string "string, and then returns
 
 Only chain methods when you're certain the first method call won't fail, or you'll obviously get errors on subsequent methods.
 
+
 ## Classes
 Methods are specific to different types of objects. You can call `.even?` on a number, but you can't call the `.length`. Similarly you can call `.length` on a string, but not `.even?`
 
@@ -416,8 +439,10 @@ Think of classes like a blueprint for building a car or radio or house. Objects 
 
 Use `.class` methods to determine the class of a given object
 
+
 ## Using "chomp" to Fix Our Ouput
 In widget program we're taking user input, but that's including the `\n` character when the user hit `enter`. To clear that, we can use the `.chomp` method on a string to remove new line characters.
+
 
 ## Numeric Types
 ```
@@ -433,6 +458,7 @@ fractional_number.class  // returns Float
 whole_number.even?  // returns an error
 ```
 
+
 ## Convert Strings to Numbers
 When you ask for user input using `gets` your result is always a string, even if the user inputs a digit (1, 2, 3, etc.).
 
@@ -445,6 +471,7 @@ Trying to perform math on a string will cause you problems so it's important to 
 
 `.to_i` will convert a string to an integer and `.to_f` will convert a string to a float.
 
+
 ## Comparison Operators
 Let's create a new method that calculates the prices:
 
@@ -453,6 +480,7 @@ def price(quantity)
 	quantity * 10
 end
 ```
+
 
 ## "if" and "unless" Statements
 
@@ -515,7 +543,10 @@ end
 ```
 
 
+**************************************************
 # Ruby Collections
+**************************************************
+
 ## Ruby Arrays
 Create an array in ruby via Array.new and assigning to a variable.
 
@@ -553,6 +584,7 @@ item = "milk"
 grocery_list = %W(#{item} eggs bread)
 ```
 
+
 ## Adding Items to Arrays
 Once the array is created, there are a few ways to add items to it.
 
@@ -585,6 +617,7 @@ The `+=` operator will also add items to the end of an array
 grocery_list = ["milk", "eggs", "bread"]
 grocery_list += ["ice cream", "pie"]
 ```
+
 
 ## Accessing Items in Arrays
 Ruby arrays work like other languages and start the index at 0.
@@ -654,6 +687,7 @@ grocery_list.include("eggs")  // returns true
 grocery_list.count("pasta")  // returns false
 ```
 
+
 ## Removing Items From Arrays
 One way to remove an item from the array is to use `.pop`. This method will remove the last item (which can be assigned to a separate variable.
 
@@ -683,6 +717,7 @@ grocery_list = ["milk", "eggs", "bread", "ice cream", "pie", "potatoes"]
 first_three_items = grocery_list.slice(0, 3)  // assigns "milk", "eggs", and "bread" to the first_three_items array
 new_list = grocery_list.slice(2, 2)  // assigns "bread", and "ice cream" to the new_list array
 ```
+
 
 ## Ruby Hash Creation
 With an Array, you can only refer to an item based on it's position or index in the array.
@@ -742,6 +777,7 @@ item = { "name" => "Bread", "quantity" => 1 }
 item.delete("name")
 ```
 
+
 ## Working with Hash Keys
 Use the `.keys` method to find all the different keys associated with a hash
 
@@ -767,6 +803,7 @@ hash.fetch("quantity")  // returns 1
 hash.["quantity"]       // returns 1
 ```
 
+
 ## Working with Hash Values
 Similar to `.keys` we have a `.values` method that will return an array of values in the hash
 
@@ -788,6 +825,7 @@ hash.value("Bread")  // returns true
 hash = {"item"=>"Bread", "quantity"=>1, "brand"=>"Giant Hat Bread"}
 hash.values_at("item", "quantity")  // returns ["Bread", 1]
 ```
+
 
 ## Hash Methods
 `.length` is a method that, like arrays and strings, returns the number of key/value pairs in the hash.
@@ -828,6 +866,7 @@ hash = {"item"=>"Bread"}
 puts hash.merge({"item"=>"Eggs"}) // displays {"item"=>"Eggs"}
 puts hash // still displays {"item"=>"Bread"}
 ```
+
 
 ## Build a Grocery List Program
 
@@ -898,7 +937,10 @@ end
 print_list(list)
 ```
 
+
+**************************************************
 # Ruby Loops
+**************************************************
 Start a loop in ruby using the `loop` keyword
 
 ```
@@ -930,6 +972,7 @@ loop do
 end
 ```
 
+
 ## Loop Conditionals
 Create a random number by assigning `Random.new` to a variable.
 
@@ -945,10 +988,12 @@ If statements can be run on one line by switching things up a bit.
 break if answer > 10   // executes break if answer is greater than 10
 ```
 
+
 ## The While Loop
 
 ```
 answer = ""
+
 while answer != "n"
 	print "Do you want me to repeat this pointless loop again ? (y/n) "
 	answer = gets.chomp.downcase
@@ -959,21 +1004,25 @@ When we use the `while` loop we don't need to manually `break` the loop.
 
 Conventional to use `i`, `j`, or `k` with loops.
 
+
 ## Until Loop
 Opposite of the while loop in that it runs UNTIL the condition becomes true.
 
 ```
-answer = ""
+answer = "" 
+
 until answer == "no" do
 	print "Do you want this loop to continue? (y/n) "
 	answer = gets.chomp
 end
 ```
 
+
 ## Iteration with Each
 
 ```
 array = [0, 1, 2, 3, 4, 5]
+
 array.each do |item|  // will send each array item into the do block as variable 'item'
 	puts "The current item is #{item}."
 end
@@ -983,14 +1032,17 @@ with curly braces
 
 ```
 array = [0, 1, 2, 3, 4, 5]
+
 array.each { |item|  
 	puts "The current item is #{item}."
 }
 ```
 
 or all on one line
+
 ```
 array = [0, 1, 2, 3, 4, 5]
+
 array.each { |item| puts "The current item is #{item}." }
 ```
 
@@ -998,17 +1050,21 @@ NOTE: `.each` does not affect the actual array
 
 ```
 array = [0, 1, 2, 3, 4, 5]
+
 array.each do |item|
 	item = item + 2
 	puts item  // prints 2, 3, 4, 5, 6, and 7 to screen 
 end
+
 puts array.inspect // original array still [0-5]
 ```
+
 
 ## Hash Iteration
 
 ```
 business = { "name" => "Treehouse", "location" => "Portland, OR" }
+
 business.each do |key, value|
 	puts "the hash key is #{key} and the value is #{value}."
 end
@@ -1018,11 +1074,13 @@ end
 
 Can also cycle through one specific side of the hash using `.each_key` and `.each_value`
 
+
 ## Times Iteration
 The times iteration works on integers and will run a specific number of times.
 
 ```
 // puts "hello!" 5x
+
 5.times do 
 	puts "hello!"
 end
@@ -1034,12 +1092,15 @@ end
 end
 ```
 
+
 ## For Loops
+
 ```
 for item in 1..10 do
 	puts "The current item is #{item}."
 end
 ```
+
 
 ## Build a Contacts list
 
@@ -1057,17 +1118,21 @@ def add_contact
 	contact = {"name" => "", "phone_numbers" => []}
 	contact["name"] = ask("What is the person's name?")
 	answer = ""
+
 	while answer != "n"
 		answer = ask("Do you want to add a phone number? (y/n)")
+
 		if answer == "y"
 			phone = ask ("Enter a phone number:")
 			contact["phone_numbers"].push(phone)
 		end
 	end
+
 	return contact
 end
 
 answer = ""
+
 while answer != "n"
 	contact_list.push(add_contact())
 	answer = ask("Add another? (y/n)")
@@ -1077,16 +1142,22 @@ puts "---"
 
 contact_list.each do |contact|
 	puts "Name: #{contact["name"]}"
+
 	if contact["phone_numbers"].size > 0
 		contact["phone_numbers"].each do |phone_number|
 		puts "Phone: #{phone_number}"
 	end
+
 	puts "----\n"
 end
 ```
 
+
+**************************************************
 # Ruby Objects and Classes
+**************************************************
 Think of classes like a blueprint that tells the class how it should be structured and what it should do.
+
 
 ## Instantiation
 
@@ -1103,8 +1174,10 @@ Objects are created using the `.new()` method.
 - `Array.new`
 - `Hash.new`
 
+
 ## Ruby Objects
 `.respond_to?` method will check if an object will respond to the passed method
+
 
 ## Creating a Class
 
@@ -1144,6 +1217,7 @@ puts name.middle_name
 puts name.last_name
 ```
 
+
 ## Variables
 In the above name class we defined my title, first, middle and last names as the values of those methods. Which is only useful if we never intend to use a different value for those methods.
 
@@ -1180,6 +1254,7 @@ end
 
 Denote an instance variable using the `@`
 
+
 ## Attribrute Readers
 Ruby gives us a shortcut for outputing class variables, `attr_reader`
 
@@ -1200,6 +1275,7 @@ class Name
 	end
 end
 ```
+
 
 ## Attribute Writers and Accessors
 In addition to `attr_reader` Ruby provides some additional shortcuts.
@@ -1265,6 +1341,7 @@ class Name
 end
 ```
 
+
 ## Methods
 We can create methods inside of a class, which is useful because they are only available on the instance that we are working with.
 
@@ -1291,6 +1368,7 @@ class Name
 	end
 end
 ```
+
 
 ## Instance Variables and Local Variables
 Not every method inside of a class can see EVERY variable that we use.
@@ -1361,6 +1439,7 @@ class Name
 end
 ```
 
+
 ## The to_s method
 ```
 // Defines class "Name"
@@ -1418,6 +1497,7 @@ name = Name.new("Mr.", "Nick", "", "Hogan")
 puts name    // works the same as the above code
 ```
 
+
 ## Build a Bank Account
 
 ```
@@ -1460,12 +1540,12 @@ class BankAccount
 	end
 
 	def print_register
-		puts "#{name}'s Bank Account"
+		puts "#{name}'s Bank Account" 
+		puts "Description\tAmount
 
-	puts "Description\tAmount
-	@transactions.each do |transaction|
-		puts transaction[:description] + "\t" + sprintf("%0.2f",transaction[:amount].to_s)
-	end
+		@transactions.each do |transaction|
+			puts transaction[:description] + "\t" + sprintf("%0.2f",transaction[:amount].to_s)
+		end
 	end
 end
 
@@ -1476,7 +1556,10 @@ bank_account.debit("Groceries", 40)
 ```
 
 
+**************************************************
 # Building Web Apps with Sinatra
+**************************************************
+
 ## Your First App
 Install Sinatra
 
@@ -1498,6 +1581,7 @@ If working in the Treehouse workspace you need to have the following right after
 set :bind, "0.0.0.0"
 ```
 
+
 ## Multiple Routes in the Same App
 
 ```
@@ -1514,6 +1598,7 @@ get("/carrot") do
 end
 ```
 
+
 ## Root Path
 
 ```
@@ -1521,6 +1606,7 @@ get("/") do
   "<h1>Welcome to our Wiki!</h1>"
 end
 ```
+
 
 ## Getting HTML from a Template
 We'll be using `.erb`  files, which stands for Embedded Ruby.
@@ -1530,6 +1616,7 @@ Sinatra loads the .erb files from a `/views` directory.
 Add a new file to that views directory and name it `welcome.erb`
 
 `erb :welcome` to call the welcome.erb file and display it. 
+
 
 ## Loading Text Files
 Let's create a method to pull a .txt file and read it on the page
@@ -1543,6 +1630,7 @@ end
 ```
 
 Create a new folder called `/pages`
+
 
 ## URL Parameters
 We don't want to create a get request for EVERY page because that would turn into a huge file and wouldn't allow for dynamic pages.
@@ -1564,6 +1652,7 @@ get "/:title" do
 	page_content(params[:title])
 end
 ```
+
 
 ## ERB Tags
 Two kinds of ERB Tags, regular embedding tags and outputting embedding tags.
@@ -1604,6 +1693,7 @@ Create a variable and cycle through each entry, outputting it to the display
 25 dollar
 ```
 
+
 ## Embedding Page Data with ERB
 Let's use instance variables, which are available to 
 
@@ -1624,6 +1714,7 @@ We'll create that file and put some HTML inside of it that accesses our instance
 <p><%= @content %></p> 
 ```
 
+
 ## Saving Text Files
 We've added a new method to our wiki.rb file that will take in two parameters (title and content), allowing users to create new pages.
 
@@ -1638,6 +1729,7 @@ end
 We call the `File.open` method with the name of the file we want to save our text to.
 
 The second argument will open the file in write mode (`"w"`).
+
 
 ## Route Priority
 Now that we've created a function or method that let's users create new files and save data to it, we need to provide a page that contains a fillable form so they can submit that data.
@@ -1666,16 +1758,19 @@ In the views folder create a new file called new.erb and drop in HTML to be disp
 
 ```
 <h1>Add New Page</h1>
+
 <div>
 	<form method="post" action="/create">
 		<fieldset>
 			<label id="titleLabel" for="title">Title:</label>
 			<input type="text" name="title" id="title" />
 		</fieldset>
+
 		<fieldset>
 			<label id="contentLabel" for="content">Content:</label>
 			<textarea name="content" id="content" rows="10" columns="50"></textarea>
 		</fieldset>
+
 		<input type="submit" />
 	</form>
 </div>
@@ -1719,6 +1814,7 @@ redirect URI.escape("/#{params["title"]}")
 
 This way, if the title of a new page has a space in it, that space is encoded into `%20` in the URL during the redirect.
 
+
 ## A Form to Edit an Existing Page
 Similar to what we did for new pages, we need to create a link to the form to edit an existing page.
 
@@ -1748,13 +1844,16 @@ In the views folder create a new file called edit.erb. Since this form will actu
 
 ```
 <h1>Edit Page: <%= @title %></h1>
+
 <div>
 	<form method="post" action="/<%= @title %>">
 		<input type="hidden" name="_method" value="put"> // Sinatra will recognize this hidden field and modify the request from 'post' to 'put'
+		
 		<fieldset>
 			<label id="contentLabel" for="content">Content:</label>
 			<textarea name="content" id="content" rows="10" columns="50"><%= @content %></textarea>
 		</fieldset>
+
 		<input type="submit" />
 	</form>
 </div>
@@ -1773,6 +1872,7 @@ put "/:title" do
 end
 ```
 
+
 ## Deleting Pages
 Now we need to allow for pages to be deleted.
 
@@ -1789,7 +1889,8 @@ In the `show.erb`, we're going to add a small form to delete the current page.
 ```
 <div>
 	<a href="/<%= @title =>/edit">Edit this page</a>
-	<form method="post" action="<%= @title =>>
+
+	<form method="post" action="<%= @title =>">
 		<input type="hidden" name="_method" value="delete" />
 		<input type="submit" value="Delete this page" />
 	</form>
@@ -1805,6 +1906,7 @@ delete "/:title" do
 end
 ```
 
+
 ## Layouts
 Instead of recreating the same HTML and CSS structure for all of our .erb files we're going to create a layout that serves as a template for site.
 
@@ -1816,6 +1918,7 @@ In the views folder create a new page called `page.erb`
 	<head>
 		<link rel="stylesheet" href="/styles.css">
 	</head>
+
 	<body>
 		<%= yield %>
 	</body>
@@ -1863,17 +1966,21 @@ end
 ```
 
 
+**************************************************
 # Ruby on Rails 5 Basics
+**************************************************
 MVC - Model, View, Controller
 Model - Writes Ruby objects to the database and reads them later
 View - Shows data to users, most often in HTML
 Controller - Respond to requests by users, cordinates with Model and View
+
 
 ## Creating a Rails App
 `rails new blog` creates a new directory with the same name as the app, "blog"
 
 `cd blog`
 `bin/rails server` to get the rails server fired up
+
 
 ## Our First Resource
 A Resource is a type of object that we want users to be able to:
@@ -1909,12 +2016,14 @@ There aren't any posts yet, so click the New Post link, fill out the field to ad
 
 Now on the /posts page you'll see the post you've created with links to Show (read), Edit (update), and Destroy (delete).
 
+
 ## The Browser's Request
 ### How Rails Processes a Request
 1. Rails looks at the request to see which code should handle it.
 2. The request gets routed to an action method on that controller.
 3. The controller loads the info in from the database using a model.
 4. The controller generates a view using the model data
+
 
 ## The Controller
 The controller is responsible for handling the browser request. It controls the model and the view to generate a response.
@@ -1931,6 +2040,7 @@ end
 
 Basically says, on page load get all Posts and assign to the local variable @posts.
 
+
 ## The Model
 The Model is responsible for storing and retrieving data from users of the app.
 
@@ -1939,6 +2049,7 @@ Model classes are ruby classes that usually know how to read and write data from
 Rails creates the code for Model classes in the /app/models sub directory.
 
 Rails generates SQL queries for you.
+
 
 ## The View
 The View is responsible for dispalying data to users. views usually, but not always, take the form of HTML templates, with Ruby expressions embedded in them.
@@ -1953,10 +2064,12 @@ The code `<%= yield %>` is a piece of ruby code that will will actually render a
 
 Because we're looking at the posts page, the `yield` keyword will render in the /app/views/posts folder, specifically the indx.html.erb (because we're working with the index controller action).
 
+
 ## Launching Rails Console
 The rails console is useful when you need to do operations on many models at once, or to look at model attributes that you haven't yet added to any views.
 
 `bin/rails console` will start new system prompt where ruby will be evaluated (like irb)
+
 
 ## Rails Console: Reading Model Objects
 ### Read
@@ -1965,6 +2078,7 @@ The rails console is useful when you need to do operations on many models at onc
 `Post.last` will show the controller going to the model to `SELECT "posts".* FROM "posts" ORDER BY "posts"."id" DESC LIMIT ? [["LIMIT", 1]]` and then display the single post that was returned.
 
 `Post.find(3)` will show the controller going to the model to `SELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ? [["id", 3], ["LIMIT", 1]]` and then display the single post with id=3.
+
 
 ## Rails Console: Creating Model Objects
 `post = Post.new` will create a post variable and define it as a new instance of the Post object. By default, no values are assigned to any of the object attributes (id: nil, title:nil, etc.)
@@ -1979,6 +2093,7 @@ Now when we run `Post.all` we can see our new post is included in the results.
 
 When we inserted our post to the database, using `post.save` an id was automatically assigned to the post.
 
+
 ## Rails Console: Updating Model Objects
 Remeber the `post.find()` method, and that we were able to use that to pull a specific post.
 
@@ -1988,12 +2103,14 @@ By assigning the return object to a variable, we can edit the object the same we
 
 Like the new post, let's assign a new title value, `post.title = "Updated Title"` and `post.save` to save this new post title to the DB.
 
+
 ## Rails Console: Deleting Model Objects
 `post = Post.find(4)` assigns the Post object with id = 4 to the post variable.
 
 Now we can call the `.destroy` method on that variable to delete itm `post.destroy`
 
 This runs an SQL query that deletes the object from the DB, `DELETE FROM "posts" WHERE "posts"."id" = ? [["id", 4]]`
+
 
 ## Updating the Model
 We built a title into a Post object, but never added a body for the Post content. We'll need to update the Model to include that.
@@ -2019,6 +2136,7 @@ bin/rails generate migration AddBodyToPosts body:text
 This command will create another file in the /db/migrate/ folder to hold the migration, BUT it's not actually performing the migration, so we still need to do that with `bin/rails db:migrate` again.
 
 Now all Posts have a body attribute (with `nil` as default value).
+
 
 ## Updating Views
 Now that we've added columns to the DB to store blog post content, we need to update the views on the front-end.
@@ -2054,6 +2172,7 @@ We can mimic the code for the title attribute in this file to generate some code
 	<%= f.text_area : body %>
 </div>
 ```
+
 
 ## Updating Strong Parameters
 When we update a post, we're sending a POST request to the server (names unintentionally similar). A hacker could potentially hijack the POST process and send malicious data to the server. 
