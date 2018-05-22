@@ -95,11 +95,11 @@ Important to note that MAMP Servers need to be on to run Wordpress locally
     2. Go to Search and Replace plugin
         1. Enter Search URL from local site
           
-          [http://localhost/localwp.com](http://localhost/localwp.com)
-          
+            [http://localhost/localwp.com](http://localhost/localwp.com)
+
         2. Enter Replace URL for new site
           
-          [http://liveurlthatyoubought.com](http://liveurlthatyoubought.com/)
+            [http://liveurlthatyoubought.com](http://liveurlthatyoubought.com/)
 
 7. Good idea to run process in reverse if you're going to start developing locally again.
 
