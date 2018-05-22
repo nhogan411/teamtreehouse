@@ -151,7 +151,7 @@ When viewing Customize setting page you'll see options on the left and preview o
 
 The specific options available to us is dependant on the theme itself.
 
-    Switch themes = different options available for customization
+   Switch themes = different options available for customization
 
 Theme Option Pages
 Typically found at Appearance > Theme Options
