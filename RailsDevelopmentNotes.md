@@ -412,8 +412,11 @@ Use `.` operator on an object to indicate we're calling a method on it.
 You can string multiple methods together
 
 ```
-string = "AA"  // assigns "AA" to variable "string"
-string.length.even? // determines the length of string "string, and then returns true because the length is an even number
+// assigns "AA" to variable "string"
+string = "AA"
+
+// determines the length of string "string, and then returns true because the length is an even number
+string.length.even? 
 ```
 
 Only chain methods when you're certain the first method call won't fail, or you'll obviously get errors on subsequent methods.
@@ -425,8 +428,11 @@ Methods are specific to different types of objects. You can call `.even?` on a n
 You can get a list of methods avaialble on a given object by calling the `.methods` method.
 
 ```
-p 2.methods.sort  // prints sorted list of integer methods to screen
-p "AA".methods.sort  // prints sorted list of string methods to screen
+// prints sorted list of integer methods to screen
+p 2.methods.sort  
+
+// prints sorted list of string methods to screen
+p "AA".methods.sort
 ```
 
 Object class determines what methods are availalble.
@@ -444,14 +450,19 @@ In widget program we're taking user input, but that's including the `\n` charact
 ```
 whole_number = 12
 fractional_number = 12.34
-whole_number.class  // returns Fixnum
-fractional_number.class  // returns Float
+
+// returns Fixnum
+whole_number.class  
+
+// returns Float
+fractional_number.class  
 ```
 
 `.even?` is a method for Fixnums, but it is not available for Floats
 
 ```
-whole_number.even?  // returns an error
+// returns an error
+whole_number.even?  
 ```
 
 
@@ -461,8 +472,11 @@ When you ask for user input using `gets` your result is always a string, even if
 Trying to perform math on a string will cause you problems so it's important to know how to convert strings to numbers.
 
 ```
-"7" * 10  // returns "7777777777", the original string repeated 10 times
-"a" * 3  // returns "aaa", the original string repeated 3 times
+// returns "7777777777", the original string repeated 10 times
+"7" * 10  
+
+// returns "aaa", the original string repeated 3 times
+"a" * 3  
 ```
 
 `.to_i` will convert a string to an integer and `.to_f` will convert a string to a float.
@@ -494,15 +508,18 @@ end
 
 ```
 if 75 > 50
-	puts "75 > 50"  // displays on page
+	// displays on page
+	puts "75 > 50"  
 end
 
 if 75 > 100
-	puts "75 > 100"  // DOES NOT display on page
+	// DOES NOT display on page
+	puts "75 > 100"  
 end
 
 if 50 == 50
-	puts "50 == 50"  // displays on page
+	// displays on page
+	puts "50 == 50"  
 end
 ```
 
@@ -510,15 +527,18 @@ end
 
 ```
 unless 75 > 50
-	puts "75 > 50"  // DOES NOT display on page
+	// DOES NOT display on page
+	puts "75 > 50"  
 end
 
 unless 75 > 100
-	puts "75 > 100"  // display on page
+	// display on page
+	puts "75 > 100"  
 end
 
 unless 50 == 50
-	puts "50 == 50"  // DOES NOT display on page
+	// DOES NOT display on page
+	puts "50 == 50"  
 end
 ```
 
@@ -619,67 +639,101 @@ Ruby arrays work like other languages and start the index at 0.
 
 ```
 grocery_list = ["milk", "eggs", "bread", "ice cream", "pie", "potatoes"]
-grocery_list[0]  // returns "milk"
-grocery_list[1]  // returns "eggs"
+
+// returns "milk"
+grocery_list[0]  
+
+// returns "eggs"
+grocery_list[1]  
 ```
 
 `.at` method also works
 
 ```
 grocery_list = ["milk", "eggs", "bread", "ice cream", "pie", "potatoes"]
-grocery_list.at(0)  // returns "milk"
-grocery_list.at(1)  // returns "eggs"
+
+// returns "milk"
+grocery_list.at(0)  
+
+// returns "eggs"
+grocery_list.at(1)  
 ```
 
 `.first` and `.last` are quick ways to get the first and last items of the array
 
 ```
 grocery_list = ["milk", "eggs", "bread", "ice cream", "pie", "potatoes"]
-grocery_list.first  // returns "milk"
-grocery_list.last  // returns "potatoes"
+
+// returns "milk"
+grocery_list.first  
+
+// returns "potatoes"
+grocery_list.last  
 ```
 
 `-1` notation will also get you the last item in the array. this notation works backwards through the index, so it works for more than just -1 and the last item
 
 ```
 grocery_list = ["milk", "eggs", "bread", "ice cream", "pie", "potatoes"]
-grocery_list[-1]  // returns "potatoes"
-grocery_list[-2]  // returns "pie"
-grocery_list[-3]  // returns "ice cream"
+
+// returns "potatoes"
+grocery_list[-1]  
+
+// returns "pie"
+grocery_list[-2]  
+
+// returns "ice cream"
+grocery_list[-3]  
 ```
 
 `.insert` method will insert a new item into the array at the specified location
 
 ```
 grocery_list = ["milk", "eggs", "bread", "ice cream", "pie", "potatoes"]
-grocery_list.insert(2, "oatmeal")  // puts "oatmeal at the number 2 index in the array (between "eggs" and "bread")
+
+// puts "oatmeal at the number 2 index in the array (between "eggs" and "bread")
+grocery_list.insert(2, "oatmeal")  
 ```
 
 `.length` method also applies to arrays (not just strings)
 
 ```
 grocery_list = ["milk", "eggs", "bread", "ice cream", "pie", "potatoes"]
-grocery_list.length  // returns 6
+
+// returns 6
+grocery_list.length  
 ```
 
 `.count` method can also return the number of items in the array, but it can also be used to find out how many times an item is in the array
 
 ```
 grocery_list = ["milk", "eggs", "bread", "ice cream", "pie", "potatoes"]
-grocery_list.count  // returns 6
-grocery_list.count("eggs")  // returns 1
+
+// returns 6
+grocery_list.count  
+
+// returns 1
+grocery_list.count("eggs")  
 
 grocery_list = ["eggs", "eggs", "eggs", "ice cream", "pie", "potatoes"]
-grocery_list.count  // returns 6
-grocery_list.count("eggs")  // returns 3
+
+// returns 6
+grocery_list.count  
+
+// returns 3
+grocery_list.count("eggs")  
 ```
 
 `.include?` method will return a boolean based on if the passed parameter is in the array
 
 ```
 grocery_list = ["milk", "eggs", "bread", "ice cream", "pie", "potatoes"]
-grocery_list.include("eggs")  // returns true
-grocery_list.count("pasta")  // returns false
+
+// returns true
+grocery_list.include("eggs")  
+
+// returns false
+grocery_list.count("pasta")  
 ```
 
 
@@ -688,29 +742,39 @@ One way to remove an item from the array is to use `.pop`. This method will remo
 
 ```
 grocery_list = ["milk", "eggs", "bread", "ice cream", "pie", "potatoes"]
-last_item = grocery_list.pop  // removes "potatoes" from grocery_list AND assigns "potatoes" to last_item variable
+
+// removes "potatoes" from grocery_list AND assigns "potatoes" to last_item variable
+last_item = grocery_list.pop  
 ```
 
 `.shift` method works the same way as .pop but on the first item in the array
 
 ```
 grocery_list = ["milk", "eggs", "bread", "ice cream", "pie", "potatoes"]
-first_item = grocery_list.shift  // removes "milk" from grocery_list AND assigns "milk" to first_item variable
+
+// removes "milk" from grocery_list AND assigns "milk" to first_item variable
+first_item = grocery_list.shift  
 ```
 
 The `.drop` method will pull a specified number of items from the end of the array for separate use. THESE ITEMS AREN'T REMOVED FROM THE ARRAY
 
 ```
 grocery_list = ["milk", "eggs", "bread", "ice cream", "pie", "potatoes"]
-drop_two_items = grocery_list.drop(2)  // assigns "pie" and "potatoes" to the drop_two_items array
+
+// assigns "pie" and "potatoes" to the drop_two_items array
+drop_two_items = grocery_list.drop(2)  
 ```
 
 The `.slice` method will take in a start index and a specified number of items and push to a separate array. THESE ITEMS AREN'T REMOVED FROM THE ARRAY
 
 ```
 grocery_list = ["milk", "eggs", "bread", "ice cream", "pie", "potatoes"]
-first_three_items = grocery_list.slice(0, 3)  // assigns "milk", "eggs", and "bread" to the first_three_items array
-new_list = grocery_list.slice(2, 2)  // assigns "bread", and "ice cream" to the new_list array
+
+// assigns "milk", "eggs", and "bread" to the first_three_items array
+first_three_items = grocery_list.slice(0, 3)  
+
+// assigns "bread", and "ice cream" to the new_list array
+new_list = grocery_list.slice(2, 2)  
 ```
 
 
@@ -778,24 +842,36 @@ Use the `.keys` method to find all the different keys associated with a hash
 
 ```
 hash = {"item"=>"Bread", "quantity"=>1, "brand"=>"Giant Hat Bread"}
-hash.keys // returns an array of keys: ["itme", "quantity", "brand"]
+
+// returns an array of keys: ["itme", "quantity", "brand"]
+hash.keys 
 ```
 
 `.has_key?` or `key?` or `.member` to test whether a specific key is available
 
 ```
 hash = {"item"=>"Bread", "quantity"=>1, "brand"=>"Giant Hat Bread"}
-hash.has_key?("brand")  // returns true
-hash.key?("brand")      // returns true
-hash.member?("brand")   // returns true
+
+// returns true
+hash.has_key?("brand")  
+
+// returns true
+hash.key?("brand")      
+
+// returns true
+hash.member?("brand")   
 ```
 
 `.fetch` method will pull the value associated with the specified key. Same as using brackets `[]`
 
 ```
 hash = {"item"=>"Bread", "quantity"=>1, "brand"=>"Giant Hat Bread"}
-hash.fetch("quantity")  // returns 1
-hash.["quantity"]       // returns 1
+
+// returns 1
+hash.fetch("quantity")  
+
+// returns 1
+hash.["quantity"]       
 ```
 
 
@@ -804,21 +880,29 @@ Similar to `.keys` we have a `.values` method that will return an array of value
 
 ```
 hash = {"item"=>"Bread", "quantity"=>1, "brand"=>"Giant Hat Bread"}
-hash.values  // returns ["Bread", 1, "Giant Hat Bread"]
+
+// returns ["Bread", 1, "Giant Hat Bread"]
+hash.values  
 ```
 
 `.has_value?` or `.value` can be used to check if a value is in the hash
 
 ```
 hash = {"item"=>"Bread", "quantity"=>1, "brand"=>"Giant Hat Bread"}
-hash.has_value?("Bread")  // returns true
-hash.value("Bread")  // returns true
+
+// returns true
+hash.has_value?("Bread")  
+
+// returns true
+hash.value("Bread")  
 ```
 
 `.values_at` gives us the option to specify more than one key, and receive back an array of values associated with the specified keys
 ```
 hash = {"item"=>"Bread", "quantity"=>1, "brand"=>"Giant Hat Bread"}
-hash.values_at("item", "quantity")  // returns ["Bread", 1]
+
+// returns ["Bread", 1]
+hash.values_at("item", "quantity")  
 ```
 
 
@@ -827,13 +911,17 @@ hash.values_at("item", "quantity")  // returns ["Bread", 1]
 
 ```
 hash = {"item"=>"Bread", "quantity"=>1, "brand"=>"Giant Hat Bread"}
-hash.length  // returns 3
+
+// returns 3
+hash.length  
 ```
 
 `.invert` flips the keys and values 
 
 ```
 hash = {"item"=>"Bread", "quantity"=>1, "brand"=>"Giant Hat Bread"}
+
+
 inverted_hash = hash.invert  // same as: 
 inverted_hash = {"Bread"=>"item", 1=>"quantity", "Giant Hat Bread"=>"brand"
 ```
@@ -842,24 +930,36 @@ inverted_hash = {"Bread"=>"item", 1=>"quantity", "Giant Hat Bread"=>"brand"
 
 ```
 hash = {"item"=>"Bread", "quantity"=>1, "brand"=>"Giant Hat Bread"}
-shifted_hash = hash.shift  // returns ["item", "Bread"]
-hash.inspect // returns {"quantity"=>1, "brand"=>"Giant Hat Bread"}
+
+// returns ["item", "Bread"]
+shifted_hash = hash.shift  
+
+// returns {"quantity"=>1, "brand"=>"Giant Hat Bread"}
+hash.inspect 
 ```
 
 `.merge` combines two hashes, without affect either
 
 ```
 hash = {"item"=>"Bread", "quantity"=>1, "brand"=>"Giant Hat Bread"}
-puts hash.merge({"calories"=>100}) // will display {"item"=>"Bread", "quantity"=>1, "brand"=>"Giant Hat Bread", "calories"=>100}
-puts hash // still returns original hash
+
+// will display {"item"=>"Bread", "quantity"=>1, "brand"=>"Giant Hat Bread", "calories"=>100}
+puts hash.merge({"calories"=>100}) 
+
+// still returns original hash
+puts hash 
 ```
 
 If `.merge`ing to a key that already exists you'll overwrite the old with the new
 
 ```
 hash = {"item"=>"Bread"}
-puts hash.merge({"item"=>"Eggs"}) // displays {"item"=>"Eggs"}
-puts hash // still displays {"item"=>"Bread"}
+
+// displays {"item"=>"Eggs"}
+puts hash.merge({"item"=>"Eggs"}) 
+
+// still displays {"item"=>"Bread"}
+puts hash 
 ```
 
 
@@ -973,13 +1073,15 @@ Create a random number by assigning `Random.new` to a variable.
 We can put a limit on the random number generator with `rand(x)`
 
 ```
-random_number = Random.new.rand(5) // assigns a random number between 0 and 5
+// assigns a random number between 0 and 5
+random_number = Random.new.rand(5) 
 ```
 
 If statements can be run on one line by switching things up a bit.
 
 ```
-break if answer > 10   // executes break if answer is greater than 10
+// executes break if answer is greater than 10
+break if answer > 10   
 ```
 
 
@@ -1017,7 +1119,8 @@ end
 ```
 array = [0, 1, 2, 3, 4, 5]
 
-array.each do |item|  // will send each array item into the do block as variable 'item'
+// will send each array item into the do block as variable 'item'
+array.each do |item|  
 	puts "The current item is #{item}."
 end
 ```
@@ -1047,10 +1150,13 @@ array = [0, 1, 2, 3, 4, 5]
 
 array.each do |item|
 	item = item + 2
-	puts item  // prints 2, 3, 4, 5, 6, and 7 to screen 
+
+	// prints 2, 3, 4, 5, 6, and 7 to screen 
+	puts item  
 end
 
-puts array.inspect // original array still [0-5]
+// original array still [0-5]
+puts array.inspect 
 ```
 
 
@@ -1074,7 +1180,6 @@ The times iteration works on integers and will run a specific number of times.
 
 ```
 // puts "hello!" 5x
-
 5.times do 
 	puts "hello!"
 end
@@ -1082,7 +1187,8 @@ end
 
 ```
 5.times do |item|
-	puts "#{item}"    // outputs 0-4
+	// outputs 0-4
+	puts "#{item}"    
 end
 ```
 
@@ -1256,6 +1362,7 @@ Ruby gives us a shortcut for outputing class variables, `attr_reader`
 class Name
 	// Auto builds the 'title' method, so we've deleted it
 	attr_reader :title
+
 	// Auto builds the other methods, so we've deleted them
 	attr_reader :first_name, :middle_name, last_name
 
@@ -1301,6 +1408,7 @@ The shortcut version of this new method for altering class variables is `attr_wr
 // Defines class "Name"
 class Name
 	attr_reader :title, :first_name, :middle_name, last_name
+
 	// Allows you to set new value for class variable 'title'
 	attr_writer :title
 
@@ -1487,7 +1595,9 @@ class Name
 end
 
 name = Name.new("Mr.", "Nick", "", "Hogan")
-puts name    // works the same as the above code
+
+// works the same as the above code
+puts name    
 ```
 
 
@@ -1503,8 +1613,10 @@ class BankAccount
 	def initialize(name)
 		// Set instance variable @name
 		@name = name
+
 		// Set instance array @transctions (although none created yet)
 		@transactions = []
+
 		// Set initial value of @transactions
 		add_transaction("Beginning Balance", 0)
 	end
@@ -1667,8 +1779,11 @@ This sets the grade variable to 64, but doesn't output anything.
 **Outputting** - `<%= %>` - ruby code goes between these open/close tags. The code is evaluated and gets included in the output.
 
 ```
-<%= 2 + 2 %>   // outputs 4
-<%= Time.now %>   // outputs current time
+// outputs 4
+<%= 2 + 2 %>   
+
+// outputs current time
+<%= Time.now %>   
 ```
 
 ### Combining embed tags
@@ -1839,7 +1954,8 @@ In the views folder create a new file called edit.erb. Since this form will actu
 
 <div>
 	<form method="post" action="/<%= @title %>">
-		<input type="hidden" name="_method" value="put"> // Sinatra will recognize this hidden field and modify the request from 'post' to 'put'
+		// Sinatra will recognize this hidden field and modify the request from 'post' to 'put'
+		<input type="hidden" name="_method" value="put"> 
 		
 		<fieldset>
 			<label id="contentLabel" for="content">Content:</label>
