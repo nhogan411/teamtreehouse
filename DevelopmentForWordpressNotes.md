@@ -1072,7 +1072,8 @@ $wp_customize->add_setting( 'header_textcolo', array(
 Controller - the actual HTML element that someone uses to modify a setting.
 
 Different types of setting will obviously have different types of controllers.
-   The blog name would use a text input contoller whereas the color for a link would use a color picker controller, and selecting the log would use an image uploader controller.
+
+* The blog name would use a text input contoller whereas the color for a link would use a color picker controller, and selecting the log would use an image uploader controller.
 
 ## Sections and Panels - Customizer Terms
 Sections - Different areas of the theme customizer divided by collapsible headings.
