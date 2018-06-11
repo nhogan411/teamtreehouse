@@ -1117,10 +1117,13 @@ The comment on line 2 will pull all the customizable settings and controls and d
 function wpt_register_theme_customizer( $wp_customize ) {
   // Customize title and tagline sections to read "Site Name and Description
   $wp_customize->get_section('title_tagline')->title = __('Site Name and Description', 'wptthemecustomizer');
+  
   // Customize label for the field controlling the site title to read "Site Name"
   $wp_customize->get_control('blogname')->label = __('Site Name', 'wptthemecustomizer');
+  
   // Customize label for the field controlling the site description or tagline to read "Site Description"
   $wp_customize->get_control('blogdescription')->label = __('Site Description', 'wptthemecustomizer');
+  
   // Update the transport option on the 'blogname' and 'blogdescription' settings from refresh to postMessage
   $wp_customize->get_setting( 'blogname' )->transport = 'postMessage';
   $wp_customize->get_setting( 'blogdescription' )->transport  = 'postMessage';
@@ -1200,6 +1203,7 @@ $wp_customize->aedd_control(
       'label' => __( 'Change Logo', 'wptthemecustomizer' ),
       // Applies to the ID of the setting
       'section' => 'custom_logo',
+      
       // Applies to the ID of the setting
       'settings' => 'wpt_logo',
       'context' => 'wpt-custom-logo'
@@ -1311,6 +1315,7 @@ $wp_customize->add_Control(
       'settings' => 'wpt_h1_font_size',
       // Creates a dropdown menu to choose font size
       'type' => 'select',
+      
       // What are the options in our dropdown menu and their corresponding values
       'choices' => 'array(
         '22' => '22px',
