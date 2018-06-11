@@ -509,6 +509,233 @@ The function we created is getting hooked into the widgest_init action hook.
 ****************************************************************************************************
 # The Wordpress Template Hierarchy
 
+## How Wordpress Templates Work
+Template in wordpress is a single php document that determines how a page or set of pages look on the front-end of a site.
+
+They can include HTML, php and special wordpress PHP functions. Template even exist for CSS and javascript files.
+
+Anything you would code in a static site moves over to wordpress template in some way.
+
+Wordpress has a special naming convention associated with these files. That means the names are similarly named, which makes the easier to work with.
+
+## The Template Hierarchy
+[codex.wordpress.org/Template_Hierarchy](codex.wordpress.org/Template_Hierarchy)
+[codex.wordpress.org/imates/1/18/Template_Hierarchy.png](codex.wordpress.org/imates/1/18/Template_Hierarchy.png)
+* Types of pages on the left and then moves through the types of templates that would work for each page.
+[wphierarchy.com](wphierarchy.com) is the same as the above image, but an interactive web interface that links you to the specific page of the codex.
+
+Say you had a single page on the site. Wordpress will determine whether it's a post page or a static page. Assume it's a static page, then it will determine if there's a custom template (with a custom name) or if it's the default page template, in which case we could have page-slug.php OR page-ID.php (these actual file names would look like page-about-us.php or page-4.php). If neither of these page options are available, then wordpress will look for the backup, page.php. IF that's not available then it will default to index.php
+
+New hypothetical. Say you've got an Archive page that you want categorized by date. In order to do this, we would create date.php. If date.php doesn't exist then wordpress will look for archive.php. As always, if archive.php doesn't exist then wordpress will fall back to using the index.php template.
+
+## Common Wordpress Template Code
+The Loop is the most common piece of code you'll find in a wordpress template.
+
+`WP_Query` is also common. It is a customization that we add to the loop to let it search for different things.
+* For example, if we wanted the loop to only pull posts from a specific author, then we would edit the WP_Query and pass it a parameter 'author_name'.
+
+`get_template_part` is the final piece of common wordpress template code. We use this in wordpress to include files.
+
+```
+<?php get_template_part( 'slug', 'additional items'); ?>
+```
+
+For example, `<?php get_template_part( 'loop', 'index'); ?>` would look for the file loop-index.php and `<?php get_template_part( 'loop', 'blog'); ?> `would look for the file loop-blog.php.
+
+## style.css
+This page is required of ALL wordpress themes. It contains both the main styles for the theme as well as the meta data about the theme.
+
+## index.php
+The index.php file serves as the backup for ALL other templates. For this reason, you will likely want to keep index.php fairly generic, unless you're also building out all of the other templates you'll need.
+
+The index.php in our example is pretty simple. Contains a `get_header()` and `get_footer()` functions to load up the headers and footers, there's some HTML markup, The Loop, the content that displays for each post or page, clode the loop, pull in the sidebar, close some HTML markup.
+
+## header.php
+header.php is the naming we use to make sure wordpress' `get_header()` function calls the proper file. If we named header.php something else, like top-header.php, then the `get_header()` function wouldn't work.
+
+```
+<?php wp_header(); ?>
+```
+
+This is a critical piece of the wordpress code. It allows wordpress to hook into our code and output any CSS or javascript or code that needed. That function needs to be included BEFORE the closing head tag.
+
+```
+<body <?php body_class(); ?>>
+```
+
+This is another very helpful function. This outputs special code, as class attributes, to the body tag of the site.
+
+Navigation code is also typically found in the header.php file since it will typically be included on every page. 
+
+The `wp_nav_menu()` function is what builds the navigation.
+
+## footer.php
+First thing to do in the footer.php is to make sure you're closing any HTML markup that was opened in the header.php file.
+
+Like the header.php file we have a special function that allows plugins to hook into the footer of the site before the closing `</body>` and `</html>` tags.
+
+This function is `<?php wp_footer(); ?>`
+
+## sidebar.php
+sidebar.php gets called by templates using the `get_sidebar()` function.
+
+Typically in a sidebar, you'll display widget information, which is done using the `dynamic_siderbar()` function.
+
+Important to note that you can have multiple sidebar files for your site. On index.php you might call the main sidebar.
+
+That would look like this:
+
+```
+get_sidebar();
+```
+
+However, on the blogs.php you might want a separate sidebar for the blog, in which case you would use the same function, but pass it a parameter, like this:
+
+```
+get_sidebar( 'blog' );
+```
+
+This would load the sidebar-blog.php file. If the parameter above had been 'about' the function would look for the sidebar-about.php file to load.
+
+## Homepage Templates in Wordpress
+Wordpress offers users the option to set whether the homepage of the site is a static page or the blog listings page. Most sites today use a static page and typically that's being managed by front-page.php and the home.php managed the blog listings.
+
+If you don't use the static homepage option, then home.php gets used for the main site homepage and front-page.php is completely ignored.
+
+## front-page.php
+If there is no front-page.php your site will default to page.php as the template for your homepage.
+
+## home.php
+home.php is the default for blogs listings on your homepage. If home.php doesn't exist, then index.php will be used.
+
+## Static Page Template Files
+By default, page.php controls the static pages on the site.
+
+There are way to step in front of that default though. For example, if you wanted a specific template for your about-us page with a post-id of 100 then we could use page-100.php or page-about-us.php to override the default page.php.
+
+Keep in mind this works ONLY on the page selected. In the above example, the Homepage or the Contact Us page or the Services page would be unaffected by the page-100.php code. These pages would still be using page.php instead of page-100.php.
+
+Another way we could do this would be to create a separate page template. This requires that we have some specific code at the top of the page:
+
+```
+<?php
+/*
+Template Name: PAGE TEMPLATE NAME
+*/
+?>
+```
+
+This would allow users to select this template in the backend of wordpress when they edit pages. 
+
+In this case, you could setup the About Us page AND the Contact Us page to use this template, but not the Homepage or the Services page.
+
+Keep in mind that this final option of setting the page template in Wordpress OVERRIDES whatever defaults might have been setup. Even if we have a custom template like page-about-us.php the About Us page would use whatever is set in the backend of wordpress.
+
+## Single Post and Post Format Templates
+Single blog posts are controlled by the single.php page.
+
+## The Comment Template
+Important to know, when working with posts, about the comments.php template.
+
+The comments.php template contains all the markup and code needed to display the comment form on blog posts.
+
+This file contains a bunch of accessibility code that make the forms easier to use for screen readers and such. It's recommended that you leave as much of this as possible to avoid issues.
+
+A good idea would be to use one of the default themes comments.php files as a base for creating your own. Go copy their code and then edit/adjust as necessary.
+
+## Post Formats
+Post formats in wordpress help describe either what the post is about or what type of content it's using.
+
+There is not custom templates for each of these but we do have some practices for seeing how they work.
+
+In single.php, which controls how an individual post is displayed, you'll see `get_template_part( 'content', get_post_format() );` which will echo out the post format selected in the admin area of wordpress.
+
+Say you've selected "status" as the post format. That would transform the above code to this:
+
+```
+get_template_part( 'content', 'status' );
+```
+
+In this case you could have a content-status.php that controls how the posts with "status" as the selected format will be displayed.
+
+These aren't really about template hierarchy, but using conditionals or variables to pull in code based on values selected in the wordpress admin area.
+
+IF youre building your own theme, you do need to make sure to turn on the post formats option, AS WELL AS setting what options are available.
+
+This is done in the functions.php file using the following code:
+
+```
+add_theme_support( 'post-formats', array( 'image', 'quote' ) );
+```
+
+This would turn on the option for users to select post formats as well as set "image" and "quote" as post format options.
+
+Selecting these options don't actually change anything unless you properly utilize that `get_template_part()` function AND have a content-WHATEVER.php file created.
+
+## Archive Templates in Wordpress
+Archive templates are super helpful when building themes because they can work across a range of purposes.
+
+archive.php serves as the catch all backup template.
+
+But we can do a lot of customization based on dates or categories or authors using the other archive templates available.
+
+## Date Archives
+date.php is the default for archives by date.
+
+In date.php we've got a basic template with a basic loop, but some conditional statements that check what kind of date archive we're looking at.
+
+If we're looking at a year based archive, then display the month name as a header before displaying posts from that month.
+
+If we're looking at a month archive, then don't display the month as an additional header (it's included in the title). 
+
+## Category Archives
+Unlike data archives category archives can be more specific.
+
+category.php is the generic file to control category archives, but we can also create files that will control specific categories based on the slug or the id of the category. This is similar to what we were able to do with page. 
+
+Blog posts with category "event" selected can override the category.php file if a category-event.php file exists.
+
+Use can use the blody_class() function here to customize the page based on the category archive.
+
+In the above example, .category-event would get added to the <body> tag on this category page (regardless of whether category-event.php is used or not) and a specific CSS rule could be written for that class to alter styles.
+
+## Author Archives
+author.php manages the Author page archives.
+
+Again, the author ID and author nice name (similar to the slug) can be used to create custom author pages based on which author we're viewing.
+
+ex: author-4.php or author-nhogan.php
+
+## An Important Review of Custom Post Type Setup
+Wordpress provides a lot of flexibility regarding the templates managing custom post types, but you do have to pay some attention to how the custom post types are being setup.
+
+When creating a Custom Post Type, we need to pay attention to a few advanced options.
+1. Has Archive - Does this custom post type have an archive page at all. By default this is set to false, which means we have to use WP_Query in order to pull this data.
+2. Rewrite - Helps setup the URL for custom post types and permalinks. Works in conjunction with the Custom Rewrite Slug.
+  1. If your custom post type is "porfolio" you could set the Custom Rewrite Slug to "work" and would use "work" instead of the default "portfolio"
+
+Like the categories, we can create a new file archive-portfolio.php to manage the listing of portfolio items.
+
+The page used to control the look of a single custom post type is single-customposttype.php, otherwise it will just use single.php (like all other posts).
+
+## Media Templates
+If we select the Attachment Page as the Link To option when we add a piece of media to our content, then there is a special template that will manage the look of this page.
+
+MIME types are used to determine how these items are displayed.
+
+image.php overrides png.php overrides attachment.php
+
+## Search Templates
+search.php is going to control what the search results page looks like.
+
+We can add the search form in two ways:
+1. Add the search widget into one of our sidebars
+2. Use the `get_search_form()` function
+
+`get_search_form()` actually pulls searchform.php and inserts that code on the page. So if you need to customize the search form, you would do that at searchform.php.
+
+## 404 Pages
+404.php is what controls error pages on the wordpress site.
 
 ****************************************************************************************************
 # Wordpress Hooks - Actions and Filters
