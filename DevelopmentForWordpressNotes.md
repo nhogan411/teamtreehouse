@@ -747,13 +747,15 @@ Hooks will significantly expand the functionality of wordpress, but might requir
 ## Definition of Terms - Actions vs Filters
 1. Hooks - A generic term in Wordpress that refers to places where you can add your own code or change what Wordpress is doing or outputting by default. Two types of hooks exist in Wordpress, actions and filters.
 2. Actions - A hook that is triggered at a specific time when Wordpress is running and let's you take an action.
-  ex:
-  * creating a widget when wordpress is initializing
-  * sending a tweet when someone publishes a post
+  
+   ex:
+   * creating a widget when wordpress is initializing
+   * sending a tweet when someone publishes a post
 3. Filters - Allows you to get and modify Wordpress data before it is sent to the database or the browser.
-  ex:
-  * customizing how excerpts are displayed
-  * adding in some custom code at the end of a blog post
+  
+   ex:
+   * customizing how excerpts are displayed
+   * adding in some custom code at the end of a blog post
 
 Can be confusing at first to determine whether something is an action OR a filter. Important difference is that when you work with a filter, you'll receive some data and at the end return it back. Actions, on the other hand, you're not receiving and modifying any data, you're simply given a place in the wordpress run-time where you can execute your code.
 
