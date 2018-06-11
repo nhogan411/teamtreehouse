@@ -388,6 +388,7 @@ Added one line of code to add:
 
 This checks for the "Footer Menu" and displays the menu if it exists.
 
+
 ## Finding, Installing and Updating Wordpress Plugins
 Plugins extend the functionality of wordpress.
 
@@ -426,6 +427,7 @@ Wordpress + PHP
 * Write loops and conditional statements
 * Pull in Wordpress specific information
 * Pull in images, PHP, CSS, and javscripts files
+
 
 ## PHP Files
 Wordpress has a few different types of PHP files:
@@ -505,9 +507,745 @@ The function we created is getting hooked into the widgest_init action hook.
 ****************************************************************************************************
 # Wordpress Theme Development
 
+## Where Wordpress Themes Live
+`/wp-content/themes/[YOUR THEME HERE]`
+
+
+## The Wordpress Template Hierarchy
+* [http://codex.wordpress.org/Template_Hierarchy](http://codex.wordpress.org/Template_Hierarchy) - Explains all the different possible files you can use to build a wordpress theme
+* [http://codex.wordpress.org/imates/1/18/Template_Hierarchy.png](http://codex.wordpress.org/imates/1/18/Template_Hierarchy.png) - Graphic shows flow of what kind of page you're trying to create and what types of templates or naming conventions you would use for that page or template
+* [wphierarchy.com](wphierarchy.com) - interactive/dynamic website that linsk you to spots on the codex to get more about particular terms or templates. Really just an interactive version of the Template_Hierarchy.png image.
+
+
+## Setting Up a Wordpress Theme Folder
+Important to namespace the theme folder so no conflicts with other themes with same name.
+
+* Ex. portfolio style theme so name it "portfolio", but that's a potentially a pretty common name. Better to name it "treehouse-portfolio", less likely that someone is using that name.
+
+Drag the folder into sublime text editor and create three files inside:
+1. style.css - important and required to activation. All meta information for theme lives in style.css:
+  1. Author
+  2. Version
+  3. Description
+  4. Tags
+  5. Image
+  6. Supported Features
+2. index.php - important and required to activation
+3. functions.php - just important, not required to activate
+
+### style.css
+
+```
+/*
+Theme Name: Treehouse POrtfolio Theme
+Author: Treehouse
+Author URI: http://teamtreehouse.com/
+Description: A post modern, simple, responsive portfolio theme designed in Wordpress Theme...
+Version: 1.0
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Tags: black, white, light, one-column, two-columns, left-siderbar, flexible-width, fluid...
+
+At Treehouse we believe that you should reach for your dreams.
+You are welcome to use this theme privately or commercially you want to help accomplish...
+*/
+```
+
+Still needs a screenshot.png file to show image in admin area.
+* 880x660px image as screenshot of theme.
+
+
+## Porting Over Static Template CSS
+In the download sections, are the original files used to create a static HTML site. CSS rules already exist in a .css file, so we're just copying those styles over to our styles.css
+
+The `@import` rule is important, but the best way to link to external or additional CSS files is via the functions.php file.
+
+
+## Adding CSS to a Theme Via functions.php File
+How to link to the `@import` for external fonts as well as the additional CSS files that came with our static site.
+
+We need to move the CSS files from static site into a /css folder inside the theme
+* Should be wp-content/treehouse-portfolio/css/foundations.css and wp-content/treehouse-portfolio/css/normalize.css
+
+Open up the functions.php file and start a php block:
+
+```
+<?php 
+
+?>
+```
+
+Now we're going to create a new function. When we do this we put a unique namespace at the beginning of the function name to avoid conflicts with other functions and plugins
+
+```
+function wpt_theme_styles() {
+
+}
+```
+
+The `wpt_` stands for "WordPress Treehouse" but could be anything.
+ - [ ] Does GH have a naming convention they like to throw up at the beginning of functions to serve as namespace?
+
+Inside of our function we're going to call the `wp_enqueue_style()` function, which let's us link to a style sheet for a particular theme.
+* First parameter is a unique name or handle that identifies the particular stylesheet that we're linking to. Probably similar to the name of the file, but not required.
+
+   Ex. 'foundation_css' instead of 'foundation.css'
+
+* Second parameter is a link to the actual file. Best way to do this is to use the `get_template_directory_uri() `function and concatenate it with the path to the file.
+
+```
+wp_enqueue_style( 'foundation_css', get_template_directory_uri() . '/css/foundation.css' );
+wp_enqueue_style( 'normalize_css', get_template_directory_uri() . '/css/normalize.css' );
+```
+
+We're also going to use wp_enqueue_style() to bring in the `@import` rule from the original CSS file. 
+* Instead of concatenating the `get_template_directory_uri()` function and the path to the file, just use the string directly
+
+```
+wp_enqueue_style( 'googlefont_css', 'http://fonts.googleapis.com/css?family=Asap:400,700,400italic,700italic' );
+```
+
+Finally, we need to make sure that our main CSS file is being loaded up. So once again we go back to the `wp_enqueue_style()` function
+
+```
+wp_enqueue_style( 'main_css', 'get_template_directory_uri() . 'style.css' );
+```
+
+Now that our function is created, we need to use an action hook to make sure the function is called. So after we close the function we're going to add an `add_action()` function with `wp_enqueue_scripts` as one parameter and the name of OUR function as the second.
+
+```
+add_action( 'wp_enqueue_scripts', 'wpt_theme_styles' );
+```
+
+Final look at our functions.php file should be something like:
+
+```
+<?php
+  function wpt_theme_styles() {
+    wp_enqueue_style( 'foundation_css', get_template_directory_uri() . '/css/foundation.css' );
+    wp_enqueue_style( 'normalize_css', get_template_directory_uri() . '/css/normalize.css' );
+    wp_enqueue_style( 'googlefont_css', 'http://fonts.googleapis.com/css?family=Asap:400,700,400italic,700italic' );
+    wp_enqueue_style( 'main_css', 'get_template_directory_uri() . 'style.css' );
+  }
+  add_action( 'wp_enqueue_scripts', 'wpt_theme_styles' );
+?>
+```
+
+
+## How to Link to JS from functions.php File
+There are a handful of javascript files and scripts that are included in the static version of the site we created and we're going to use the same method for add those to our wordpress theme that we used for the CSS files.
+
+Before we can do anything to the functions.php we should copy over all the javascript files from our static site into our theme.
+* The path for this would be wp-content/treehouse-portfolio/js/app.js, wp-content/treehouse-portfolio/js/foundation.min.js, and wp-content/treehouse-portfolio/js/modernizr.js
+
+Back in our functions.php we're going to create a new function that queues up our javscript files. Again we're using our "wpt_" namespace.
+
+```
+function wpt_theme_js() {
+
+}
+```
+
+Similar to the `wp_enqueue_style()` function is a `wp_enqueue_script()` function.
+```
+wp_enqueue_script( 'modernizr_js', get_template_directory_uri() . '/js/modernizr.js', '', '', false );
+```
+
+There are additional parameters to pass in the `wp_enqueue_script`. 
+1. An array of dependants. Not needed in this example.
+2. Sets a version. Not needed in this example
+3. True/False parameter asking if we want to include in the footer of the page
+
+Copy the code again and update for the js file
+
+```
+wp_enqueue_script( 'foundation_js', get_template_directory_uri() . '/js/foundation.min.js', array('jquery'), '', true );
+```
+
+Foundation.min.js is dependant on jquery, so if we pass an array with jquery filled in it'll make sure jquery is loaded prior to foundation.
+
+Lastly, we're going to load up our main javscript file.
+
+```
+wp_enqueue_script( 'main_js', get_template_directory_uri() . '/js/app.js', array('jquery', 'foundation_js'), '', true );
+```
+
+This last file is not only dependant on jquery, but ALSO dependant on the foundation javascript so the array of dependants will include BOTH dependencies.
+
+Similar to the CSS we can now call the add_action hook to call the function we just created.
+
+```
+add_action( 'wp_enqueue_scripts', 'wpt_theme_js' );
+```
+
+So a final look at the functions.php file:
+
+```
+<?php 
+  function wpt_theme_styles() {
+    wp_enqueue_style( 'foundation_css', get_template_directory_uri() . '/css/foundation.css' );
+    wp_enqueue_style( 'normalize_css', get_template_directory_uri() . '/css/normalize.css' );
+    wp_enqueue_style( 'googlefont_css', 'http://fonts.googleapis.com/css?family=Asap:400,700,400italic,700italic' );
+    wp_enqueue_style( 'main_css', 'get_template_directory_uri() . 'style.css' );
+  }
+  add_action( 'wp_enqueue_scripts', 'wpt_theme_styles' );
+
+  function wpt_theme_js() {
+    wp_enqueue_script( 'modernizr_js', get_template_directory_uri() . '/js/modernizr.js', '', '', false );
+    wp_enqueue_script( 'foundation_js', get_template_directory_uri() .'js/foundation.min.js', array('jquery'), '', true );
+    wp_enqueue_script( 'main_js', get_template_directory_uri() . '/js/app.js', array('jquery', 'foundation_js'), '', true );
+  }
+  add_action( 'wp_enqueue_scripts', 'wpt_theme_js' );
+?>
+```
+
+jquery uses the $ sign to denote the start of a jquery function and wordpress allows for multiple javascript frameworks that might also use the $ so we have to adjust our main javascript file to note that anytime it sees the $ it's for jquery.
+
+We do this by wrapping our jquery code inside of a function that is specifically calling jquery.
+
+This:
+```
+$( ".nav-toggle" ).click(function() {
+  $(this).toggleClass("open");
+  $("nav").fadeToggle(100);
+
+  return false;
+});
+```
+
+becomes this:
+
+```
+jQuery(document).ready(function($) {
+  $( ".nav-toggle" ).click(function() {
+    $(this).toggleClass("open");
+    $("nav").fadeToggle(100);
+
+    return false;
+  });
+});
+```
+Any other scripts used in the actual static pages should also be called here:
+
+```
+jQuery(document).ready(function($) {
+  $(document).foundation();
+  $( ".nav-toggle" ).click(function() {
+    $(this).toggleClass("open");
+    $("nav").fadeToggle(100);
+
+    return false;
+  });
+});
+```
+
+
+## The header.php and footer.php Files
+First we need to create two new files in our theme:
+1. header.php
+2. footer.php
+
+All wordpress site have to use the above naming convention
+
+in index.php we'll setup some php codeblocks to pull the header and footer files.
+
+```
+<?php get_header()' ?>
+
+<h1>Index file</h1>
+
+<?php get_footer(); ?>
+```
+
+* `get_header()` function calls the header.php file
+* `get_footer()` function calls the footer.php file
+
+   These functions work similar to the php include function, but for these specific files.
+
+
+## Porting existing headers and footers into Wordpress
+Cut from the top of your static page down to the closing `</header>` tag and paste that into the header.php file.
+
+* This include the full `<head>` section the opening `<body>` tag, the start of the `<header>` tag and all the navigation.
+
+Then we'll do the same thing for the footer.php file. 
+
+* Go into your static page and scroll to the bottom and cut everything from the final .footer-clear div down to the closing `</html>` tag and paste it into footer.php.
+
+Everything will show up as code, but the styles won't work yet.
+
+Now we need to clean things up a bit by removing anything in the header.php or footer.php that'll be replaced by any code in another template or by calls in the functions.php file.
+
+### in header.php
+1. Replace the contents of the `<title>` tag with `<?php wp_title(); ?>`
+2. Delete the references to the stylesheets and javascripts
+  1. In their place, we need to put in `<?php wp_head(); ?>` which tells wordpress we're about to hit the closing `</head>` tag and the plugin or theme should dump that stuff in.
+3. Replace the href on the "G" logo. Instead of hard coded, it needs to point to `<?php bloginfo('url'); ?>`. `bloginfo()` function contains a lot of info about a wordpress site we just have to tell it what piece of info to pull, hence the 'url' parameter.
+4. Instead of leaving the "G" as the site title, we're also going to replace that with the `bloginfo()` function, but this time pass the 'name' parameter:
+
+   ```
+   <?php bloginfo('name'); ?>
+   ```
+
+5. Replace the same two items (steps 3 & 4) where they live in the navigation.
+
+### in footer.php
+1. We're going to remove the social links
+2. Instead of the static copyright date we're replace that year with `<?php echo date('Y'); ?>` in order dynamically output the correct date.
+3. We can also pull all the links to javascript files and instead put in the `<?php wp_footer(); ?>` function to tell wordpress to output any code right before the closing body tag.
+
+
+## An Explanation of the Wordpress Loop
+The Loop is a powerful block of code that sits at the heart of wordpress templates.
+
+It checks to see what content is available for a page and then loops through and displays it.
+
+The loop is smart enough to know when multiple pieces of content should be displayed (like on a blog listing page), or if a single piece of content should be displayed (like on a static "About" page).
+
+The loop starts with an If statement to see if content is available and then moves into a while statement that continues operating until there's no longer content to display.
+
+INSIDE of the loop is where you find the code that dynamically generates the markup.
+
+[codex.wordpress.org/The_Loop](codex.wordpress.org/The_Loop)
+
+The loop has two different methods for being displayed. 
+1. Uses a shorthand method - essentially one line of code or perhaps starting the loop, closing the php block, filling in some HTML markup and coming back to close the loop later.
+2. More longhand method - a full PHP block
+
+
+## Adding the Loop to index.php File
+To start, let's pull the .row `<section>` from our static page and put it into our index.php file.
+
+Copy over the loop from the wordpress codex using the shorthand methods. Bring over both the opening and closing blocks of the loop.
+
+Since we want the `<section>` to exist regardless of the output of the loop, we need to make sure the loop starts inside of the `<section>` as well as inside the .small-12 and .leader `<div>`s
+
+Instead of hardcoded `<h1>` and `<p>` tags let's dyanmically pull the title and the content using two function `the_title()` and `the_content()`.
+
+```
+<h1><?php the_title(); ?></h1>
+<p><?php the_content(); ?></p>
+```
+
+
+## Common Wordpress Functions Used with the Loop
+The difference between a "the_" function and a "get_" function is significant. `the_permalink()` will echo out that permalink into a code. `get_permalink()` will go and get the permalink and allows us to save it to a variable for later use.
+
+
+## The page.php File
+page.php controls the static pages in the wordpress site.
+
+Save the index.php file as page.php as a starting point for page.php. This will work as the baseline for all of our pages on the wordpress site. 
+
+That being said, we can create create files that will handle custom templates (like if we wanted a sidebar, etc.).
+
+
+## Creating Custom Page Templates in Wordpress
+Our static site had a blog.html page that was two columns. A primary column on the right and sidebar column on the left.
+
+Open up the blogs.html static page source code as well as a new page (page-sidebar-left.php). Copy everything from page.php so our base code is there.
+
+Now at the top of the page add a block of php that names the template. This tells wordpress we're using a custom template.
+
+```
+<?php
+/*
+  Template Name: Left Sidebar
+*/
+?>
+```
+
+Now we can take what we need from our blogs.html page and move what's needed into page-sidebar-left.php.
+* Grab the opening .two-column `<section>` down to the .primary `<div>` and replace the opening `<section>` tag in page-sidebar-left.php. 
+* Do the same with the corresponding closing tags. 
+
+It can be difficult to determine where in a static HTML template you want to split your content up, but ultimately the decision comes down to what needs to be repeated (and therefore palced inside the loop), and what doesn't (and therefore outside of the loop).
+
+
+## The wp_nav_menu Function
+The `wp_nav_menu` function takes a number of parameters that mostly control how the menu is displayed, what comes before or after it re: markup, whether there are `<div>` wrapper containers, and the depth of the menu (display one level or two).
+
+However, in order for it to work there are some things we need to do in the theme as well as in the admin area.
+1. We need to call the `add_theme_support()` function and pass it a parameter of 'menus'. by default wordpress won't give you menu options for your theme.
+  1. Go to functions.php and add a hook action above all your other functions:
+
+   ```
+   add_theme_support( 'menus' );
+   ```
+
+   Once this is done, we can now see menus as an option in the admin area.
+
+2. In functions.php we need to tell wordpress that we have a specific menu setup. So we create a new function `register_theme_menus()`
+
+```
+function register_theme_menus() {
+  register_nav_menus(
+    array(
+      'primary-menu' => __( 'Primary Menu' )
+    )
+  );
+}
+add_action( 'init', 'register_theme_menus' );
+```
+
+   The parameters passed in the above array tell wordpress that this theme has specific menu or navigation areas.
+
+At this point we've told wordpress that we have a primary menu area, and it is available in the admin area, but it doesn't exist anywhere in our theme.
+
+
+## Coding a Basic Navigation in Wordpress
+So now we're going to go into our header.php file and prepare it for taking in a navigation menu.
+
+In betwee the .open `<h1>` and the .no-bullet `<ul>` we're going to open up a php block. Then we're going to set the default arguments for working with the wp_nav_menu function. This is done with an array full of parameters.
+1. 'container' - by default wordpress will wrap your menu, which is an unordered list, inside of a `<div>` tag. Since our code ges straight from an `<h1>` directly into the `<ul>`, we don't want that extra code outputted. Thus we set 'container' => false
+2. 'theme_location' - this tells wordpress where the primary menu lives. In functions.php we setup the 'primary-menu' but we didn't tell wordpress where that is. We do this now.
+3. 'menu-class' - this assigns a class to the first element (in this case the <ul>. had we left 'container' => true, then that <div would be the first element and recieve whatever class we assign here).
+
+Once we've done all that we simply need to run the `wp_nav_menu()` function, passing $defaults as the parameter.
+
+```
+<?php 
+  $defaults = array(
+    'container' => false,
+    'theme-location' => 'primary-menu',
+    'menu_class' => 'no-bullets'
+  );
+
+wp_nav_menu( $defaults );
+?>
+```
+
+
+## Coding Your Own Custom Post Type Templates
+It is possible to create a custom post type in our functions.php file using the `register_post_type()` function. This is not recommended though. If the post type is setup in your theme, and someone switches away from your theme, they lose the ability to manage the information in that custom post type. That custom content will no longer be available.
+
+Instead of building these custom post types in the theme we're going to build them using plugins so they operate regardless of selected theme.
+
+So install the Custom Post Type UI and Advanced Custom Fields plugins, which were discussed ina previous lesson; and setup the Portfolio post type with a Description and Image.
+
+Complete the setup in the admin area.
+
+
+## The WP_Query Function
+The `WP_Query` function is a special function that lets us specify what we want a specific loop to display on a page.
+
+Thus far, we've let the loop decide what to display, but with wp_query we can customize this output. 
+
+Check out the [codex.wordpress.org/wp_query#Parameters](codex.wordpress.org/wp_query#Parameters) to see what parameters are available to us to customize the query to look for specific post types.
+
+These are similar to the normal loop in that there's an IF statement checking if anything is avaialble and then looping through those options until there's no longer anything to loop through.
+
+However, it's written a bit differently. Instead of just if have_posts() we're establishing an object ($the_query) by calling a new `WP_Query()` function with blank arguments.
+
+In the past we've just checked if `have_posts()` or while `have_posts()` or `get_the_post()`, etc. Now we'll have to create a query object on our own and make sure we call that object specifically in our loop.
+
+Make sure, once you're done with your loop, to run wp_reset_postdata(); to avoid affecting one loop with the data from another.
+
+
+## The Portfolio Homepage
+Let's start with the page.php template and use it as the base for our page-portfolio.php. Don't forget the code at the top of the page to set it up as a custom template:
+
+```
+<?php
+/*
+  Template Name: Portfolio Page
+*/
+?>
+```
+
+Now we need to jump back to the portfolio page in our static site and grab the HTML markup to display the portfolio data. This is hand coded in the static page, but when it's n our loop we'll only have to enter the code once with some adjustments.
+
+Let's create a new php block and an array called $args, which will house the parameters we send to WP_Query.
+
+```
+<?php
+  $args = array(
+    'post_type' => 'portfolio'
+  );
+
+  $query = new WP_Query( $args );
+?>
+
+<section class="row no-max pad">
+  <?php if( $query->have_posts() ) : while( $query->have_posts() ) : $query->the_post(); ?>
+
+    <div>
+      <a href="<?php the_permalink(); ?>"><img src="<?php the_post_thumbnail('large');" alt""></a>
+    </div>
+
+  <?php enwhile; endif; wp_reset_postdata); ?>
+</section>
+```
+
+
+## The Portfolio Single Page
+Since the page-sidebar-left.php has a similar layout to the portfolio details (or single) page, we're going to use that as the basis for the single-portfolio.php.
+
+Since we followed the normal naming convention we don't actually need the php comment at the top of the page that tells wordpress what the template name is.
+
+Since output from the loop is going to be in both the main area AND the sidebar area of this page we need to move our loop up a bit and close it further down the page.
+
+That allows us to work with the cloop content in both the primary and secondary columns.
+
+In the primar column, we want to display the images. We can do that as follows:
+
+```
+<?php the_field('images'); ?>
+```
+
+In the sidebar, instead of displaying an <h2> tag, we want to use the `<h1>` tag and display `the_title()`.
+
+```
+<h1><?php the_title(); ?></h1>
+```
+
+Let's also display the description in the sidebar. We'll do this by using `the_field()` function again, but this time we'll pass the 'description' parameter.
+
+```
+<p><?php the_field('description'); ?></p>
+```
+
+Just a note that `the_field()` function is only used with the Custom Fields plugin. It is not native to wordpress.
+
+Now everything works, but it's a bit janky and we want to add an option in the sidebar, underneath the description to jump back to the portfolio or to the previous/next portfolio item.
+
+We can do this using a function called `previous_post_link();` and `next_post_link();`
+
+
+## Setting up the Blog Homepage
+The blog listings are typically managed from home.php. Since the layout for the blogs home is going to be similar to the left sidebar template, we'll use post-sidebar-left.php as the base for our home.php code.
+
+Remove the code at the top that let's wordpress know what the template name is.
+
+
+## Coding the Blog Homepage
+In the blog.html page from our static site you can see the `<article>` tag and the HTML markup that will be applied to our blog posts as they're listed out.
+
+Move that into the the home.php template INSIDE the loop.
+
+Now that the blog post markup is setup, we need to make sure the content is being filled dynamically.
+
+1. The link to the single blog post. Instead of hard coded, we need the permalink for each post. Not surprisingly, `the_permalink()` function will help us here.
+
+```
+<h1><a href="<?php the_permalink(); ?>">The Title</h1>
+```
+
+2. Next we can pull the hardcoded title and replace that with the_title() function.
+
+```
+<h1><a href="<?php the_permalink(); ?>"><?php the_title(); ?></h1>
+```
+
+3. Instead of a hard coded excerpt, we want wordpress to handle that, so we use `the_excerpt()` function.
+
+```
+<h2><?php echo strip_tags( get_the_excerpt() ); ?></h2>
+```
+
+4. Now we need to display the authors avatar. We can do this using the `get_avater()` function, but remember that "get_" functions get the avatar object and we have to pass some parameters about how the item should be displayed.
+
+```
+<?php echo get_avater( get_the_author_meta( 'ID' ), Instead
+```
+
+5. Instead of displaying a hardcoded authors name, we'll use a function called `the_athor_posts_link()`. This generates a link to a special author page that we can control via the archives page.
+
+```
+</php the_author_posts_link(); ?>
+```
+
+6. We can then come down to the category links and replace the whole link with `the_category()` function. This particular function will take in a parameter that determines how the categories are separated, but it's not required.
+
+```
+<li class="cat">in <?php the_category( ', ' ); ?></li>
+```
+
+7. We should also display the date the post was published so:
+
+```
+<li class="date">on <?php the_time('f j, Y'); ?></li>
+```
+
+8. Finally, we need to display the featured image of the post. We did this early so we can copy/paste that code here with a minor adjustment.
+
+```
+<?php if (get_the_post_thumbnail() ) :
+  <div class="img-container">
+    <?php the_post_thumbnail('large'); ?>
+  </div>
+<?php endif; ?>
+```
+
+To descrease the length of the excerpt go to functions.php and create a new function called `wpt_excerpt_length()`
+
+```
+function wpt_excerpt_length( $length ) {
+  return 16;
+}
+add_filter( 'excerpt_length, 'wpt_excerpt_length', 999 );
+```
+
+
+## The single.php Page
+The template for a single blog post looks similar to the blogs listing template so we're going to use that as the base for single.php 
+
+Instead of using `the_excerpt` to display we'll obviously display the full content, so...
+
+```
+<h2></php echo strip_tags( get_the_excerpt() ); ?></h2>
+```
+
+becomes:
+
+```
+<?php the_content(); ?>
+```
+
+
+## Adding Comments to a Template
+Adding comments to our template is as simple as adding the `comments_template()` function. 
+
+This function takes a couple of parameters, specifically the file option and whether to sepearate comments by comment type. Both of these are optional.
+
+After the_content() function we want another function that displays the comments.
+
+```
+<?php comments_template(); ?>
+```
+
+
+## A Catch All Archives
+We're going to use home.php as the model for our archive.php page.
+
+Before we get into the loop though we want to add a header to let people know what page they're on.
+
+So push the loop down and above that add the following:
+
+```
+<div class="leader">
+  <h1><?php wp_title(''); ?> Blog Posts</h1>
+</div>
+```
+
+
+## A Static Homepage Template
+We need a front-page.php template. We'll use index.php as the base for this new page.
+
+Instead of a regular homepage, we actually want the portfolio loop on the homepage so we're going to go to that portfolio listing page and bring that code into front-page.php
+
+Good coding practices say that just copy/pasting is a bad idea, so instead we're going to use an include to do it.
+
+Create a new file called content-portfolio.php and let's put that altered query in there.
+
+Then on both the front-page.php and the page-portfolio.php we are going to use the `get_template_part()` function.
+
+```
+<?php get_template_part('content', 'portfolio'); ?>
+```
+
+This is basically a php include that pulls the "content" "-" "portfolio" .php file.
+
+Say for instance that we didn't want to include as many of the portfolio items on the front page as we do on the portfolio page.
+
+To achieve this we can include the posts_per_page parameter.
+
+To do this we should check out the [Conditional _Tags page in the codex](http://codex.wordpress.org/Conditional_Tags).
+
+Now edit the content-portfolio.php file to check if the page is the front page and if so, only display 4 posts.
+
+```
+$num_posts = -1  //sets the default to ALL
+if( is_front_page() ) $num_posts = 4;  // overwrites the default if the front page
+```
+
+A  simplified version of this same if statement is:
+
+```
+$num_posts = ( is_front_page() ) ? 4 : -1;
+```
+
+We also have to edit the arguments we pass through to include the number of posts.
+
+```
+$args = array(
+  'post_type' => 'portfolio'
+);
+$query = new WP_Query( $args );
+```
+
+becomes
+
+```
+$args = array(
+  'post_type' => 'portfolio',
+  'post_per_page' => $num_posts
+);
+$query = new WP_Query( $args );
+```
+
+
+## Adding Widget Areas to a Wordpress Theme
+Site is basically setup, but we want to add in the sidebar widgets.
+
+Open up functions.php and drop in the following code to setup widgets:
+
+```
+function wpt_create_widget( $name, $id, $description ) {
+  register_sidebar(array(
+    'name' => __( $name ),
+    'id' => $id,
+    'description' => __( $description ),
+    'before_widget' => '<div class="widget">',
+    'after_widget' => '</div>',
+    'before_title' => '<h2 class="module-heading">',
+    'after_title' => '</h2>'
+  ));
+}
+wpt_create_widget( 'Page Siderbar', 'page', 'Displays on the side of pages with a sidebar' );
+wpt_create_widget( 'Blog Sidebar', 'blog', 'Displays on the side of pages in the blog section' );
+```
+
+This is a helper function that allows us to easily create widget areas.
+
+Now we need to get into all the templates that display sidebars.
+
+Setup a new file called sidebar.php to easily include this similar code on multiple pages.
+
+Use the `get_sidebar()` function to call the sidebar.php file.
+
+On page-sidebar-left.php we're going to pass a parameter with the `get_sidebar()` function called 'page'. This calls a different file. instead of sidebar.php it will pull up sidebar-page.php which can be customized a little differently.
+
+On sidebar.php and sidebar-page.php you need the following code to dynamically display widgets:
+
+```
+<?php if( !dynamic_sidebar( 'page' ) ): ?>
+
+<?php endif; ?>
+```
+
+
+## Adding Shortcodes to Your Theme
+Shortcodes can be used to help content contributors easily style content.
+
+
+## Testing Your Wordpress Theme
+in the wp-config.php file you want to turn on debug mode by finding:
+
+```
+define('WP_DEBUG', false);
+```
+
+and setting it to:
+
+```
+define('WP_DEBUG', true);
+```
+
 
 ****************************************************************************************************
 # The Wordpress Template Hierarchy
+
 
 ## How Wordpress Templates Work
 Template in wordpress is a single php document that determines how a page or set of pages look on the front-end of a site.
@@ -517,6 +1255,7 @@ They can include HTML, php and special wordpress PHP functions. Template even ex
 Anything you would code in a static site moves over to wordpress template in some way.
 
 Wordpress has a special naming convention associated with these files. That means the names are similarly named, which makes the easier to work with.
+
 
 ## The Template Hierarchy
 [codex.wordpress.org/Template_Hierarchy](codex.wordpress.org/Template_Hierarchy)
@@ -528,6 +1267,7 @@ Wordpress has a special naming convention associated with these files. That mean
 Say you had a single page on the site. Wordpress will determine whether it's a post page or a static page. Assume it's a static page, then it will determine if there's a custom template (with a custom name) or if it's the default page template, in which case we could have page-slug.php OR page-ID.php (these actual file names would look like page-about-us.php or page-4.php). If neither of these page options are available, then wordpress will look for the backup, page.php. IF that's not available then it will default to index.php
 
 New hypothetical. Say you've got an Archive page that you want categorized by date. In order to do this, we would create date.php. If date.php doesn't exist then wordpress will look for archive.php. As always, if archive.php doesn't exist then wordpress will fall back to using the index.php template.
+
 
 ## Common Wordpress Template Code
 The Loop is the most common piece of code you'll find in a wordpress template.
@@ -541,15 +1281,18 @@ The Loop is the most common piece of code you'll find in a wordpress template.
 <?php get_template_part( 'slug', 'additional items'); ?>
 ```
 
-For example, `<?php get_template_part( 'loop', 'index'); ?>` would look for the file loop-index.php and `<?php get_template_part( 'loop', 'blog'); ?> `would look for the file loop-blog.php.
+For example, `<?php get_template_part( 'loop', 'index'); ?>` would look for the file loop-index.php and `<?php get_template_part( 'loop', 'blog'); ?>` would look for the file loop-blog.php.
+
 
 ## style.css
 This page is required of ALL wordpress themes. It contains both the main styles for the theme as well as the meta data about the theme.
+
 
 ## index.php
 The index.php file serves as the backup for ALL other templates. For this reason, you will likely want to keep index.php fairly generic, unless you're also building out all of the other templates you'll need.
 
 The index.php in our example is pretty simple. Contains a `get_header()` and `get_footer()` functions to load up the headers and footers, there's some HTML markup, The Loop, the content that displays for each post or page, clode the loop, pull in the sidebar, close some HTML markup.
+
 
 ## header.php
 header.php is the naming we use to make sure wordpress' `get_header()` function calls the proper file. If we named header.php something else, like top-header.php, then the `get_header()` function wouldn't work.
@@ -570,12 +1313,14 @@ Navigation code is also typically found in the header.php file since it will typ
 
 The `wp_nav_menu()` function is what builds the navigation.
 
+
 ## footer.php
 First thing to do in the footer.php is to make sure you're closing any HTML markup that was opened in the header.php file.
 
 Like the header.php file we have a special function that allows plugins to hook into the footer of the site before the closing `</body>` and `</html>` tags.
 
 This function is `<?php wp_footer(); ?>`
+
 
 ## sidebar.php
 sidebar.php gets called by templates using the `get_sidebar()` function.
@@ -598,16 +1343,20 @@ get_sidebar( 'blog' );
 
 This would load the sidebar-blog.php file. If the parameter above had been 'about' the function would look for the sidebar-about.php file to load.
 
+
 ## Homepage Templates in Wordpress
 Wordpress offers users the option to set whether the homepage of the site is a static page or the blog listings page. Most sites today use a static page and typically that's being managed by front-page.php and the home.php managed the blog listings.
 
 If you don't use the static homepage option, then home.php gets used for the main site homepage and front-page.php is completely ignored.
 
+
 ## front-page.php
 If there is no front-page.php your site will default to page.php as the template for your homepage.
 
+
 ## home.php
 home.php is the default for blogs listings on your homepage. If home.php doesn't exist, then index.php will be used.
+
 
 ## Static Page Template Files
 By default, page.php controls the static pages on the site.
@@ -632,8 +1381,10 @@ In this case, you could setup the About Us page AND the Contact Us page to use t
 
 Keep in mind that this final option of setting the page template in Wordpress OVERRIDES whatever defaults might have been setup. Even if we have a custom template like page-about-us.php the About Us page would use whatever is set in the backend of wordpress.
 
+
 ## Single Post and Post Format Templates
 Single blog posts are controlled by the single.php page.
+
 
 ## The Comment Template
 Important to know, when working with posts, about the comments.php template.
@@ -643,6 +1394,7 @@ The comments.php template contains all the markup and code needed to display the
 This file contains a bunch of accessibility code that make the forms easier to use for screen readers and such. It's recommended that you leave as much of this as possible to avoid issues.
 
 A good idea would be to use one of the default themes comments.php files as a base for creating your own. Go copy their code and then edit/adjust as necessary.
+
 
 ## Post Formats
 Post formats in wordpress help describe either what the post is about or what type of content it's using.
@@ -673,12 +1425,14 @@ This would turn on the option for users to select post formats as well as set "i
 
 Selecting these options don't actually change anything unless you properly utilize that `get_template_part()` function AND have a content-WHATEVER.php file created.
 
+
 ## Archive Templates in Wordpress
 Archive templates are super helpful when building themes because they can work across a range of purposes.
 
 archive.php serves as the catch all backup template.
 
 But we can do a lot of customization based on dates or categories or authors using the other archive templates available.
+
 
 ## Date Archives
 date.php is the default for archives by date.
@@ -700,12 +1454,14 @@ Use can use the `body_class()` function here to customize the page based on the 
 
 In the above example, .category-event would get added to the <body> tag on this category page (regardless of whether category-event.php is used or not) and a specific CSS rule could be written for that class to alter styles.
 
+
 ## Author Archives
 author.php manages the Author page archives.
 
 Again, the author ID and author nice name (similar to the slug) can be used to create custom author pages based on which author we're viewing.
 
 ex: author-4.php or author-nhogan.php
+
 
 ## An Important Review of Custom Post Type Setup
 Wordpress provides a lot of flexibility regarding the templates managing custom post types, but you do have to pay some attention to how the custom post types are being setup.
@@ -719,12 +1475,14 @@ Like the categories, we can create a new file archive-portfolio.php to manage th
 
 The page used to control the look of a single custom post type is single-customposttype.php, otherwise it will just use single.php (like all other posts).
 
+
 ## Media Templates
 If we select the Attachment Page as the Link To option when we add a piece of media to our content, then there is a special template that will manage the look of this page.
 
 MIME types are used to determine how these items are displayed.
 
 image.php overrides png.php overrides attachment.php
+
 
 ## Search Templates
 search.php is going to control what the search results page looks like.
@@ -735,14 +1493,18 @@ We can add the search form in two ways:
 
 `get_search_form()` actually pulls searchform.php and inserts that code on the page. So if you need to customize the search form, you would do that at searchform.php.
 
+
 ## 404 Pages
 404.php is what controls error pages on the wordpress site.
+
+
 
 ****************************************************************************************************
 # Wordpress Hooks - Actions and Filters
 
 ## An Overview of Hooks in Wordpress
 Hooks will significantly expand the functionality of wordpress, but might require more knowledge and experience with php to meet your needs.
+
 
 ## Definition of Terms - Actions vs Filters
 1. Hooks - A generic term in Wordpress that refers to places where you can add your own code or change what Wordpress is doing or outputting by default. Two types of hooks exist in Wordpress, actions and filters.
@@ -758,6 +1520,7 @@ Hooks will significantly expand the functionality of wordpress, but might requir
    * adding in some custom code at the end of a blog post
 
 Can be confusing at first to determine whether something is an action OR a filter. Important difference is that when you work with a filter, you'll receive some data and at the end return it back. Actions, on the other hand, you're not receiving and modifying any data, you're simply given a place in the wordpress run-time where you can execute your code.
+
 
 ## Actions and Filters in the Codex
 * [codex.wordpress.org/Plugin_API/Filter_Reference](codex.wordpress.org/Plugin_API/Filter_Reference) - Lots of information about creating plugins and filters in general, as well as what filters are available for use. Lots of filters are applied to template tags that you'll recognize from theme development. 
@@ -776,6 +1539,7 @@ Can be confusing at first to determine whether something is an action OR a filte
 
   We can execute code when a post is being edited or deleted, when it's being published or when it's being saved. And so on.
 
+
 ## Dash for Documentation
 Only avaialble for Mac.
 
@@ -785,6 +1549,7 @@ Setup a global search shortcut or hotkey combo that will automatically open up a
 
 This tool is extremely useful when you want to see the documentation on a specific action or filter or function or whatever. Use your hotkey to pull up the search, type the function name, read your info and quickly close the tool without having to go hunting online for the page you need.
 
+
 ## Working with `$wp_filter`
 `$wp_filter` is another option to find out what hooks are available in wordpress.
 
@@ -792,10 +1557,12 @@ Echo this out onto the screen let's you see native hooks, custom hooks that we'v
 
 In addition to seeing the hooks themselves, we also get to see the different functions that are tied into that hook.
 
+
 ## Query Monitor Plugin
 A plugin that will show you, like the `$wp_filter`, what hooks are running and what functions are associated with them. 
 
 Can actually split up hooks by front-end/back-end and what's core wordpress vs what's from installed plugins.
+
 
 ## Searching Wordpress Core
 Looking the the wordpress core code is also an option for finding out more information about hooks.
@@ -813,6 +1580,7 @@ New example. Instead of searching for `add_filter( 'wp_title` we're going to sea
     * add_action( "init
     * add_action('init
     * add_action("init
+
 
 ## The add_filter Function
 `add_filter()` - This is the code used to add your own function into an existing hook.
@@ -833,6 +1601,7 @@ add_filter( 'excerpt_length', 'my_custom_excerpt_length', 999 );
 ```
 
 So we're tieing into a filter called 'excerpt_length', and then calling our own custom function, 'my_custom_excerpt_length', and setting the priority to 999. High priority means that our function runs LATER (we want it to be the last thing that affects the 'excerpt_length').
+
 
 ## The remove_filter Function
 `remove_filter()` - This is the code used to remove a function from an existing hook.
@@ -861,6 +1630,7 @@ remove_filter( 'the_content', 'do_something', 11 );
 add_filter( 'the_content', 'do_something_instead', 11 );
 ```
 
+
 ## The apply_filters Function
 `apply_filters()` - taking in a few parameters. 
 
@@ -881,6 +1651,7 @@ add_filter( 'example_filter', 'example_callback' );
 echo $value = apply_filters( 'example_filter', 'default value' );
 ```
 
+
 ## Wordpress Filter Helper Functions
 We're going to look at three helpful functions that help us write code re: filters.
 1. `has_filter()` - Let's us do two things.
@@ -888,6 +1659,7 @@ We're going to look at three helpful functions that help us write code re: filte
   2. Checks to see if a specific function is tied into a specific hook. You could then run code dependant on that result. For instance, if a function is tied to a filter, then you could remove the function and do your own function.
 2. `current_filter()` - This tells you the action or filter that is being run, that your code is tied in to. Helpful if you wrote a single function that operates on a lot of different hooks, but does so differently depending on the hook used. Like a sanitization function that operates everytime someone saves data. In certain places of your site you might want that code to operate a little differently. 
 3. `is_main_query()` - Heplful for filters that apply within the main query. If you run multiple loops on a page or if you're running custom loops, you'll want to be able to identify whether it's the main loop and only affect code there. Other instances of the loop would be unaffected.
+
 
 ## Real World Examples of Wordpress Filters
 Let's look at some real world examples of fitlers.
@@ -937,6 +1709,7 @@ function manage_posts_columns_example( $columns ) {
 add_filter( 'manage_posts_columns', 'manage_posts_columns_example' );
 ```
 
+
 ## The `add_action` Function
 `add_action()` - 
 1. Takes the hook we latch on to
@@ -957,6 +1730,7 @@ Basically, when it's time for `wp_enqueue_scripts` to do it's thing, we're addin
 
 This does not output any code. It just adds our function to the list of things that need to happen.
 
+
 ## The remove_action Function
 `remove_action()` operates in the opposite fashion of add_action().
 
@@ -973,6 +1747,7 @@ remove_action( 'wp_enqueue_scripts', 'add_google_font' );
 This can apply to native functions, custom functions, or third-party functions. If a plugin you downloaded is using a hook to do action that you don't like, use this to remove that action, possibly replacing it with one of your own.
 
 `remove_all_actions()` and `remove_all_filters()` will remove all the actions or filters from specified hook. you could even pass a priority to only remove actions with a priority of 11 or 10 or whatever you specify.
+
 
 ## The do_action Function
 You place this in the code where you want an action hook to take place.
@@ -993,12 +1768,14 @@ add_action( 'my_footer', 'custom_footer_text' );
 custom_footer();
 ```
 
+
 ## Action Helper Functions
 `has_action()` - allows you to see if a specific action hook exists, as well as if a specific function is tied into that hook.
 
   Could be used in an if statement to see if a function is tied to an ction hook, and if it is, removing it and adding your own function to that hook.
 
 `current_filter()` - Technically, actions are a type of filter and so current_filter() works on both.
+
 
 ## Real World Examples of Wordpress Actions
 
@@ -1010,10 +1787,12 @@ custom_footer();
 
 4. admin_menu - Could be used to remove options from the admin menu.
 
+
 ## Hooking Into Wordpress Plugins
 Up to now we have primarily looked at tieing into the native hooks in wordpress.
 
 Now we're going to look at how to create our own hooks that other developers can use to tie into our theme or plugins.
+
 
 ## Gravity Forms Example
 `gform_submit_button` is a filter hook built into Gravity Forms.
@@ -1024,6 +1803,7 @@ function form_submit_button($button, $form) {
   return "<button class='button' id='gform_submit_button{$form["id"]}'><span>Submit</span></button>';
 }
 ```
+
 
 ## Advanced Custom Fields Example
 `load_field` - a filter that allows you to pull a field data and customize it before sending it out to the page.
@@ -1043,10 +1823,12 @@ Using the filters you could customize how that field is presented.
 ****************************************************************************************************
 # Wordpress Customizer API
 
+
 ## Introduction to the Course
 We're going to cover how to integrate your wordpress theme with the live theme customizer option.
 
 Taking an in-depth look at customizer in action and native customizer options as well as how to create your own custom settings.
+
 
 ## Settings - Customizer Terms
 Settings - Is an individual customization option avaialble for changing in the theme customizer area.
@@ -1068,12 +1850,14 @@ $wp_customize->add_setting( 'header_textcolo', array(
 ) );
 ```
 
+
 ## Controllers - Customizer Terms
 Controller - the actual HTML element that someone uses to modify a setting.
 
 Different types of setting will obviously have different types of controllers.
 
 * The blog name would use a text input contoller whereas the color for a link would use a color picker controller, and selecting the log would use an image uploader controller.
+
 
 ## Sections and Panels - Customizer Terms
 Sections - Different areas of the theme customizer divided by collapsible headings.
@@ -1092,12 +1876,14 @@ Can add your own section to the customizer using the `$wp_customizer->add_sectio
 
 Panel - a grouping of section in the theme customizer
 
+
 ## Transports - Customizer Terms
 Transports - One of the parameters for a setting determining how a setting is updated and displayed in the preview area.
 
 Two options:
 1. Refresh - The preview area will "refresh" to show the updated setting
 2. Post Message - The setting will change live in real-time
+
 
 ## The customize_register Action Hook
 Add the following code to your functions.php page
@@ -1110,6 +1896,7 @@ add_action( 'customize_register', 'wpt_register_theme_customizer' );
 ```
 
 The comment on line 2 will pull all the customizable settings and controls and display the variable contents on the page. Not good for production, but excellent for debugging and finding out what you have to work with.
+
 
 ## Site Title and Tagline
 
@@ -1143,6 +1930,7 @@ function wpt_customizer_js() {
 add_action( 'customize_preview_init', 'wpt_customizer_js' );
 ```
 
+
 ## Create Custom Panels
 `add_panel()` function to create new panels and rearrange existing sections to fall into new or existing panels
 
@@ -1170,6 +1958,7 @@ $wp_customize->get_section('background_image')->priority = 1000;
 $wp_customize->get_section('header_image')->panel = 'design_settings';
 ```
 
+
 ## An Overview of Custom Controls in Wordpress
 
 ### Adding our own custom settings
@@ -1178,6 +1967,7 @@ $wp_customize->get_section('header_image')->panel = 'design_settings';
 2. Create a controller
 3. Adding code for postMessage updates
 4. Necessary adjustments to theme template code
+
 
 ## Adding a Logo Uploader
 
@@ -1223,6 +2013,7 @@ $wp_customize->aedd_control(
 <?php endif; ?>
 ```
 
+
 ## Making the Logo Uploader Work with postMessage
 
 ```
@@ -1237,6 +2028,7 @@ wp-customize( 'wpt_logo' , function( value ) {
   } );
 });
 ```
+
 
 ## Custom Footer Text in the Theme Customizer
 
@@ -1274,6 +2066,7 @@ function sanitize_text( $text ) {
   return sanitize_text_field( $text );
 }
 ```
+
 
 ## Custom Text Color Picker and Font-size Settings
 
@@ -1335,6 +2128,7 @@ $wp_customize->add_Control(
   )
 );
 ```
+
 
 ## Custom CSS Textarea in the Theme Customizer
 Can't use postMessage for a CSS field in the customizer. Probably can but it's a bunch of extra work and probably better off not to bother.
