@@ -993,7 +993,7 @@ In the primar column, we want to display the images. We can do that as follows:
 <?php the_field('images'); ?>
 ```
 
-In the sidebar, instead of displaying an <h2> tag, we want to use the `<h1>` tag and display `the_title()`.
+In the sidebar, instead of displaying an `<h2>` tag, we want to use the `<h1>` tag and display `the_title()`.
 
 ```
 <h1><?php the_title(); ?></h1>
