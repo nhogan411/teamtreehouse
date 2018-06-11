@@ -522,6 +522,7 @@ Wordpress has a special naming convention associated with these files. That mean
 [codex.wordpress.org/Template_Hierarchy](codex.wordpress.org/Template_Hierarchy)
 [codex.wordpress.org/imates/1/18/Template_Hierarchy.png](codex.wordpress.org/imates/1/18/Template_Hierarchy.png)
 * Types of pages on the left and then moves through the types of templates that would work for each page.
+
 [wphierarchy.com](wphierarchy.com) is the same as the above image, but an interactive web interface that links you to the specific page of the codex.
 
 Say you had a single page on the site. Wordpress will determine whether it's a post page or a static page. Assume it's a static page, then it will determine if there's a custom template (with a custom name) or if it's the default page template, in which case we could have page-slug.php OR page-ID.php (these actual file names would look like page-about-us.php or page-4.php). If neither of these page options are available, then wordpress will look for the backup, page.php. IF that's not available then it will default to index.php
@@ -695,7 +696,7 @@ category.php is the generic file to control category archives, but we can also c
 
 Blog posts with category "event" selected can override the category.php file if a category-event.php file exists.
 
-Use can use the blody_class() function here to customize the page based on the category archive.
+Use can use the `body_class()` function here to customize the page based on the category archive.
 
 In the above example, .category-event would get added to the <body> tag on this category page (regardless of whether category-event.php is used or not) and a specific CSS rule could be written for that class to alter styles.
 
@@ -740,6 +741,302 @@ We can add the search form in two ways:
 ****************************************************************************************************
 # Wordpress Hooks - Actions and Filters
 
+## An Overview of Hooks in Wordpress
+Hooks will significantly expand the functionality of wordpress, but might require more knowledge and experience with php to meet your needs.
+
+## Definition of Terms - Actions vs Filters
+1. Hooks - A generic term in Wordpress that refers to places where you can add your own code or change what Wordpress is doing or outputting by default. Two types of hooks exist in Wordpress, actions and filters.
+2. Actions - A hook that is triggered at a specific time when Wordpress is running and let's you take an action.
+  ex:
+  * creating a widget when wordpress is initializing
+  * sending a tweet when someone publishes a post
+3. Filters - Allows you to get and modify Wordpress data before it is sent to the database or the browser.
+  ex:
+  * customizing how excerpts are displayed
+  * adding in some custom code at the end of a blog post
+
+Can be confusing at first to determine whether something is an action OR a filter. Important difference is that when you work with a filter, you'll receive some data and at the end return it back. Actions, on the other hand, you're not receiving and modifying any data, you're simply given a place in the wordpress run-time where you can execute your code.
+
+## Actions and Filters in the Codex
+* [codex.wordpress.org/Plugin_API/Filter_Reference](codex.wordpress.org/Plugin_API/Filter_Reference) - Lots of information about creating plugins and filters in general, as well as what filters are available for use. Lots of filters are applied to template tags that you'll recognize from theme development. 
+
+  Some filters apply when we read from the database and others apply as we write to the database.
+
+  Again, filters are working with data between the database and the browser, or vice versa.
+
+* [codex.wordpress.org/Plugin_API/Action_Reference](codex.wordpress.org/Plugin_API/Action_Reference) - Actions different in that instead of manipulating data before or after it comes from the database or browser, we're inserting OUR code at certain points as wordpress is building out the site or admin area.
+
+  For instance:
+  * actions run during a typical page build
+  * actions run when building out an admin page
+
+  Similar to filters, there's also actions for different categories (posts or pages or comments, etc.) but instead of manipulating data we're executing our code at those points. 
+
+  We can execute code when a post is being edited or deleted, when it's being published or when it's being saved. And so on.
+
+## Dash for Documentation
+Only avaialble for Mac.
+
+Once you've installed Dash you'll be asked if you want to download documentation. This lets you download documentation from a ton of places online and lets you easily access them from keyboard shortcuts.
+
+Setup a global search shortcut or hotkey combo that will automatically open up a search in the wordpress documentation.
+
+This tool is extremely useful when you want to see the documentation on a specific action or filter or function or whatever. Use your hotkey to pull up the search, type the function name, read your info and quickly close the tool without having to go hunting online for the page you need.
+
+## Working with `$wp_filter`
+`$wp_filter` is another option to find out what hooks are available in wordpress.
+
+Echo this out onto the screen let's you see native hooks, custom hooks that we've setup, and any third party plugin hooks that are being used.
+
+In addition to seeing the hooks themselves, we also get to see the different functions that are tied into that hook.
+
+## Query Monitor Plugin
+A plugin that will show you, like the `$wp_filter`, what hooks are running and what functions are associated with them. 
+
+Can actually split up hooks by front-end/back-end and what's core wordpress vs what's from installed plugins.
+
+## Searching Wordpress Core
+Looking the the wordpress core code is also an option for finding out more information about hooks.
+
+Open up a text editor and use the advanced search to look at the entire wp install. Search for `add_filter( 'wp_title`.
+
+This is the code that any function would use when it wants to tie into `wp_title`
+
+In this example, twentyfouteen theme is using this filter. Typically the function they're calling is right above the hook, so you should be able to easily see the filter and what the filter is doing. 
+
+New example. Instead of searching for `add_filter( 'wp_title` we're going to search for `add_action( 'init`.
+
+  Be aware that the core wordpress code follows some standards re: their code, like the space between the opening parenthesis in "add_filter" and the attribute we're passing. Plugins might not follow these same standards and you might have to tweak your search accordingly.
+    * add_action( 'init
+    * add_action( "init
+    * add_action('init
+    * add_action("init
+
+## The add_filter Function
+`add_filter()` - This is the code used to add your own function into an existing hook.
+
+We can see that the `add_filter()` function is accepting a few arguments.
+1. The original hook you want to tie into (any filter)
+2. The function you want to call (YOUR CODE)
+3. The priority level (defaults to 10 and can leave empty if no change)
+4. The number of accepted arguments (defaults to 1, since most filters will go get one thing and edit/return it - not always the case so make sure to include that if you need to send something other than 1)
+
+Couple lessons back we edited the excerpt length. This was included as part of our theme in the functions.php file. 
+
+```
+function my_custom_excerpt_length( $length ) {
+  return 20;
+}
+add_filter( 'excerpt_length', 'my_custom_excerpt_length', 999 );
+```
+
+So we're tieing into a filter called 'excerpt_length', and then calling our own custom function, 'my_custom_excerpt_length', and setting the priority to 999. High priority means that our function runs LATER (we want it to be the last thing that affects the 'excerpt_length').
+
+## The remove_filter Function
+`remove_filter()` - This is the code used to remove a function from an existing hook.
+
+Similar to apply_filter we can see that this accept a handful of arguments:
+1. The original hook you want to tie into (any filter)
+2. The function you want to call (YOUR CODE)
+3. The priority level (defaults to 10 and can leave empty if no change)
+
+Since we're removing the function from the hook, we definitely don't need to pass a parameter and so this function doesn't ask for how many parameters.
+
+Say we wanted to look at the_content filter and wanted to remove the `do_shortcode` function from that filter. This would make sure that shortcodes NEVER run inside of the_content.
+
+Our code would look like this:
+
+```
+remove_filter( 'the_content', 'do_shortcode', 11 );
+```
+
+This goes to the_content filter, and removes the do_shortcode function and sets a priority of 11.
+
+Basically this is useful if you don't like the way something is executing and want to stop it OR if you want to replace the way it executes with a function of your own.
+
+```
+remove_filter( 'the_content', 'do_something', 11 );
+add_filter( 'the_content', 'do_something_instead', 11 );
+```
+
+## The apply_filters Function
+`apply_filters()` - taking in a few parameters. 
+
+1. The name of the filter we want it to have.
+2. The default value.
+3. One or more variables passed, that we can use within the filter functions.
+
+```
+// First create a custom function
+function example_callback ( $string ) {
+  $new_value = $string . " NEW!";
+  return $new_value;
+}
+// Then hook it into a new example hook
+add_filter( 'example_filter', 'example_callback' );
+
+// Then use apply_filters in your code when you want the filter to run. This is what we would use in our plugin or theme that grants users access to filter a piece of info
+echo $value = apply_filters( 'example_filter', 'default value' );
+```
+
+## Wordpress Filter Helper Functions
+We're going to look at three helpful functions that help us write code re: filters.
+1. `has_filter()` - Let's us do two things.
+  1. Checks to see if certain filter exists, if it does then we can run our own code. Helpful if you want to tie into another hook if it exists.
+  2. Checks to see if a specific function is tied into a specific hook. You could then run code dependant on that result. For instance, if a function is tied to a filter, then you could remove the function and do your own function.
+2. `current_filter()` - This tells you the action or filter that is being run, that your code is tied in to. Helpful if you wrote a single function that operates on a lot of different hooks, but does so differently depending on the hook used. Like a sanitization function that operates everytime someone saves data. In certain places of your site you might want that code to operate a little differently. 
+3. `is_main_query()` - Heplful for filters that apply within the main query. If you run multiple loops on a page or if you're running custom loops, you'll want to be able to identify whether it's the main loop and only affect code there. Other instances of the loop would be unaffected.
+
+## Real World Examples of Wordpress Filters
+Let's look at some real world examples of fitlers.
+
+### Custom Title
+
+```
+function custom_wp_title( $title, $sep ) {
+  global $page;
+
+  // Add the site name.
+  $title .= get_blogInfo( 'name' );
+
+  //Add the site description for the home/front page.
+  $site_description = get_bloginfo( 'description', 'display' );
+  if ( $site_description && ( is_home() || is_front_page() ) ) {
+    $title = "$title $sep $site_description";
+  }
+
+  return $title;
+}
+add_filter( 'wp_title', 'custom_wp_title', 20, 2 );
+```
+
+### body_class
+
+```
+function custom_body_classes ( $classes ) {
+  if ( 'post' == get_post_type() ) {
+    $classes[] = "custom-class";
+  }
+  return $classes;
+}
+add_filter( 'body_class', 'custom_body_classes' );
+```
+
+### manage_posts_columns
+
+```
+function manage_posts_columns_example( $columns ) {
+  unset( columns['author'] );
+  unset( columns['categories'] );
+  unset( columns['tags'] );
+  unset( columns['comments'] );
+  return $columns
+}
+add_filter( 'manage_posts_columns', 'manage_posts_columns_example' );
+```
+
+## The `add_action` Function
+`add_action()` - 
+1. Takes the hook we latch on to
+2. The function we want to add
+3. The priority level
+4. The number of accepted arguments
+
+Example of `add_action()` in practice:
+
+```
+function add_google_font() {
+  wp_enqueue_style( 'google_font', 'http://fonts.googleapis.com/css?family=Pacifico' );
+}
+add_action( 'wp_enqueue_scripts', 'add_google_font' );
+```
+
+Basically, when it's time for `wp_enqueue_scripts` to do it's thing, we're adding `add_google_font()` as one of the things we want done, which will run the `wp_enqueue_style()` function, which throws adds a style tag linking to the URL parameter.
+
+This does not output any code. It just adds our function to the list of things that need to happen.
+
+## The remove_action Function
+`remove_action()` operates in the opposite fashion of add_action().
+
+Instead of calling our a function that we want executed at a specific point in the wordpress build, we're saying DON'T do the specific function at the specific time of the wordpress build.
+
+```
+remove_action( 'wp_enqueue_scripts', 'add_google_font' );
+```
+
+  In the previous section we added the `add_google_font()` function to the list of things to do when wp_enqueue_scripts() runs.
+
+  The above code, simply removes the `add_google_font()` function from the list of things to do in wp_enqueue_scripts.
+
+This can apply to native functions, custom functions, or third-party functions. If a plugin you downloaded is using a hook to do action that you don't like, use this to remove that action, possibly replacing it with one of your own.
+
+`remove_all_actions()` and `remove_all_filters()` will remove all the actions or filters from specified hook. you could even pass a priority to only remove actions with a priority of 11 or 10 or whatever you specify.
+
+## The do_action Function
+You place this in the code where you want an action hook to take place.
+
+`do_action()` can take the name of the action and the arguments you want to pass (whether that's one or more) OR you can use do_action_ref_array() to pass the name of the action and an array that contains any arguments you want to pass.
+
+```
+function custom_footer() {
+  do_action('my_footer');
+}
+
+function custom_footer_text() {
+  echo "Custom Footer Text";
+}
+add_action( 'my_footer', 'custom_footer_text' );
+
+// In your template code
+custom_footer();
+```
+
+## Action Helper Functions
+`has_action()` - allows you to see if a specific action hook exists, as well as if a specific function is tied into that hook.
+
+  Could be used in an if statement to see if a function is tied to an ction hook, and if it is, removing it and adding your own function to that hook.
+
+`current_filter()` - Technically, actions are a type of filter and so current_filter() works on both.
+
+## Real World Examples of Wordpress Actions
+
+1. wp_enqueue_scripts - Used many times in previous lessons and courses to add stylesheets or .js files to the header/footer of a page.
+
+2. widgets_init - This runs when widgets are beginning to be setup in wordpress
+
+3. init - We add actions to the init hook to call functions that build menus.
+
+4. admin_menu - Could be used to remove options from the admin menu.
+
+## Hooking Into Wordpress Plugins
+Up to now we have primarily looked at tieing into the native hooks in wordpress.
+
+Now we're going to look at how to create our own hooks that other developers can use to tie into our theme or plugins.
+
+## Gravity Forms Example
+`gform_submit_button` is a filter hook built into Gravity Forms.
+
+```
+add_filter("gform_submit_button", "form_submit_button", 10, 2);
+function form_submit_button($button, $form) {
+  return "<button class='button' id='gform_submit_button{$form["id"]}'><span>Submit</span></button>';
+}
+```
+
+## Advanced Custom Fields Example
+`load_field` - a filter that allows you to pull a field data and customize it before sending it out to the page.
+
+If you were using Advanced Custom Fields on your site and wanted to display a custom field on your page you would need this:
+
+```
+<div class="custom-area">
+  <?php the_field('custom_field'); ?>
+</div>
+```
+
+The runs `the_field()` function and uses the 'custom_field' parameter to know which custom field to get. 
+
+Using the filters you could customize how that field is presented.
 
 ****************************************************************************************************
 # Wordpress Customizer API
