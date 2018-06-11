@@ -1043,6 +1043,325 @@ Using the filters you could customize how that field is presented.
 ****************************************************************************************************
 # Wordpress Customizer API
 
+## Introduction to the Course
+We're going to cover how to integrate your wordpress theme with the live theme customizer option.
+
+Taking an in-depth look at customizer in action and native customizer options as well as how to create your own custom settings.
+
+## Settings - Customizer Terms
+Settings - Is an individual customization option avaialble for changing in the theme customizer area.
+
+Each individual option we have to change in the customizer area is a setting.
+
+Some settings are default and come with the customizer (blog name, background color, background, etc.), but you can add your own settings to your own themes (like custom logo, font styles, etc.).
+
+Settings are saved in wordpress using the `$wp_customize->add_setting()` funtion and they're available for access in the theme using the `$wp_customize->get_setting()` function.
+
+That said, you can't add a setting without adding the code for a controller. Creating a new setting tells WP that the setting exists, but the code for the controller is what is displayed in the theme customizer.
+
+In twentyfourteen theme Site Title is a setting and Tagline is a setting, but are managed with multiple controls (the actual text, the color of the text, the size of the text, etc.).
+
+```
+$wp_customize->add_setting( 'header_textcolo', array(
+  'default' => '#000000",
+  'transport' => 'refresh',
+) );
+```
+
+## Controllers - Customizer Terms
+Controller - the actual HTML element that someone uses to modify a setting.
+
+Different types of setting will obviously have different types of controllers.
+
+   The blog name would use a text input contoller whereas the color for a link would use a color picker controller, and selecting the log would use an image uploader controller.
+
+## Sections and Panels - Customizer Terms
+Sections - Different areas of the theme customizer divided by collapsible headings.
+
+Wordpress has a few default sections
+
+1. title_tagline
+2. colors
+3. header_image
+4. background_image
+5. navigation
+6. widgets
+7. static_front_page
+
+Can add your own section to the customizer using the `$wp_customizer->add_section()`
+
+Panel - a grouping of section in the theme customizer
+
+## Transports - Customizer Terms
+Transports - One of the parameters for a setting determining how a setting is updated and displayed in the preview area.
+
+Two options:
+1. Refresh - The preview area will "refresh" to show the updated setting
+2. Post Message - The setting will change live in real-time
+
+## The customize_register Action Hook
+Add the following code to your functions.php page
+
+```
+function wpt_register_theme_customizer( $wp_customize ) {
+  //var_dump( $wp_customize );
+}
+add_action( 'customize_register', 'wpt_register_theme_customizer' );
+```
+
+The comment on line 2 will pull all the customizable settings and controls and display the variable contents on the page. Not good for production, but excellent for debugging and finding out what you have to work with.
+
+## Site Title and Tagline
+
+```
+function wpt_register_theme_customizer( $wp_customize ) {
+  // Customize title and tagline sections to read "Site Name and Description
+  $wp_customize->get_section('title_tagline')->title = __('Site Name and Description', 'wptthemecustomizer');
+  // Customize label for the field controlling the site title to read "Site Name"
+  $wp_customize->get_control('blogname')->label = __('Site Name', 'wptthemecustomizer');
+  // Customize label for the field controlling the site description or tagline to read "Site Description"
+  $wp_customize->get_control('blogdescription')->label = __('Site Description', 'wptthemecustomizer');
+  // Update the transport option on the 'blogname' and 'blogdescription' settings from refresh to postMessage
+  $wp_customize->get_setting( 'blogname' )->transport = 'postMessage';
+  $wp_customize->get_setting( 'blogdescription' )->transport  = 'postMessage';
+}
+add_action( 'customize_register', 'wpt_register_theme_customizer' );
+
+// Custom js for theme customizer
+function wpt_customizer_js() {
+  wp_enqueue_script(
+    'wpt_theme_customizer',
+    get_template_directory_uri() . '/js/theme-customizer.js',
+    array( 'jquery', 'customize-preview' ),
+    '',
+    true
+  );
+}
+add_action( 'customize_preview_init', 'wpt_customizer_js' );
+```
+
+## Create Custom Panels
+`add_panel()` function to create new panels and rearrange existing sections to fall into new or existing panels
+
+```
+$wp_customize->add_panel( 'general_settings', array(
+  'priority' => 10,
+  'theme_supports' => '',
+  'title' => __( 'General Settings', 'wptthemecustomizer' ),
+  'description' => __( 'Controls the basic settings for the theme.', 'wpthemecustomizer' )
+) );
+$wp_customize->add_panel( 'design_settings', array(
+  'priority' => 20,
+  'theme_supports' => '',
+  'title' => __( 'Design Settings', 'wptthemecustomizer' ),
+  'description' => __( 'Controls the basic design settings for the theme.', 'wpthemecustomizer' )
+) );
+
+$wp_customize->get_section('title_tagline')->panel = 'general_settings';
+$wp_customize->get_section('nav')->panel = 'general_settings';
+$wp_customize->get_section('static_front_page')->panel = 'general_settings';
+$wp_customize->get_section('header_text_styles')->panel = 'design_settings';
+$wp_customize->get_section('background_image')->panel = 'design_settings';
+$wp_customize->get_section('background_image')->priority = 1000;
+$wp_customize->get_section('header_image')->panel = 'design_settings';
+```
+
+## An Overview of Custom Controls in Wordpress
+
+### Adding our own custom settings
+
+1. Create a setting
+2. Create a controller
+3. Adding code for postMessage updates
+4. Necessary adjustments to theme template code
+
+## Adding a Logo Uploader
+
+### In functions.php
+
+```
+$wp_customize->add_section( 'custom-logo' array(
+  'title' => __('Change Your Logo','wpthemecustomizer'),
+  'panel' => 'design_settings',
+  'priority' => 20
+) );
+$wp_customize->add_setting(
+  'wpt-logo',
+  array(
+    'default' => get_template_directory_uri() . '/images/logo.png',
+    //'transport' => 'postMessage'
+  )
+);
+$wp_customize->aedd_control(
+  new WP_Customize_Image_control(
+    $wp_customize,
+    'custom_logo',
+    array(
+      'label' => __( 'Change Logo', 'wptthemecustomizer' ),
+      // Applies to the ID of the setting
+      'section' => 'custom_logo',
+      // Applies to the ID of the setting
+      'settings' => 'wpt_logo',
+      'context' => 'wpt-custom-logo'
+    )
+  )
+);
+```
+
+### In index.php
+```
+// get_theme_mod() used to setup customization for 'wpt_logo', which is the setting ID back in functions.php
+<?php if( get_theme_mod( 'wpt_logo' ) != "" ) : ?>
+  <img id="logo" src="<?php echo get_theme_mod( 'wpt_logo' ); ?>">
+<?php endif; ?>
+```
+
+## Making the Logo Uploader Work with postMessage
+
+```
+wp-customize( 'wpt_logo' , function( value ) {
+  value.bind( function( to ) {
+    if( to == '' ) {
+      $(' #logo ').hide();
+    } else {
+      $(' #logo ' ).show();
+      $(' #logo ').attr( 'src', to );
+    }
+  } );
+});
+```
+
+## Custom Footer Text in the Theme Customizer
+
+```
+$wp_customize->(
+  'wpt_footer_text',
+  array(
+    'default' => __( 'Custom Footer Text', 'wptthemecustomizer' ),
+    'transport' => 'postMessage',
+    // Since this text field WILL be saved to the DB you want to make sure it's sanitized first.
+    'sanitize_callback' => 'sanitize_text'
+  )
+);
+$wp_customize->add_control(
+  // Generic object for new customization control
+  new WP_Customize_Control(
+    $wp_customize,
+    'custom_footer_text',
+    array(
+      'label' => __( 'Footer Text', 'wptthemecustomizer' ),
+      'section' => 'custom_footer_text',
+      'settings' => 'wpt_footer_text',
+      // Sets the new control as a text field
+      'type' => 'text'
+    )
+  )
+);
+```
+
+Further down in the functions.php file you need:
+
+```
+function sanitize_text( $text ) {
+  return sanitize_text_field( $text );
+}
+```
+
+## Custom Text Color Picker and Font-size Settings
+
+```
+// Add H1 Style Settings
+$wp_customize->add_section( 'h1_styles' , array(
+  'title' => __('H1 Styles', 'wptthemecustomizer' ),
+  'panel' => 'design_settings',
+  'priority' => 100
+) );
+$wp_customize->add_setting(
+  'wpt_h1_color',
+  array(
+    'default' => #222222',
+    'transport' => 'postMessage'
+  )
+);
+$wp_customize->add_Control(
+  new WP_Customize_Color_Control(
+    $wp_customize,
+    'custom_h1_color',
+    array(
+      'label' => __( 'Color', 'wptthemecustomzier' ),
+      'section' => 'h1_styles',
+      'settings' => 'wpt_h1_color'
+    )
+  )
+);
+$wp_customize->add_setting(
+  'wpt_h1_font_size',
+  array(
+    'default' => 24px',
+    'transport' => 'postMessage'
+  )
+);
+$wp_customize->add_Control(
+  new WP_Customize_Control(
+    $wp_customize,
+    'custom_h1_font_size',
+    array(
+      'label' => __( 'Font Size', 'wptthemecustomzier' ),
+      'section' => 'h1_styles',
+      'settings' => 'wpt_h1_font_size',
+      // Creates a dropdown menu to choose font size
+      'type' => 'select',
+      // What are the options in our dropdown menu and their corresponding values
+      'choices' => 'array(
+        '22' => '22px',
+        '28' => '28px',
+        '32' => '32px',
+        '42' => '42px',
+      )
+    )
+  )
+);
+```
+
+## Custom CSS Textarea in the Theme Customizer
+Can't use postMessage for a CSS field in the customizer. Probably can but it's a bunch of extra work and probably better off not to bother.
+
+```
+// Add Custom CSS Textfield
+$wp_customize->add_section( 'custom_css_field', array(
+  'title' => __('Custom CSS', wpthemecustomzier'),
+  'panel' => 'design_settings',
+  'priority' => 2000
+) );
+$wp_customize->add_setting(
+  'wpt_custom_css',
+  array(
+    'sanitize_callback' => 'sanitize_text'
+  )
+);
+$wp_customize->add_control(
+  new WP_Customize_Control(
+    $wp_customize,
+    'custom_css',
+    array(
+      'label' => __( 'Add custom CSS here', 'wptthemecustomizer' ),
+      'section' => 'custom_css_field',
+      'settings' => 'wpt_custom_css',
+      'type' => 'textarea'
+    )
+  )
+);
+```
+
+but down in the `style_header()` function we need a bit of code that will take our custom CSS and echo it onto the page:
+
+```
+<style>
+  <?php if (get_theme_mod('wpt_custom_css') != '' ) {
+    echo get_theme_mod('wpt_custom_css');
+  } ?>
+</style>
+```
 
 ****************************************************************************************************
 # Customizing the Wordpress Admin Area
