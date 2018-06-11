@@ -1153,6 +1153,7 @@ $wp_customize->add_panel( 'general_settings', array(
   'title' => __( 'General Settings', 'wptthemecustomizer' ),
   'description' => __( 'Controls the basic settings for the theme.', 'wpthemecustomizer' )
 ) );
+
 $wp_customize->add_panel( 'design_settings', array(
   'priority' => 20,
   'theme_supports' => '',
@@ -1188,6 +1189,7 @@ $wp_customize->add_section( 'custom-logo' array(
   'panel' => 'design_settings',
   'priority' => 20
 ) );
+
 $wp_customize->add_setting(
   'wpt-logo',
   array(
@@ -1195,6 +1197,7 @@ $wp_customize->add_setting(
     //'transport' => 'postMessage'
   )
 );
+
 $wp_customize->aedd_control(
   new WP_Customize_Image_control(
     $wp_customize,
@@ -1247,6 +1250,7 @@ $wp_customize->(
     'sanitize_callback' => 'sanitize_text'
   )
 );
+
 $wp_customize->add_control(
   // Generic object for new customization control
   new WP_Customize_Control(
@@ -1280,6 +1284,7 @@ $wp_customize->add_section( 'h1_styles' , array(
   'panel' => 'design_settings',
   'priority' => 100
 ) );
+
 $wp_customize->add_setting(
   'wpt_h1_color',
   array(
@@ -1287,6 +1292,7 @@ $wp_customize->add_setting(
     'transport' => 'postMessage'
   )
 );
+
 $wp_customize->add_Control(
   new WP_Customize_Color_Control(
     $wp_customize,
@@ -1298,6 +1304,7 @@ $wp_customize->add_Control(
     )
   )
 );
+
 $wp_customize->add_setting(
   'wpt_h1_font_size',
   array(
@@ -1305,6 +1312,7 @@ $wp_customize->add_setting(
     'transport' => 'postMessage'
   )
 );
+
 $wp_customize->add_Control(
   new WP_Customize_Control(
     $wp_customize,
@@ -1338,12 +1346,14 @@ $wp_customize->add_section( 'custom_css_field', array(
   'panel' => 'design_settings',
   'priority' => 2000
 ) );
+
 $wp_customize->add_setting(
   'wpt_custom_css',
   array(
     'sanitize_callback' => 'sanitize_text'
   )
 );
+
 $wp_customize->add_control(
   new WP_Customize_Control(
     $wp_customize,
